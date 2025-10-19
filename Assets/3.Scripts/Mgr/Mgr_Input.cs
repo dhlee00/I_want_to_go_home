@@ -19,6 +19,5 @@ public class Mgr_Input : MonoBehaviour
 
         // 마우스 입력
         InputLook = new Vector2(Input.GetAxisRaw("Mouse X"), Input.GetAxisRaw("Mouse Y"));
-
     }
 }
