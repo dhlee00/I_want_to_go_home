@@ -571,7 +571,7 @@ MonoBehaviour:
   googleSheetUrl: https://script.google.com/macros/s/AKfycbyFlNwMDqXyre0421aIG78iWwJdE5EZv7LhaLIlWfGYGUhS3LdqLmCGN0GafRe0iRHm/exec
   availSheets: Item_Data
   generateFolderPath: /GenerateGoogleSheet
-  googleSheetSO: {fileID: 0}
+  googleSheetSO: {fileID: 11400000, guid: 7cb7cb1831387bd4f921567a258a18ce, type: 2}
 --- !u!1 &1472913409
 GameObject:
   m_ObjectHideFlags: 0
