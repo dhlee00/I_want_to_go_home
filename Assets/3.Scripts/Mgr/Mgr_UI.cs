@@ -30,23 +30,30 @@ public class Mgr_UI : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.I))
         {
-            // 인벤토리 생성
-            if(Inventory_UI == null)
-            {
-                GameObject inven = Instantiate(Inventory_Prefab);
-                Inventory_UI = inven;
-                inven.transform.SetParent(UI_Parent, false);
-            }
-            // 인벤토리 생성 되있고 비횔성화 중이면
-            else if (Inventory_UI != null && Inventory_UI.activeSelf == false) 
-            {
-                Inventory_UI.SetActive(true);
-            }
-            // 인벤토리 생성 되있고 횔성화 중이면
-            else if (Inventory_UI != null && Inventory_UI.activeSelf == true)
-            {
-                Inventory_UI.GetComponent<Animator>().Play("Close");
-            }
+            Spawn_UI(Inventory_Prefab, ref Inventory_UI);
         }
     }
+
+    #region Spawn_UI
+    void Spawn_UI(GameObject _uiPrefab, ref GameObject _ui)
+    {
+        // UI 생성
+        if (_ui == null)
+        {
+            GameObject spawnUI = Instantiate(_uiPrefab);
+            _ui = spawnUI;
+            spawnUI.transform.SetParent(UI_Parent, false);
+        }
+        // UI 생성 되있고 비횔성화 중이면 (열기)
+        else if (_ui != null && _ui.activeSelf == false)
+        {
+            Inventory_UI.SetActive(true);
+        }
+        // UI 생성 되있고 횔성화 중이면 (닫기)
+        else if (_ui != null && _ui.activeSelf == true)
+        {
+            _ui.GetComponent<Animator>().Play("Close");
+        }
+    }
+    #endregion
 }
