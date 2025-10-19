@@ -1,0 +1,20 @@
+{
+  "Item_Data": [
+    {
+      "ITEM_NAME": "철",
+      "AMOUNT": 1
+    },
+    {
+      "ITEM_NAME": "나무",
+      "AMOUNT": 1
+    },
+    {
+      "ITEM_NAME": "고무",
+      "AMOUNT": 1
+    },
+    {
+      "ITEM_NAME": "다이아",
+      "AMOUNT": 1
+    }
+  ]
+}
