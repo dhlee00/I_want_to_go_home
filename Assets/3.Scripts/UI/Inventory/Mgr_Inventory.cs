@@ -65,6 +65,7 @@ public class Mgr_Inventory : MonoBehaviour
         foreach(var item in GlobalValue.User_Inventory)
         {
             Inven_ItemSlotList[index].Set_SlotInfo(item.Value, item.Value.Get_Item_Amount);
+            item.Value.Get_Item_SlotIndex = index;
             index++;
         }
     }

@@ -15,6 +15,14 @@
       "ITEM_AMOUNT": 1,
       "ITEM_DESC": "땅에 떨어져 있는 돌 조각으로 제작 재료로 사용된다.",
       "ITEM_ICON_PATH": "Image/Item/Icon/heal"
+    },
+    {
+      "ITEM_INDEX": 2,
+      "ITEM_NAME": "테스트장비",
+      "ITEM_TYPE": "EQUIPMENT",
+      "ITEM_AMOUNT": 1,
+      "ITEM_DESC": "테스트 장비",
+      "ITEM_ICON_PATH": "Image/Item/Icon/heal"
     }
   ],
   "Interact_Obj": []

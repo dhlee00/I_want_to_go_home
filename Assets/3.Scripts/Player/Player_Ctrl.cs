@@ -82,18 +82,41 @@ public class Player_Ctrl : NetworkBehaviour
 
             if (40 <= GlobalValue.User_Inventory.Count) return;
 
-            InteractionList[0].OnInteraction();
-
+            // 획득 수량
+            int get_Amount = 0;
             for (int i = 0; i < UI_ObjPool.Inst.Interact_UI_List.Count; i++)
             {
-                if (InteractionList[0] == UI_ObjPool.Inst.Interact_UI_List[i].Get_interaction)
+                if (InteractionList[0].ItemData.Get_Item_Index ==
+                    UI_ObjPool.Inst.Interact_UI_List[i].Get_interaction.ItemData.Get_Item_Index)
                 {
+                    // 획득 수량 설정
+                    get_Amount = UI_ObjPool.Inst.Interact_UI_List[i].Get_ItemAmount;
+                    // 획득했으니 UI 비활성화
                     UI_ObjPool.Inst.Interact_UI_List[i].gameObject.SetActive(false);
                     break;
                 }
             }
 
-            InteractionList.RemoveAt(0);
+            InteractionList[0].OnInteraction(get_Amount);
+
+            Item GetItem = InteractionList[0].ItemData;
+            // InteractionList.RemoveAt(0);
+
+            int index = 0;
+            while (0 < get_Amount)
+            {
+                // 상호작용된 오브젝트 중에서 획득한 아이템과 동일한 오브젝트라면
+                if(InteractionList[index].ItemData.Get_Item_Index == GetItem.Get_Item_Index)
+                {
+                    get_Amount--;
+                    GameObject removeItem = InteractionList[index].gameObject;
+                    InteractionList.RemoveAt(index);
+                    Destroy(removeItem);
+                    continue;
+                }
+
+                index++;
+            }
         }
 
         if (Input.GetKeyDown(KeyCode.P))
@@ -194,7 +217,29 @@ public class Player_Ctrl : NetworkBehaviour
         {
             if (list == interaction) return;
         }
-        UI_ObjPool.Inst.Get_Interact_UI(interaction.ItemData, interaction);
+
+        bool isActive = false;
+        // 이미 UI가 떠 있다면 수량 증가
+        for(int i = 0; i < UI_ObjPool.Inst.Interact_UI_List.Count; i++)
+        {
+            // 상호작용 UI 이미 활성화 && 상호작용 된 아이템이 이미 활성화 되있는 UI면
+            if(UI_ObjPool.Inst.Interact_UI_List[i].gameObject.activeSelf == true
+                && UI_ObjPool.Inst.Interact_UI_List[i].Get_interaction.ItemData.Get_Item_Index == interaction.ItemData.Get_Item_Index &&
+                 UI_ObjPool.Inst.Interact_UI_List[i].Get_interaction.ItemData.Get_ItemType != ITEM_TYPE.EQUIPMENT)
+            {
+                UI_ObjPool.Inst.Interact_UI_List[i].Set_Amount(interaction.ItemData.Get_Item_Amount);
+                isActive = true;
+                break;
+            }
+        }
+        //
+
+        if(isActive == false)
+        {
+            // 없으면 UI 생성
+            UI_ObjPool.Inst.Get_Interact_UI(interaction.ItemData, interaction);
+        }
+
         InteractionList.Add(interaction);
     }
 
@@ -205,7 +250,19 @@ public class Player_Ctrl : NetworkBehaviour
         Interaction interaction = other.gameObject.GetComponent<Interaction>();
         if (interaction == null) return;
 
-        for(int i = 0; i < UI_ObjPool.Inst.Interact_UI_List.Count; i++)
+        // 이미 UI가 떠 있다면 수량 감소
+        for (int i = 0; i < UI_ObjPool.Inst.Interact_UI_List.Count; i++)
+        {
+            if (UI_ObjPool.Inst.Interact_UI_List[i].gameObject.activeSelf == true
+                && UI_ObjPool.Inst.Interact_UI_List[i].Get_interaction.ItemData.Get_Item_Index == interaction.ItemData.Get_Item_Index)
+            {
+                UI_ObjPool.Inst.Interact_UI_List[i].Set_Amount(-interaction.ItemData.Get_Item_Amount);
+                break;
+            }
+        }
+        //
+
+        for (int i = 0; i < UI_ObjPool.Inst.Interact_UI_List.Count; i++)
         {
             if(interaction == UI_ObjPool.Inst.Interact_UI_List[i].Get_interaction)
             {

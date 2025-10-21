@@ -6,7 +6,7 @@ public class Interaction : MonoBehaviour
     public Item ItemData;
 
     // 상호작용시 업데이트 자식에서 재정의
-    public virtual void OnInteraction()
+    public virtual void OnInteraction(int _amount)
     {
 
     }
