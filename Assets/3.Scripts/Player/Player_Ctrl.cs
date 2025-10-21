@@ -1,9 +1,18 @@
+using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 
-public class Player_Ctrl : MonoBehaviour
+public class Player_Ctrl : NetworkBehaviour
 {
-    Vector2 Move = Vector2.zero; // 입력을 받을 변수
+    #region InPut
+    Vector2 InputMove; // 입력을 받을 변수
+    Vector2 InputLook; // 입력을 받을 변수
+    #endregion
+
+    #region Move
+    Vector2 Move = Vector2.zero; 
     public float Speed;                  // 이동 변수
     public float MoveSpeed = 4.0f;       // 걷기 속도
 
@@ -14,11 +23,15 @@ public class Player_Ctrl : MonoBehaviour
     float RotationSmoothTime = 0.12f;    // 회전시 천천히 돌때 사용
     float SpeedChangeRate = 10.0f;   // 속도 변화율
 
+    float AnimationMoveBlend;      // 이동시 애니메이션 블랜드
+    #endregion
+
+
 
     // 애니메이션
     [Header("Animator")]
     Animator m_Animator;
-    float AnimationBlend;      // 이동시 애니메이션 블랜드
+    
 
 
     // 카메라
@@ -30,6 +43,10 @@ public class Player_Ctrl : MonoBehaviour
     float TopClamp = 70.0f;
     float BottomClamp = -20.0f;
 
+
+
+    // 상호작용
+    List<Interaction> InteractionList = new List<Interaction>();
 
 
     protected CharacterController Controller;
@@ -46,17 +63,30 @@ public class Player_Ctrl : MonoBehaviour
 
     void Start()
     {
-        // 테스트
-        Cursor.lockState = CursorLockMode.Locked;
+        
     }
 
     void Update()
     {
+        // 무브 입력
+        InputMove = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+
         CharMove();
+
+        if(Input.GetKeyDown(KeyCode.F))
+        {
+            if (InteractionList.Count <= 0) return;
+
+
+            InteractionList[0].OnInteraction();
+        }
     }
 
     void LateUpdate()
     {
+        // 마우스 입력
+        InputLook = new Vector2(Input.GetAxisRaw("Mouse X"), Input.GetAxisRaw("Mouse Y"));
+
         CameraRotation();
     }
 
@@ -64,7 +94,7 @@ public class Player_Ctrl : MonoBehaviour
     void CharMove()
     {
         // 인풋시스템에서 Vector2값 가져오기
-        Move = Mgr_Input.Inst.InputMove;
+        Move = InputMove;
 
 
         // 속도 설정
@@ -105,17 +135,17 @@ public class Player_Ctrl : MonoBehaviour
         // 애니메이션
         if (m_Animator)
         {
-            AnimationBlend = Mathf.Lerp(AnimationBlend, Move != Vector2.zero ? 1 : 0, Time.deltaTime * SpeedChangeRate);
-            if (AnimationBlend < 0.01f) AnimationBlend = 0f;
+            AnimationMoveBlend = Mathf.Lerp(AnimationMoveBlend, Move != Vector2.zero ? 1 : 0, Time.deltaTime * SpeedChangeRate);
+            if (AnimationMoveBlend < 0.01f) AnimationMoveBlend = 0f;
 
-            m_Animator.SetFloat("Move", AnimationBlend);
+            m_Animator.SetFloat("Move", AnimationMoveBlend);
         }
     }
 
     // 카메라 회전
     void CameraRotation()
     {
-        Vector2 look = Mgr_Input.Inst.InputLook;
+        Vector2 look = InputLook;
 
         if (look.sqrMagnitude >= 0.01f)
         {
@@ -123,19 +153,39 @@ public class Player_Ctrl : MonoBehaviour
             CinemachineTargetPitch += look.y;
         }
 
-        CinemachineTargetYaw = ClampAngle(CinemachineTargetYaw, float.MinValue, float.MaxValue);
-        CinemachineTargetPitch = ClampAngle(CinemachineTargetPitch, BottomClamp, TopClamp);
+        CinemachineTargetYaw = GlobalValue.ClampAngle(CinemachineTargetYaw, float.MinValue, float.MaxValue);
+        CinemachineTargetPitch = GlobalValue.ClampAngle(CinemachineTargetPitch, BottomClamp, TopClamp);
 
         // Cinemachine will follow this target
         CameraTargetRoot.transform.rotation = Quaternion.Euler(CinemachineTargetPitch + 0.0f,
             CinemachineTargetYaw, 0.0f);
     }
 
-    public static float ClampAngle(float lfAngle, float lfMin, float lfMax)
+
+
+
+    private void OnTriggerEnter(Collider other)
     {
-        if (lfAngle < -360f) lfAngle += 360f;
-        if (lfAngle > 360f) lfAngle -= 360f;
-        return Mathf.Clamp(lfAngle, lfMin, lfMax);
+        if (other.tag != "Interaction") return;
+        Interaction interaction = other.gameObject.GetComponent<Interaction>();
+        if (interaction == null) return;
+
+        foreach (Interaction list in InteractionList)
+        {
+            if (list == interaction) return;
+        }
+
+        InteractionList.Add(interaction);
+    }
+
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.tag != "Interaction") return;
+        Interaction interaction = other.gameObject.GetComponent<Interaction>();
+        if (interaction == null) return;
+
+        InteractionList.Remove(interaction);
     }
 
 
