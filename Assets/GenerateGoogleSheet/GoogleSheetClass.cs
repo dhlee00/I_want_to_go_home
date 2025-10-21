@@ -11,7 +11,11 @@ public class GoogleSheetSO : ScriptableObject
 [Serializable]
 public class Item_Data
 {
+	public int ITEM_INDEX;
 	public string ITEM_NAME;
-	public int AMOUNT;
+	public string ITEM_TYPE;
+	public int ITEM_AMOUNT;
+	public string ITEM_DESC;
+	public string ITEM_ICON_PATH;
 }
 

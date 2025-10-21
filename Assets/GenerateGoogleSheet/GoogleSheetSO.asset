@@ -13,13 +13,17 @@ MonoBehaviour:
   m_Name: GoogleSheetSO
   m_EditorClassIdentifier: 
   Item_DataList:
-  - ITEM_NAME: "\uCCA0"
-    AMOUNT: 1
-  - ITEM_NAME: "\uB098\uBB34"
-    AMOUNT: 1
-  - ITEM_NAME: "\uACE0\uBB34"
-    AMOUNT: 1
-  - ITEM_NAME: "\uB2E4\uC774\uC544"
-    AMOUNT: 1
-  - ITEM_NAME: "\uD14C\uC2A4\uD2B8"
-    AMOUNT: 9
+  - ITEM_INDEX: 0
+    ITEM_NAME: "\uB098\uBB47\uAC00\uC9C0"
+    ITEM_TYPE: INGREDIENT
+    ITEM_AMOUNT: 1
+    ITEM_DESC: "\uB098\uBB34\uB97C \uC798\uB77C \uD68D\uB4DD\uD55C \uB3C4\uAD6C\uB97C
+      \uC81C\uC791\uD560 \uC218 \uC788\uB294 \uC7AC\uB8CC\uB85C \uC0AC\uC6A9\uB41C\uB2E4."
+    ITEM_ICON_PATH: Image/Item/Icon/nian
+  - ITEM_INDEX: 1
+    ITEM_NAME: "\uB3CC\uBA69\uC774"
+    ITEM_TYPE: INGREDIENT
+    ITEM_AMOUNT: 1
+    ITEM_DESC: "\uB545\uC5D0 \uB5A8\uC5B4\uC838 \uC788\uB294 \uB3CC \uC870\uAC01\uC73C\uB85C
+      \uC81C\uC791 \uC7AC\uB8CC\uB85C \uC0AC\uC6A9\uB41C\uB2E4."
+    ITEM_ICON_PATH: Image/Item/Icon/heal

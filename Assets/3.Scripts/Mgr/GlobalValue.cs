@@ -1,8 +1,9 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public static class GlobalValue
 {
-
+    public static Dictionary<int, Item> User_Inventory = new Dictionary<int, Item>();
 
     public static float ClampAngle(float lfAngle, float lfMin, float lfMax)
     {
@@ -11,11 +12,3 @@ public static class GlobalValue
         return Mathf.Clamp(lfAngle, lfMin, lfMax);
     }
 }
-
-
-
-
-
-
-
-

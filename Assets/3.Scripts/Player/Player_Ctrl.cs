@@ -47,7 +47,10 @@ public class Player_Ctrl : NetworkBehaviour
 
     // 상호작용
     List<Interaction> InteractionList = new List<Interaction>();
+    public List<Interaction> Get_InteractionList { get => InteractionList; }
 
+    // 테스트 프리펩
+    [SerializeField] GameObject testPrefab;
 
     protected CharacterController Controller;
 
@@ -77,8 +80,25 @@ public class Player_Ctrl : NetworkBehaviour
         {
             if (InteractionList.Count <= 0) return;
 
+            if (40 <= GlobalValue.User_Inventory.Count) return;
 
             InteractionList[0].OnInteraction();
+
+            for (int i = 0; i < UI_ObjPool.Inst.Interact_UI_List.Count; i++)
+            {
+                if (InteractionList[0] == UI_ObjPool.Inst.Interact_UI_List[i].Get_interaction)
+                {
+                    UI_ObjPool.Inst.Interact_UI_List[i].gameObject.SetActive(false);
+                    break;
+                }
+            }
+
+            InteractionList.RemoveAt(0);
+        }
+
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            GameObject obj = Instantiate(testPrefab);
         }
     }
 
@@ -175,6 +195,7 @@ public class Player_Ctrl : NetworkBehaviour
             if (list == interaction) return;
         }
 
+        UI_ObjPool.Inst.Get_Interact_UI(interaction.ItemData, interaction);
         InteractionList.Add(interaction);
     }
 
@@ -184,6 +205,15 @@ public class Player_Ctrl : NetworkBehaviour
         if (other.tag != "Interaction") return;
         Interaction interaction = other.gameObject.GetComponent<Interaction>();
         if (interaction == null) return;
+
+        for(int i = 0; i < UI_ObjPool.Inst.Interact_UI_List.Count; i++)
+        {
+            if(interaction == UI_ObjPool.Inst.Interact_UI_List[i].Get_interaction)
+            {
+                UI_ObjPool.Inst.Interact_UI_List[i].gameObject.SetActive(false);
+                break;
+            }
+        }
 
         InteractionList.Remove(interaction);
     }
