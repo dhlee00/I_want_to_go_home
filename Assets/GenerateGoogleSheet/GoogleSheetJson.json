@@ -1,24 +1,21 @@
 {
   "Item_Data": [
     {
-      "ITEM_NAME": "철",
-      "AMOUNT": 1
+      "ITEM_INDEX": 0,
+      "ITEM_NAME": "나뭇가지",
+      "ITEM_TYPE": "INGREDIENT",
+      "ITEM_AMOUNT": 1,
+      "ITEM_DESC": "나무를 잘라 획득한 도구를 제작할 수 있는 재료로 사용된다.",
+      "ITEM_ICON_PATH": "Image/Item/Icon/nian"
     },
     {
-      "ITEM_NAME": "나무",
-      "AMOUNT": 1
-    },
-    {
-      "ITEM_NAME": "고무",
-      "AMOUNT": 1
-    },
-    {
-      "ITEM_NAME": "다이아",
-      "AMOUNT": 1
-    },
-    {
-      "ITEM_NAME": "테스트",
-      "AMOUNT": 9
+      "ITEM_INDEX": 1,
+      "ITEM_NAME": "돌멩이",
+      "ITEM_TYPE": "INGREDIENT",
+      "ITEM_AMOUNT": 1,
+      "ITEM_DESC": "땅에 떨어져 있는 돌 조각으로 제작 재료로 사용된다.",
+      "ITEM_ICON_PATH": "Image/Item/Icon/heal"
     }
-  ]
+  ],
+  "Interact_Obj": []
 }

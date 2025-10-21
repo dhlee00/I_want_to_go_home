@@ -20,9 +20,15 @@ public class Mgr_Inventory : MonoBehaviour
     [SerializeField] Transform EquipSlot_Tr;
     [SerializeField] int EquipSlot_Amount;
 
+    public static Mgr_Inventory Inst = null;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        if(Inst == null)
+        {
+            Inst = this;
+        }
+
         // 아이템 슬롯 생성
         Spawn_Slot<Inven_Slot>(ItemSlot_Amount, Inven_ItemSlot_Prefab, ItemSlot_Tr, Inven_ItemSlotList);
 
@@ -42,6 +48,17 @@ public class Mgr_Inventory : MonoBehaviour
             T comp = slot.GetComponent<T>();
             comp.Set_SlotNum(i);
             _list.Add(comp);
+        }
+    }
+    #endregion
+
+    #region Refresh Inventory
+    public void Refresh_Inventory()
+    {
+        int index = 0;
+        foreach(var item in GlobalValue.User_Inventory)
+        {
+            Inven_ItemSlotList[index].Set_SlotInfo(item.Value, item.Value.Get_Item_Amount);
         }
     }
     #endregion

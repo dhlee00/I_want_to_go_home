@@ -88,3 +88,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9339c254146300041a83c76dc0c9aca2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  SlotNum: 0
+  ItemData:
+    Item_Index: 0
+    Item_Name: 
+    ItemType: 0
+    Item_Amount: 0
+    Item_SlotIndex: 0
+    Item_Equip: 0
+    Item_Desc: 
+    Item_Icon: {fileID: 0}
