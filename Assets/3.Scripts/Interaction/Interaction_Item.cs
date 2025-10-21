@@ -10,7 +10,7 @@ public class Interaction_Item : Interaction
 
     public override void OnInteraction()
     {
-        Debug.Log(this.ItemData.Get_Item_Name);
+        // Debug.Log(this.ItemData.Get_Item_Name);
 
         // 인벤토리로 들어가는 아이템 획득 코드
         // 이미 존재한다면
@@ -37,7 +37,9 @@ public class Interaction_Item : Interaction
 
     void Add_Inventory()
     {
-        GlobalValue.User_Inventory.Add(ItemData.Get_Item_Index, ItemData);
+        Item item = new Item(ItemData);
+
+        GlobalValue.User_Inventory.Add(item.Get_Item_Index, item);
         GlobalValue.User_Inventory[ItemData.Get_Item_Index].Get_Item_Amount = 1;
     }
 }

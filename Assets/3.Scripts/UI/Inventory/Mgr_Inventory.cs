@@ -21,10 +21,10 @@ public class Mgr_Inventory : MonoBehaviour
     [SerializeField] int EquipSlot_Amount;
 
     public static Mgr_Inventory Inst = null;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+
+    void Awake()
     {
-        if(Inst == null)
+        if (Inst == null)
         {
             Inst = this;
         }
@@ -34,6 +34,12 @@ public class Mgr_Inventory : MonoBehaviour
 
         // 厘馒 浇吩 积己
         Spawn_Slot<Equip_Slot>(EquipSlot_Amount, Inven_EquipSlot_Prefab, EquipSlot_Tr, Inven_EquipSlotList);
+    }
+
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    void Start()
+    {
+
     }
 
     // 浇吩 积己
@@ -59,6 +65,7 @@ public class Mgr_Inventory : MonoBehaviour
         foreach(var item in GlobalValue.User_Inventory)
         {
             Inven_ItemSlotList[index].Set_SlotInfo(item.Value, item.Value.Get_Item_Amount);
+            index++;
         }
     }
     #endregion

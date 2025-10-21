@@ -55,5 +55,18 @@ public class Item
 
         Item_Icon = Resources.Load<Sprite>(_iconPath);
     }
+
+    public Item(Item _item)
+    {
+        Item_Index = _item.Item_Index;
+        Item_Name = _item.Item_Name;
+        ItemType = _item.ItemType;
+        Item_Desc = _item.Item_Desc;
+        Item_Amount = _item.Item_Amount;
+        Item_SlotIndex = _item.Item_SlotIndex;
+        Item_Equip = _item.Item_Equip;
+
+        Item_Icon = _item.Item_Icon;
+    }
     #endregion
 }

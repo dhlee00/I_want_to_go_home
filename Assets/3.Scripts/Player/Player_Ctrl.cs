@@ -46,7 +46,7 @@ public class Player_Ctrl : NetworkBehaviour
 
 
     // 상호작용
-    List<Interaction> InteractionList = new List<Interaction>();
+    [SerializeField] List<Interaction> InteractionList = new List<Interaction>();
     public List<Interaction> Get_InteractionList { get => InteractionList; }
 
     // 테스트 프리펩
@@ -194,7 +194,6 @@ public class Player_Ctrl : NetworkBehaviour
         {
             if (list == interaction) return;
         }
-
         UI_ObjPool.Inst.Get_Interact_UI(interaction.ItemData, interaction);
         InteractionList.Add(interaction);
     }
