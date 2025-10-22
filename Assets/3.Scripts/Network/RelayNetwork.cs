@@ -17,9 +17,6 @@ public class RelayNetwork : MonoBehaviour
     // 로비 정보 받아올 변수
     [HideInInspector] public Lobby lobby;
 
-    // 생성할 플레이어 프리팹
-    public GameObject playerPrefab;
-
     void Awake()
     {
         instance = this;
@@ -41,7 +38,7 @@ public class RelayNetwork : MonoBehaviour
             {
                 Data = new Dictionary<string, DataObject>
                 {
-                    { "JoinCode", new DataObject(DataObject.VisibilityOptions.Public, joinCode, DataObject.IndexOptions.S3) }
+                    { "JoinCode", new DataObject(DataObject.VisibilityOptions.Public, joinCode, DataObject.IndexOptions.S1) }
                 }
             }
         );
@@ -60,7 +57,7 @@ public class RelayNetwork : MonoBehaviour
         NetworkManager.Singleton.StartHost();
 
         // 씬 전환
-        NetworkManager.Singleton.SceneManager.LoadScene("Test_Scene", LoadSceneMode.Additive);
+        NetworkManager.Singleton.SceneManager.LoadScene("Test_Scene", LoadSceneMode.Single);
     }
 
     // 클라이언트로 시작

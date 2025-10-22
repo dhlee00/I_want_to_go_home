@@ -2,17 +2,24 @@ using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
-
+using UnityEngine.SceneManagement;
 
 public class Player_Ctrl : NetworkBehaviour
 {
+    #region 동기화 변수
+    NetworkVariable<Vector3> serverPos = new NetworkVariable<Vector3>();
+    NetworkVariable<Vector3> serverMove = new NetworkVariable<Vector3>();
+    NetworkVariable<Quaternion> serverRot = new NetworkVariable<Quaternion>();
+    NetworkVariable<float> serverAnimMoveBlend = new NetworkVariable<float>();
+    #endregion
+
     #region InPut
     Vector2 InputMove; // 입력을 받을 변수
     Vector2 InputLook; // 입력을 받을 변수
     #endregion
 
     #region Move
-    Vector2 Move = Vector2.zero; 
+    Vector2 Move = Vector2.zero;
     public float Speed;                  // 이동 변수
     public float MoveSpeed = 4.0f;       // 걷기 속도
 
@@ -31,7 +38,7 @@ public class Player_Ctrl : NetworkBehaviour
     // 애니메이션
     [Header("Animator")]
     Animator m_Animator;
-    
+
 
 
     // 카메라
@@ -66,39 +73,81 @@ public class Player_Ctrl : NetworkBehaviour
 
     void Start()
     {
-        
+
     }
 
     void Update()
     {
-        // 무브 입력
-        InputMove = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
-
-        CharMove();
-
-        if(Input.GetKeyDown(KeyCode.F))
+        // 내가 조작하는 플레이어 인 경우
+        if (IsLocalPlayer)
         {
-            if (InteractionList.Count <= 0) return;
-
-            if (40 <= GlobalValue.User_Inventory.Count) return;
-
-            InteractionList[0].OnInteraction();
-
-            for (int i = 0; i < UI_ObjPool.Inst.Interact_UI_List.Count; i++)
+            // 카메라 타겟 설정
+            if (Camera_Mgr.Inst.VirtualCamera.Follow == null)
             {
-                if (InteractionList[0] == UI_ObjPool.Inst.Interact_UI_List[i].Get_interaction)
-                {
-                    UI_ObjPool.Inst.Interact_UI_List[i].gameObject.SetActive(false);
-                    break;
-                }
+                Camera_Mgr.Inst.VirtualCamera.Follow = this.transform;
             }
 
-            InteractionList.RemoveAt(0);
+            // 무브 입력
+            InputMove = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+
+            CharMove();
+
+            if (Input.GetKeyDown(KeyCode.F))
+            {
+                if (InteractionList.Count <= 0) return;
+
+                if (40 <= GlobalValue.User_Inventory.Count) return;
+
+                InteractionList[0].OnInteraction();
+
+                for (int i = 0; i < UI_ObjPool.Inst.Interact_UI_List.Count; i++)
+                {
+                    if (InteractionList[0] == UI_ObjPool.Inst.Interact_UI_List[i].Get_interaction)
+                    {
+                        UI_ObjPool.Inst.Interact_UI_List[i].gameObject.SetActive(false);
+                        break;
+                    }
+                }
+
+                InteractionList.RemoveAt(0);
+            }
+
+            if (Input.GetKeyDown(KeyCode.P))
+            {
+                GameObject obj = Instantiate(testPrefab);
+            }
         }
 
-        if (Input.GetKeyDown(KeyCode.P))
+        // 내가 조작하는 플레이어가 아닌 경우
+        else
         {
-            GameObject obj = Instantiate(testPrefab);
+            // 위치 동기화
+
+            // 위치 차이가 크면 보정
+            float distance = Vector3.Distance(transform.position, serverPos.Value);
+            if (distance > 0.1f)
+            {
+                // CharacterController 비활성화
+                Controller.enabled = false;
+
+                // 위치 직접 적용
+                transform.position = Vector3.Lerp(transform.position, serverPos.Value, Time.deltaTime / 0.2f);
+
+                // CharacterController 다시 활성화
+                Controller.enabled = true;
+            }
+
+            else
+            {
+                // 물리 기반 이동
+                Controller.Move(serverMove.Value);
+            }
+
+            // 회전
+            transform.rotation = Quaternion.Lerp(transform.rotation, serverRot.Value, Time.deltaTime / 0.2f);
+            
+            // 애니메이션
+            m_Animator.SetFloat("Move", serverAnimMoveBlend.Value);
         }
     }
 
@@ -160,6 +209,15 @@ public class Player_Ctrl : NetworkBehaviour
 
             m_Animator.SetFloat("Move", AnimationMoveBlend);
         }
+
+        // 서버로 상태값 전송
+        SendStateRpc
+        (
+            transform.position,
+            targetDirection.normalized * (Speed * Time.deltaTime),
+            transform.rotation,
+            AnimationMoveBlend
+        );
     }
 
     // 카메라 회전
@@ -205,9 +263,9 @@ public class Player_Ctrl : NetworkBehaviour
         Interaction interaction = other.gameObject.GetComponent<Interaction>();
         if (interaction == null) return;
 
-        for(int i = 0; i < UI_ObjPool.Inst.Interact_UI_List.Count; i++)
+        for (int i = 0; i < UI_ObjPool.Inst.Interact_UI_List.Count; i++)
         {
-            if(interaction == UI_ObjPool.Inst.Interact_UI_List[i].Get_interaction)
+            if (interaction == UI_ObjPool.Inst.Interact_UI_List[i].Get_interaction)
             {
                 UI_ObjPool.Inst.Interact_UI_List[i].gameObject.SetActive(false);
                 break;
@@ -217,5 +275,20 @@ public class Player_Ctrl : NetworkBehaviour
         InteractionList.Remove(interaction);
     }
 
+    // 서버에 값 전송
+    [Rpc(SendTo.Server)]
+    void SendStateRpc(Vector3 pos, Vector3 move, Quaternion rot, float animMoveBlend)
+    {
+        // 위치값 전송
+        serverPos.Value = pos;
 
+        // 이동값 전송
+        serverMove.Value = move;
+
+        // 회전값 전송
+        serverRot.Value = rot;
+
+        // 애니메이션 전송
+        serverAnimMoveBlend.Value = animMoveBlend;
+    }
 }
