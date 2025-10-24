@@ -1,3 +1,6 @@
+using PlayFab;
+using PlayFab.ClientModels;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Interaction_Item : Interaction

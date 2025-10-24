@@ -1,4 +1,8 @@
+using PlayFab;
+using PlayFab.ClientModels;
+using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public interface ISlot
@@ -34,6 +38,8 @@ public class Mgr_Inventory : MonoBehaviour
 
         // ÀåÂø ½½·Ô »ý¼º
         Spawn_Slot<Equip_Slot>(EquipSlot_Amount, Inven_EquipSlot_Prefab, EquipSlot_Tr, Inven_EquipSlotList);
+
+        Refresh_Inventory();
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created

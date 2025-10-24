@@ -82,7 +82,7 @@ public class Player_Ctrl : NetworkBehaviour
         if (IsLocalPlayer)
         {
             // 카메라 타겟 설정
-            if (Camera_Mgr.Inst.VirtualCamera.Follow == null)
+            if (Camera_Mgr.Inst != null && Camera_Mgr.Inst.VirtualCamera.Follow == null)
             {
                 Camera_Mgr.Inst.VirtualCamera.Follow = this.transform;
             }

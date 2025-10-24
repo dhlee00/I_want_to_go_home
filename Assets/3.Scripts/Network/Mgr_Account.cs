@@ -1,4 +1,4 @@
-using PlayFab;
+ï»¿using PlayFab;
 using PlayFab.ClientModels;
 using System;
 using System.Threading.Tasks;
@@ -12,50 +12,54 @@ public class Mgr_Account : MonoBehaviour
     {
         await LoginUSG();
         await LoginPlayFab();
+        await Mgr_Data.Inst.TestLoad();
     }
 
-    // UGS ·Î±×ÀÎ
+    // UGS ë¡œê·¸ì¸
     async Task LoginUSG()
     {
-        // Unity Service ÃÊ±âÈ­
+        // Unity Service ì´ˆê¸°í™”
         await UnityServices.InitializeAsync();
 
-        // ¼¼¼Ç ÃÊ±âÈ­ (Å×½ºÆ®¿¡¼­¸¸)
-        AuthenticationService.Instance.ClearSessionToken();
+        // ì„¸ì…˜ ì´ˆê¸°í™” (í…ŒìŠ¤íŠ¸ì—ì„œë§Œ)
+        //AuthenticationService.Instance.ClearSessionToken();
 
-        // ÀÍ¸í ·Î±×ÀÎ
+        // ìµëª… ë¡œê·¸ì¸
         await AuthenticationService.Instance.SignInAnonymouslyAsync();
+
+        Debug.Log("UGS ë¡œê·¸ì¸ ì™„ë£Œ");
     }
 
-    // PlayFab ·Î±×ÀÎ
+    // PlayFab ë¡œê·¸ì¸
     async Task LoginPlayFab()
     {
-        // ¿Ï·á º¯¼ö
+        // ì™„ë£Œ ë³€ìˆ˜
         var loginComplete = new TaskCompletionSource<bool>();
 
-        // PlayFab Ä¿½ºÅÒ ·Î±×ÀÎ
+        // PlayFab ì»¤ìŠ¤í…€ ë¡œê·¸ì¸
         PlayFabClientAPI.LoginWithCustomID
         (
-            // ·£´ı ¹øÈ£·Î ·Î±×ÀÎ
             new LoginWithCustomIDRequest
             {
-                CustomId = "user_" + Guid.NewGuid().ToString(),
+                //CustomId = "user_" + Guid.NewGuid().ToString(),  // ëœë¤ ë²ˆí˜¸ë¡œ ë¡œê·¸ì¸
+                CustomId = SystemInfo.deviceUniqueIdentifier,      // ê¸°ê¸° ê³ ìœ  ë²ˆí˜¸ë¡œ ë¡œê·¸ì¸
+
                 CreateAccount = true
             },
             result =>
             {
-                // ·Î±×ÀÎ ¼º°ø ½Ã ¿Ï·á Ã³¸®
-                Debug.Log("PlayFab ·Î±×ÀÎ ¿Ï·á");
+                // ë¡œê·¸ì¸ ì„±ê³µ ì‹œ ì™„ë£Œ ì²˜ë¦¬
+                Debug.Log("PlayFab ë¡œê·¸ì¸ ì™„ë£Œ");
                 loginComplete.SetResult(true);
             },
             error =>
             {
-                Debug.LogError($"PlayFab ·Î±×ÀÎ ½ÇÆĞ: {error.ErrorMessage}");
-                loginComplete.SetException(new System.Exception(error.ErrorMessage));
+                Debug.LogError($"PlayFab ë¡œê·¸ì¸ ì‹¤íŒ¨: {error.ErrorMessage}");
+                loginComplete.SetException(new Exception(error.ErrorMessage));
             }
         );
 
-        // ·Î±×ÀÎ ¿Ï·á±îÁö ´ë±â
+        // ë¡œê·¸ì¸ ì™„ë£Œê¹Œì§€ ëŒ€ê¸°
         await loginComplete.Task;
     }
 }
