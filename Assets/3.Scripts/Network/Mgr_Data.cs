@@ -1,8 +1,6 @@
 using PlayFab;
 using PlayFab.ClientModels;
-using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using UnityEngine;
 
 public class Mgr_Data : MonoBehaviour
@@ -14,12 +12,9 @@ public class Mgr_Data : MonoBehaviour
         Inst = this;
     }
 
-    // 테스트를 위한 데이터 저장 (추후에 이동시키거나 삭제)
-    public async Task TestSave()
+    // 데이터 저장
+    public void TestSave()
     {
-        // 완료 변수
-        var saveDataComplete = new TaskCompletionSource<bool>();
-
         // 보유한 아이템 종류들만큼 반복
         for (int itemCount = 0; itemCount < GlobalValue.User_Inventory.Count; itemCount++)
         {
@@ -33,32 +28,25 @@ public class Mgr_Data : MonoBehaviour
                     // 아이템 정보 json 저장
                     Data = new Dictionary<string, string>()
                     {
-                        { saveItem.Get_Item_Index.ToString(), jsonData }
+                        { $"ItemIndex_{saveItem.Get_Item_Index.ToString()}", jsonData }
                     }
                 },
                 result =>
                 {
                     Debug.Log("데이터 저장 성공");
-                    saveDataComplete.SetResult(true);
                 },
                 error =>
                 {
-                    Debug.Log("데이터 저장 실패 " + error.GenerateErrorReport());
-                    saveDataComplete.SetException(new Exception(error.ErrorMessage));
+                    Debug.Log($"데이터 저장 실패 : {error.GenerateErrorReport()}");
                 }
             );
         }
-
-        // 저장 완료까지 대기
-        await saveDataComplete.Task;
     }
 
-    // 테스트용 유저 데이터 불러오기 (추후에 이동시키거나 삭제)
-    public async Task TestLoad()
+    // 데이터 불러오기
+    public void TestLoad()
     {
-        // 완료 변수
-        var loadDataComplete = new TaskCompletionSource<bool>();
-
+        // 데이터 불러오기
         PlayFabClientAPI.GetUserData
         (
             new GetUserDataRequest(),
@@ -69,29 +57,27 @@ public class Mgr_Data : MonoBehaviour
                     // 기존 인벤토리 초기화
                     GlobalValue.User_Inventory.Clear();
 
-                    foreach (var jsonData in result.Data)
+                    foreach (var serverData in result.Data)
                     {
-                        // 저장된 JSON 문자열
-                        string serverItem = jsonData.Value.Value;
+                        // 아이템 데이터 (키값이 "ItemIndex_"로 시작하면 불러오기)
+                        if (serverData.Key.StartsWith("ItemIndex_"))
+                        {
+                            // JSON을 Item 객체로 변환
+                            string itemData = serverData.Value.Value;
+                            Item item = JsonUtility.FromJson<Item>(itemData);
 
-                        // JSON → Item 객체
-                        Item item = JsonUtility.FromJson<Item>(serverItem);
-
-                        GlobalValue.User_Inventory.Add(item.Get_Item_Index, item);
+                            // 아이템 추가
+                            GlobalValue.User_Inventory.Add(item.Get_Item_Index, item);
+                        }
                     }
 
-                    Debug.Log("인벤토리 불러오기 성공");
-                    loadDataComplete.SetResult(true);
+                    Debug.Log("데이터 불러오기 성공");
                 }
             },
             error =>
             {
-                Debug.Log("인벤토리 불러오기 실패: " + error.GenerateErrorReport());
-                loadDataComplete.SetException(new Exception(error.ErrorMessage));
+                Debug.Log($"데이터 불러오기 실패 : {error.GenerateErrorReport()}");
             }
         );
-
-        // 데이터 로드 완료까지 대기
-        await loadDataComplete.Task;
     }
 }

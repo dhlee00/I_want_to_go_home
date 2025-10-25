@@ -1,0 +1,13 @@
+C:\Users\DHLEE\AppData\Local\Temp\ServerModule\module-compilation\ServerModule.dll
+C:\Users\DHLEE\AppData\Local\Temp\ServerModule\module-compilation\ServerModule.deps.json
+C:\Users\DHLEE\AppData\Local\Temp\ServerModule\module-compilation\ServerModule.pdb
+C:\Users\DHLEE\AppData\Local\Temp\ServerModule\module-compilation\Unity.Services.CloudCode.Apis.dll
+C:\Users\DHLEE\AppData\Local\Temp\ServerModule\module-compilation\Unity.Services.CloudCode.Core.dll
+C:\Users\DHLEE\AppData\Local\Temp\ServerModule\module-compilation\Google.Protobuf.dll
+C:\Users\DHLEE\AppData\Local\Temp\ServerModule\module-compilation\Grpc.Core.Api.dll
+C:\Users\DHLEE\AppData\Local\Temp\ServerModule\module-compilation\Grpc.Net.Client.dll
+C:\Users\DHLEE\AppData\Local\Temp\ServerModule\module-compilation\Grpc.Net.Common.dll
+C:\Users\DHLEE\AppData\Local\Temp\ServerModule\module-compilation\JsonSubTypes.dll
+C:\Users\DHLEE\AppData\Local\Temp\ServerModule\module-compilation\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+C:\Users\DHLEE\AppData\Local\Temp\ServerModule\module-compilation\Microsoft.Extensions.Logging.Abstractions.dll
+C:\Users\DHLEE\AppData\Local\Temp\ServerModule\module-compilation\Newtonsoft.Json.dll

@@ -1,8 +1,4 @@
-using PlayFab;
-using PlayFab.ClientModels;
-using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using UnityEngine;
 
 public interface ISlot
@@ -39,6 +35,7 @@ public class Mgr_Inventory : MonoBehaviour
         // 장착 슬롯 생성
         Spawn_Slot<Equip_Slot>(EquipSlot_Amount, Inven_EquipSlot_Prefab, EquipSlot_Tr, Inven_EquipSlotList);
 
+        // 불러온 데이터 인벤토리에 추가를 위해 새로고침
         Refresh_Inventory();
     }
 
@@ -71,6 +68,7 @@ public class Mgr_Inventory : MonoBehaviour
         foreach(var item in GlobalValue.User_Inventory)
         {
             Inven_ItemSlotList[index].Set_SlotInfo(item.Value, item.Value.Get_Item_Amount);
+            item.Value.Get_Item_SlotIndex = index;
             index++;
         }
     }

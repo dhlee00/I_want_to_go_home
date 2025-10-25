@@ -1,0 +1,13 @@
+C:\Programing\GitHub\I_want_to_go_home\ServerModule\Project\bin\Release\net6.0\linux-x64\ServerModule.deps.json
+C:\Programing\GitHub\I_want_to_go_home\ServerModule\Project\bin\Release\net6.0\linux-x64\ServerModule.dll
+C:\Programing\GitHub\I_want_to_go_home\ServerModule\Project\bin\Release\net6.0\linux-x64\ServerModule.pdb
+C:\Programing\GitHub\I_want_to_go_home\ServerModule\Project\obj\Release\net6.0\linux-x64\ServerModule.csproj.AssemblyReference.cache
+C:\Programing\GitHub\I_want_to_go_home\ServerModule\Project\obj\Release\net6.0\linux-x64\ServerModule.GeneratedMSBuildEditorConfig.editorconfig
+C:\Programing\GitHub\I_want_to_go_home\ServerModule\Project\obj\Release\net6.0\linux-x64\ServerModule.AssemblyInfoInputs.cache
+C:\Programing\GitHub\I_want_to_go_home\ServerModule\Project\obj\Release\net6.0\linux-x64\ServerModule.AssemblyInfo.cs
+C:\Programing\GitHub\I_want_to_go_home\ServerModule\Project\obj\Release\net6.0\linux-x64\ServerModule.csproj.CoreCompileInputs.cache
+C:\Programing\GitHub\I_want_to_go_home\ServerModule\Project\obj\Release\net6.0\linux-x64\ServerModule.sourcelink.json
+C:\Programing\GitHub\I_want_to_go_home\ServerModule\Project\obj\Release\net6.0\linux-x64\ServerModule.dll
+C:\Programing\GitHub\I_want_to_go_home\ServerModule\Project\obj\Release\net6.0\linux-x64\refint\ServerModule.dll
+C:\Programing\GitHub\I_want_to_go_home\ServerModule\Project\obj\Release\net6.0\linux-x64\ServerModule.pdb
+C:\Programing\GitHub\I_want_to_go_home\ServerModule\Project\obj\Release\net6.0\linux-x64\ref\ServerModule.dll

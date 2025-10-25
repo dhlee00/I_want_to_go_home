@@ -38,7 +38,7 @@ public class RelayNetwork : MonoBehaviour
             {
                 Data = new Dictionary<string, DataObject>
                 {
-                    { "JoinCode", new DataObject(DataObject.VisibilityOptions.Public, joinCode, DataObject.IndexOptions.S1) }
+                    { "JoinCode", new DataObject(DataObject.VisibilityOptions.Public, joinCode, DataObject.IndexOptions.S3) }
                 }
             }
         );
@@ -57,7 +57,7 @@ public class RelayNetwork : MonoBehaviour
         NetworkManager.Singleton.StartHost();
 
         // 씬 전환
-        NetworkManager.Singleton.SceneManager.LoadScene("Test_Scene", LoadSceneMode.Single);
+        NetworkManager.Singleton.SceneManager.LoadScene("1.Test_Scene", LoadSceneMode.Single);
     }
 
     // 클라이언트로 시작

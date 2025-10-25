@@ -1,15 +1,7 @@
-using PlayFab;
-using PlayFab.ClientModels;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using UnityEngine;
 
 public class Mgr_Game : MonoBehaviour
 {
-
-
-
     public static Mgr_Game Inst;
 
     void Awake()
@@ -23,11 +15,11 @@ public class Mgr_Game : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
     }
 
-    async void Update()
+    void Update()
     {
         if (Input.GetKeyDown(KeyCode.V))
         {
-            await Mgr_Data.Inst.TestSave();
+            Mgr_Data.Inst.TestSave();
         }
     }
 }

@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.SceneManagement;
+
 
 public class Player_Ctrl : NetworkBehaviour
 {
@@ -33,14 +33,11 @@ public class Player_Ctrl : NetworkBehaviour
     float AnimationMoveBlend;      // 이동시 애니메이션 블랜드
     #endregion
 
-
-
     // 애니메이션
     [Header("Animator")]
     Animator m_Animator;
 
-
-
+    #region  카메라
     // 카메라
     GameObject CameraTargetRoot;        // 카메라가 바라볼 타깃
 
@@ -49,15 +46,14 @@ public class Player_Ctrl : NetworkBehaviour
 
     float TopClamp = 70.0f;
     float BottomClamp = -20.0f;
+    #endregion
 
+    #region  상호작용
+    // 상호작용 가능한
+    List<Interaction_UI> InteractionUI_List = new List<Interaction_UI>();
+    public int ChangeInteractionCount = 0;
+    #endregion
 
-
-    // 상호작용
-    [SerializeField] List<Interaction> InteractionList = new List<Interaction>();
-    public List<Interaction> Get_InteractionList { get => InteractionList; }
-
-    // 테스트 프리펩
-    [SerializeField] GameObject testPrefab;
 
     protected CharacterController Controller;
 
@@ -78,6 +74,9 @@ public class Player_Ctrl : NetworkBehaviour
 
     void Update()
     {
+        // 마우스 휠
+        MouseScroll();
+
         // 내가 조작하는 플레이어 인 경우
         if (IsLocalPlayer)
         {
@@ -94,27 +93,7 @@ public class Player_Ctrl : NetworkBehaviour
 
             if (Input.GetKeyDown(KeyCode.F))
             {
-                if (InteractionList.Count <= 0) return;
-
-                if (40 <= GlobalValue.User_Inventory.Count) return;
-
-                InteractionList[0].OnInteraction();
-
-                for (int i = 0; i < UI_ObjPool.Inst.Interact_UI_List.Count; i++)
-                {
-                    if (InteractionList[0] == UI_ObjPool.Inst.Interact_UI_List[i].Get_interaction)
-                    {
-                        UI_ObjPool.Inst.Interact_UI_List[i].gameObject.SetActive(false);
-                        break;
-                    }
-                }
-
-                InteractionList.RemoveAt(0);
-            }
-
-            if (Input.GetKeyDown(KeyCode.P))
-            {
-                GameObject obj = Instantiate(testPrefab);
+                Interaction();
             }
         }
 
@@ -145,7 +124,7 @@ public class Player_Ctrl : NetworkBehaviour
 
             // 회전
             transform.rotation = Quaternion.Lerp(transform.rotation, serverRot.Value, Time.deltaTime / 0.2f);
-            
+
             // 애니메이션
             m_Animator.SetFloat("Move", serverAnimMoveBlend.Value);
         }
@@ -240,39 +219,158 @@ public class Player_Ctrl : NetworkBehaviour
     }
 
 
+    // 상호작용
+    void Interaction()
+    {
+        if (InteractionUI_List.Count <= 0) return;
+
+        InteractionUI_List[ChangeInteractionCount].Interaction();
+
+        // 삭제
+        Destroy(InteractionUI_List[ChangeInteractionCount].gameObject);
+        InteractionUI_List.RemoveAt(ChangeInteractionCount);
+
+        // 선택된 상호작용 순서 변경
+        if (InteractionUI_List.Count < ChangeInteractionCount)
+            ChangeInteractionCount = InteractionUI_List.Count;
+    }
+
+    // 마우스 휠
+    void MouseScroll()
+    {
+        if (Input.GetAxis("Mouse ScrollWheel") == 0) return;
+
+        ChangeInteraction(Input.GetAxis("Mouse ScrollWheel"));
+    }
+
+    // 상호작용 마우스 휠로 조작
+    void ChangeInteraction(float scroll)
+    {
+        if (InteractionUI_List.Count == 0) return;
+
+        // 휠 키다운
+        if (scroll == 0) return;
+
+        if (scroll > 0) // 마우스 휠 업 (앞으로 스크롤)
+        {
+            ChangeInteractionCount--;
+
+            if (ChangeInteractionCount < 0)
+                ChangeInteractionCount = InteractionUI_List.Count - 1;
+        }
+        else if (scroll < 0) // 마우스 휠 다운 (뒤로 스크롤)
+        {
+            ChangeInteractionCount++;
+
+            if (InteractionUI_List.Count <= ChangeInteractionCount)
+                ChangeInteractionCount = 0;
+        }
+
+
+        for (int i = 0; i < InteractionUI_List.Count; i++)
+        {
+            InteractionUI_List[i].Change(i == ChangeInteractionCount);
+        }
+
+    }
 
 
     private void OnTriggerEnter(Collider other)
     {
+        // 상호작용 오브젝트가 아니라면 리턴
         if (other.tag != "Interaction") return;
         Interaction interaction = other.gameObject.GetComponent<Interaction>();
         if (interaction == null) return;
 
-        foreach (Interaction list in InteractionList)
+
+        // 중복 체크
+        bool isDuplicate = false;
+        for (int i = 0; i < InteractionUI_List.Count; i++)
         {
-            if (list == interaction) return;
-        }
-        UI_ObjPool.Inst.Get_Interact_UI(interaction.ItemData, interaction);
-        InteractionList.Add(interaction);
-    }
+            if (InteractionUI_List[i].InteractionType != interaction.InteractionType) continue;
 
-
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.tag != "Interaction") return;
-        Interaction interaction = other.gameObject.GetComponent<Interaction>();
-        if (interaction == null) return;
-
-        for (int i = 0; i < UI_ObjPool.Inst.Interact_UI_List.Count; i++)
-        {
-            if (interaction == UI_ObjPool.Inst.Interact_UI_List[i].Get_interaction)
+            switch (InteractionUI_List[i].InteractionType)
             {
-                UI_ObjPool.Inst.Interact_UI_List[i].gameObject.SetActive(false);
-                break;
+                // 아이템 타입
+                case EInteractionType.Itme:
+                    {
+                        Interaction_Item interaction_Item = interaction.GetComponent<Interaction_Item>();
+
+                        // 아이템 코드가 같은 아이템일 경우 합치기
+                        if (InteractionUI_List[i].Item_Obj_List[0].ItemData.Get_Item_Index == interaction_Item.ItemData.Get_Item_Index)
+                        {
+                            InteractionUI_List[i].Item_Obj_List.Add(interaction_Item);
+                            InteractionUI_List[i].UI_Update();
+                            isDuplicate = true;
+                        }
+                        break;
+                    }
             }
         }
 
-        InteractionList.Remove(interaction);
+        if (isDuplicate == false)
+        {
+            InteractionUI_List.Add(UI_ObjPool.Inst.Spawn_Interaction_UI(interaction));
+        }
+
+        for (int i = 0; i < InteractionUI_List.Count; i++)
+        {
+            InteractionUI_List[i].Change(i == ChangeInteractionCount);
+        }
+
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        // 상호작용 오브젝트가 아니라면 리턴
+        if (other.tag != "Interaction") return;
+        Interaction interaction = other.gameObject.GetComponent<Interaction>();
+        if (interaction == null) return;
+
+
+        bool isDestroy = false;
+        foreach (Interaction_UI ui in InteractionUI_List)
+        {
+            // 상호작용 오브젝트와 UI가 같은 타입이 아니라면 넘기기
+            if (ui.InteractionType != interaction.InteractionType) continue;
+
+            switch (ui.InteractionType)
+            {
+                // 아이템 타입
+                case EInteractionType.Itme:
+                    {
+                        Interaction_Item interaction_Item = interaction.GetComponent<Interaction_Item>();
+
+                        ui.Item_Obj_List.Remove(interaction_Item);
+                        ui.UI_Update();
+
+                        if (ui.Item_Obj_List.Count <= 0)
+                        {
+                            InteractionUI_List.Remove(ui);
+                            Destroy(ui.gameObject);
+
+                            isDestroy = true;
+                        }
+                        break;
+                    }
+            }
+
+            if (isDestroy)
+                break;
+        }
+
+        // 만약 삭제 했다면
+        if (isDestroy)
+        {
+            // 선택된 상호작용 순서 변경
+            if (InteractionUI_List.Count < ChangeInteractionCount)
+                ChangeInteractionCount = InteractionUI_List.Count;
+        }
+
+        for (int i = 0; i < InteractionUI_List.Count; i++)
+        {
+            InteractionUI_List[i].Change(i == ChangeInteractionCount);
+        }
     }
 
     // 서버에 값 전송

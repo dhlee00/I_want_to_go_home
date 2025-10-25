@@ -5,6 +5,8 @@ public static class GlobalValue
 {
     public static Dictionary<int, Item> User_Inventory = new Dictionary<int, Item>();
 
+    public static string Nickname;
+
     public static float ClampAngle(float lfAngle, float lfMin, float lfMax)
     {
         if (lfAngle < -360f) lfAngle += 360f;

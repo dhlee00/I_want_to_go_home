@@ -6,8 +6,7 @@ public class ItemList : MonoBehaviour
     public List<Item> Item_List = new List<Item>();
     public static ItemList Inst = null;
 
-
-    void Start()
+    void Awake()
     {
         if(Inst == null)
         {
