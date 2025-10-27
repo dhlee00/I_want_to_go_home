@@ -21,7 +21,7 @@ public class Mgr_Account : MonoBehaviour
         await UnityServices.InitializeAsync();
 
         // 세션 초기화 (테스트에서만)
-        AuthenticationService.Instance.ClearSessionToken();
+        //AuthenticationService.Instance.ClearSessionToken();
 
         // 익명 로그인
         await AuthenticationService.Instance.SignInAnonymouslyAsync();
@@ -37,8 +37,8 @@ public class Mgr_Account : MonoBehaviour
         (
             new LoginWithCustomIDRequest
             {
-                CustomId = $"user_{Guid.NewGuid().ToString()}",  // 랜덤 번호로 로그인
-                //CustomId = SystemInfo.deviceUniqueIdentifier,      // 기기 고유 번호로 로그인
+                //CustomId = $"user_{Guid.NewGuid().ToString()}",  // 랜덤 번호로 로그인
+                CustomId = SystemInfo.deviceUniqueIdentifier,      // 기기 고유 번호로 로그인
                 CreateAccount = true,
                 InfoRequestParameters = new GetPlayerCombinedInfoRequestParams
                 {
@@ -50,7 +50,9 @@ public class Mgr_Account : MonoBehaviour
                 Debug.Log("PlayFab 로그인 완료");
 
                 // 닉네임이 있다면 불러오기
-                if (!string.IsNullOrEmpty(result.InfoResultPayload.PlayerProfile.DisplayName))
+                if (result.InfoResultPayload != null &&
+                    result.InfoResultPayload.PlayerProfile != null &&
+                    !string.IsNullOrEmpty(result.InfoResultPayload.PlayerProfile.DisplayName))
                 {
                     Debug.Log("닉네임 불러오기 완료");
                     GlobalValue.Nickname = result.InfoResultPayload.PlayerProfile.DisplayName;

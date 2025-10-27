@@ -1,5 +1,8 @@
+using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
+using TMPro;
 using Unity.Services.Authentication;
 using Unity.Services.CloudCode;
 using Unity.Services.Lobbies;
@@ -26,33 +29,27 @@ public class Mgr_Lobby : MonoBehaviour
     // 로비 정보 창 관련 변수
     [Header("LobbyInfo")]
     public GameObject lobbyInfo;  // 로비 정보 창
-    public Text lobbyNameTxt;     // 로비의 이름
-    public Text leaderNameTxt;    // 로비의 리더 이름
-    public Text maxPlayerTxt;     // 로비 최대 인원 수
-    public Text infoTxt;          // 로비 소개문
+    public TextMeshProUGUI lobbyNameTxt;     // 로비의 이름
+    public TextMeshProUGUI leaderNameTxt;    // 로비의 리더 이름
+    public TextMeshProUGUI maxPlayerTxt;     // 로비 최대 인원 수
+    public TextMeshProUGUI infoTxt;          // 로비 소개문
 
     // 코드 입력 창 관련 변수
     [Header("CodeInput")]
     public GameObject codeInputPanel;  // 코드 입력 창
-    public InputField codeField;       // 코드 입력필드
+    public TMP_InputField codeField;       // 코드 입력필드
 
     // 로비 생성 창 관련 변수
     [Header("CreateLobby")]
     public GameObject createLobbyPanel;  // 로비 생성 창
-    public InputField lobbyNameField;    // 로비 이름 입력필드
-    public Dropdown maxPlayerDD;         // 최대 인원수 선택 창
-    public Dropdown visibilityDD;        // 공개 / 비공개 여부 선택 창
-    public InputField lobbyInfoField;    // 로비 소개문 입력필드
+    public TMP_InputField lobbyNameField;    // 로비 이름 입력필드
+    public TMP_Dropdown maxPlayerDD;         // 최대 인원수 선택 창
+    public TMP_Dropdown visibilityDD;        // 공개 / 비공개 여부 선택 창
+    public TMP_InputField lobbyInfoField;    // 로비 소개문 입력필드
 
     [Header("")]
     // 로딩 창
     public GameObject loadingView;
-
-    // 상태 메세지
-    public Text statusMessage;
-
-    // 메세지 출력 시간
-    float messageTimer = 0;
 
     // 버튼 중복 처리
     bool isClick;
@@ -62,32 +59,28 @@ public class Mgr_Lobby : MonoBehaviour
         instance = this;
     }
 
+    CancellationTokenSource cancelTask;
+
     void Start()
     {
-        _ = UpdateLobbyList();
+        cancelTask = new CancellationTokenSource();
+        _ = UpdateLobbyList(cancelTask.Token);
     }
 
-    void Update()
+    void OnApplicationQuit()
     {
-        // 메세지는 1초간 출력하고 1초 후 비활성화
-        //if (messageTimer > 0)
-        //{
-        //    messageTimer -= Time.deltaTime;
-        //}
-
-        //else
-        //{
-        //    statusMessage.gameObject.SetActive(false);
-        //}
+        cancelTask.Cancel();
     }
 
     // 로비 목록 갱신
-    public async Task UpdateLobbyList()
+    public async Task UpdateLobbyList(CancellationToken token)
     {
-        while (SceneManager.GetActiveScene().name == "TitleScene")
+        while (SceneManager.GetActiveScene().name == "0.TitleScene_Test")
         {
             try
             {
+                token.ThrowIfCancellationRequested();
+
                 // 로그인 안된 상태에서는 갱신하지 않음
                 if (!AuthenticationService.Instance.IsSignedIn) continue;
 
@@ -106,7 +99,7 @@ public class Mgr_Lobby : MonoBehaviour
 
                         // 로비 목록에 버튼 추가
                         GameObject btn = Instantiate(lobbyBtnPrefab, lobbyContent);
-                        btn.GetComponentInChildren<Text>().text = serverLobby.Name;
+                        btn.GetComponentInChildren<TextMeshProUGUI>().text = serverLobby.Name;
 
                         btn.GetComponent<LobbyBtn>().lobbyId = serverLobby.Id;
                         btn.GetComponent<LobbyBtn>().lobbyName = serverLobby.Name;
@@ -142,9 +135,16 @@ public class Mgr_Lobby : MonoBehaviour
                     Destroy(lobbyList[lobbyId]);
                     lobbyList.Remove(lobbyId);
                 }
+
+                Debug.Log("로비 목록 갱신");
             }
             catch (System.Exception e)
             {
+                if (e is OperationCanceledException || e.InnerException is OperationCanceledException)
+                {
+                    return;
+                }
+
                 Debug.LogWarning("로비 목록 갱신 실패: " + e);
             }
             finally
@@ -192,7 +192,6 @@ public class Mgr_Lobby : MonoBehaviour
         // 아무 것도 입력하지 않으면 경고 문구 출력
         if (codeField.text.IsNullOrEmpty())
         {
-            PrintMessage("빈 칸 없이 입력해주세요.");
             return;
         }
 
@@ -212,8 +211,6 @@ public class Mgr_Lobby : MonoBehaviour
                 return;
             }
         }
-
-        PrintMessage("참여코드를 다시 확인해주세요.");
     }
 
     // 로비 생성 창 열기 버튼
@@ -229,15 +226,12 @@ public class Mgr_Lobby : MonoBehaviour
         // 아무 것도 입력하지 않으면 경고 문구 출력
         if (lobbyNameField.text.IsNullOrEmpty() || lobbyInfoField.text.IsNullOrEmpty())
         {
-            PrintMessage("빈 칸 없이 입력해주세요.");
             return;
         }
 
         if (!isClick)
         {
             isClick = true;
-
-            PrintMessage("로비 생성 중...");
 
             // 로비 생성
             Lobby newLobby = await LobbyService.Instance.CreateLobbyAsync
@@ -270,14 +264,14 @@ public class Mgr_Lobby : MonoBehaviour
                 }
             );
 
-            // 생성한 로비 정보 전달
-            RelayNetwork.instance.lobby = newLobby;
+            //// 생성한 로비 정보 전달
+            //RelayNetwork.instance.lobby = newLobby;
 
-            // 로딩 창 활성화
-            loadingView.SetActive(true);
+            //// 로딩 창 활성화
+            //loadingView.SetActive(true);
 
-            // 호스트로 Relay 시작
-            await RelayNetwork.instance.StartRelay();
+            //// 호스트로 Relay 시작
+            //await RelayNetwork.instance.StartRelay();
 
             isClick = false;
         }
@@ -304,15 +298,6 @@ public class Mgr_Lobby : MonoBehaviour
             lobbyNameField.text = null;
             lobbyInfoField.text = null;
         }
-    }
-
-    // 상태 출력
-    public void PrintMessage(string text, float time = 1.0f)
-    {
-        statusMessage.gameObject.SetActive(true);
-        messageTimer = time;
-
-        statusMessage.text = text;
     }
 
     #region 테스트용 함수

@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ServerModule")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+cbe744c03a21acf168d9d2075585b47de6cd8986")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6b24a38deb439db6132f747e5d9cb4264d410f83")]
 [assembly: System.Reflection.AssemblyProductAttribute("ServerModule")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ServerModule")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
