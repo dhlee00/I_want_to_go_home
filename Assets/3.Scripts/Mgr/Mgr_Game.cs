@@ -21,7 +21,7 @@ public class Mgr_Game : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.V))
         {
-            Mgr_Data.Inst.TestSave();
+            Mgr_Data.Inst.SaveInven();
         }
 
         // 인벤토리 열기

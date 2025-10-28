@@ -41,6 +41,9 @@ public class Item
     [SerializeField] Sprite Item_Icon;
     public Sprite Get_Item_Icon { get => Item_Icon; }
 
+    [SerializeField] string Item_IconPath;
+    public string Get_Item_IconPath { get => Item_IconPath; }
+
     // »ý¼ºÀÚ
     #region Constructor
     public Item(int _index, string _name, ITEM_TYPE _itemType, string _itemDesc, int _amount, string _iconPath, int _slotIndex = -1, bool _isEquip = false)
@@ -52,8 +55,9 @@ public class Item
         Item_Amount = _amount;
         Item_SlotIndex = _slotIndex;
         Item_Equip = _isEquip;
+        Item_IconPath = _iconPath;
 
-        Item_Icon = Resources.Load<Sprite>(_iconPath);
+        Load_Image();
     }
 
     public Item(Item _item)
@@ -65,8 +69,20 @@ public class Item
         Item_Amount = _item.Item_Amount;
         Item_SlotIndex = _item.Item_SlotIndex;
         Item_Equip = _item.Item_Equip;
+        Item_IconPath = _item.Get_Item_IconPath;
 
-        Item_Icon = _item.Item_Icon;
+        Item_Icon = Resources.Load<Sprite>(_item.Item_IconPath);
+    }
+    #endregion
+
+    #region Image_Resources_Load
+    public void Load_Image()
+    {
+        Item_Icon = Resources.Load<Sprite>(Item_IconPath);
+    }
+    public void Load_Image(string _iconPath)
+    {
+        Item_Icon = Resources.Load<Sprite>(Item_IconPath);
     }
     #endregion
 }
