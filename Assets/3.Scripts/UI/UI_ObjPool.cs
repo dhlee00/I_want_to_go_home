@@ -19,6 +19,150 @@ public class UI_ObjPool : MonoBehaviour
 
 
     #region 상호작용 UI
+    List<Interaction_UI> InteractionUI_List = new List<Interaction_UI>();
+    public int ChangeInteractionCount = 0;
+
+
+    public void Interaction()
+    {
+        if (InteractionUI_List.Count <= 0) return;
+
+        InteractionUI_List[ChangeInteractionCount].Interaction();
+
+        // 삭제
+        {
+            Destroy(InteractionUI_List[ChangeInteractionCount].gameObject);
+            InteractionUI_List.Remove(InteractionUI_List[ChangeInteractionCount]);
+        }
+        
+
+        
+        if(ChangeInteractionCount >= InteractionUI_List.Count)// 마지막 인덱스를 상호작용했을때
+        {
+            // 선택된 상호작용 순서 변경
+            ChangeInteraction(true);
+        }
+        else 
+        {
+            // UI 업데이트
+            for (int i = 0; i < InteractionUI_List.Count; i++)
+                InteractionUI_List[i].Change(i == ChangeInteractionCount);
+        }
+        
+    }
+
+    // 선택 중인 상호작용UI 설정
+    public void ChangeInteraction(bool bUp)
+    {
+        if (InteractionUI_List.Count == 0) return;
+        
+
+        if (bUp) // 위로
+        {
+            ChangeInteractionCount--;
+
+            if (ChangeInteractionCount < 0)
+                ChangeInteractionCount = InteractionUI_List.Count - 1;
+        }
+        else //아래
+        {
+            ChangeInteractionCount++;
+
+            if (ChangeInteractionCount >= InteractionUI_List.Count)
+                ChangeInteractionCount = 0;
+        }
+
+        // UI 업데이트
+        for (int i = 0; i < InteractionUI_List.Count; i++)
+            InteractionUI_List[i].Change(i == ChangeInteractionCount);
+
+    }
+
+
+    public void AddInteractionUI(Interaction interaction)
+    {
+        // 중복 체크
+        bool isDuplicate = false;
+
+        
+        if(interaction.InteractionType == EInteractionType.Itme &&
+            interaction is Interaction_Item itme)
+        {
+            if(itme.ItemData.Get_ItemType != ITEM_TYPE.EQUIPMENT)
+            {
+                for (int i = 0; i < InteractionUI_List.Count; i++)
+                {
+                    switch (InteractionUI_List[i].InteractionType)
+                    {
+                        // 아이템 타입
+                        case EInteractionType.Itme:
+                            {
+                                // 아이템 코드가 같은 아이템일 경우 합치기
+                                if (InteractionUI_List[i].Item_Obj_List[0].ItemData.Get_Item_Index == itme.ItemData.Get_Item_Index)
+                                {
+                                    InteractionUI_List[i].Item_Obj_List.Add(itme);
+                                    InteractionUI_List[i].UI_Update();
+                                    isDuplicate = true;
+                                }
+                                break;
+                            }
+                    }
+                }
+            }
+        }
+        
+
+        if (isDuplicate == false)
+        {
+            InteractionUI_List.Add(UI_ObjPool.Inst.Spawn_Interaction_UI(interaction));
+
+            for (int i = 0; i < InteractionUI_List.Count; i++)
+            {
+                InteractionUI_List[i].Change(i == ChangeInteractionCount);
+            }
+        }
+
+        
+    }
+
+    public void RemoveInteractionUI(Interaction interaction)
+    {
+        bool isDestroy = false;
+        foreach (Interaction_UI ui in InteractionUI_List)
+        {
+            // 상호작용 오브젝트와 UI가 같은 타입이 아니라면 넘기기
+            if (ui.InteractionType != interaction.InteractionType) continue;
+
+            switch (ui.InteractionType)
+            {
+                // 아이템 타입
+                case EInteractionType.Itme:
+                    {
+                        Interaction_Item interaction_Item = interaction.GetComponent<Interaction_Item>();
+
+                        ui.Item_Obj_List.Remove(interaction_Item);
+                        ui.UI_Update();
+
+                        if (ui.Item_Obj_List.Count <= 0)
+                        {
+                            InteractionUI_List.Remove(ui);
+                            Destroy(ui.gameObject);
+
+                            isDestroy = true;
+                        }
+                        break;
+                    }
+            }
+
+            if (isDestroy)
+                break;
+        }
+
+        // 만약 삭제 했다면
+        if (isDestroy && ChangeInteractionCount >= InteractionUI_List.Count)
+            ChangeInteraction(true);
+    }
+
     public Interaction_UI Spawn_Interaction_UI(Interaction interaction)
     {
         GameObject obj = Instantiate(Interact_UI_Prefab.gameObject);

@@ -9,7 +9,8 @@ public class Mgr_UI : MonoBehaviour
     [Header("Inventory")]
     [SerializeField] GameObject Inventory_Prefab;
     GameObject Inventory_UI;
-    
+
+    public bool OnInventory() { return Spawn_UI(Inventory_Prefab, Inventory_UI); }
 
     void Start()
     {
@@ -30,25 +31,27 @@ public class Mgr_UI : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.I))
-        {
-            Spawn_UI(Inventory_Prefab, Inventory_UI);
-        }
+
     }
 
     #region Spawn_UI
-    void Spawn_UI(GameObject _uiPrefab, GameObject _ui)
+    bool Spawn_UI(GameObject _uiPrefab, GameObject _ui)
     {
+        bool isOn = false;
         // UI 생성 되있고 비횔성화 중이면 (열기)
         if (_ui != null && _ui.activeSelf == false)
         {
             Inventory_UI.SetActive(true);
+            isOn = true;
         }
         // UI 생성 되있고 횔성화 중이면 (닫기)
         else if (_ui != null && _ui.activeSelf == true)
         {
             _ui.GetComponent<Animator>().Play("Close");
+            isOn = false;
         }
+
+        return isOn;
     }
 
     void Init_UI(GameObject _uiPrefab, ref GameObject _ui)
