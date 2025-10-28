@@ -111,8 +111,8 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   Speed: 0
   MoveSpeed: 4
-  InteractionList: []
-  testPrefab: {fileID: 2926777593290956202, guid: ae74a6b3e1554f84e997cdde906a5b81, type: 3}
+  ChangeInteractionCount: 0
+  TestPlayer: 0
 --- !u!95 &8060551310056287597
 Animator:
   serializedVersion: 7

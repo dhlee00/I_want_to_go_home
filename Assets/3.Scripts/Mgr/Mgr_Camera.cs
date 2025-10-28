@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Windows;
 
-public class Camera_Mgr : MonoBehaviour
+public class Mgr_Camera : MonoBehaviour
 {
     [Header("Camera")]
     public CinemachineCamera VirtualCamera;
@@ -12,7 +12,7 @@ public class Camera_Mgr : MonoBehaviour
     [Header("CameraRoot")]
     public Transform LoadingCameraRoot;
 
-    public static Camera_Mgr Inst = null;
+    public static Mgr_Camera Inst = null;
 
 
     private void Awake()
@@ -21,6 +21,12 @@ public class Camera_Mgr : MonoBehaviour
         ChangeTarget(LoadingCameraRoot);
         SetCameraZoom(0);
     }
+
+    private void Start()
+    {
+        VirtualCamera.Follow = Player_Ctrl.LocalInst.transform;
+    }
+
 
     bool IsNULLVirtualCamera()
     {
@@ -37,6 +43,7 @@ public class Camera_Mgr : MonoBehaviour
         VirtualCamera.Follow = input;
     }
 
+    // 카메라 줌
     public void SetCameraZoom(float zoom)
     {
         if (IsNULLVirtualCamera()) return;
@@ -49,4 +56,15 @@ public class Camera_Mgr : MonoBehaviour
         //}
 
     }
+
+    // 카메라 잠금
+    public void SetCameraLock(bool isLocked)
+    {
+        CinemachineInputAxisController pov = VirtualCamera.GetComponent<CinemachineInputAxisController>();
+
+        if(pov == null) return;
+
+        pov.enabled = !isLocked;
+    }
+
 }

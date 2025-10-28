@@ -15,7 +15,6 @@ public class Player_Ctrl : NetworkBehaviour
 
     #region InPut
     Vector2 InputMove; // 입력을 받을 변수
-    Vector2 InputLook; // 입력을 받을 변수
     #endregion
 
     #region Move
@@ -37,25 +36,16 @@ public class Player_Ctrl : NetworkBehaviour
     [Header("Animator")]
     Animator m_Animator;
 
-    #region  카메라
-    // 카메라
-    GameObject CameraTargetRoot;        // 카메라가 바라볼 타깃
 
-    float CinemachineTargetYaw = 0;
-    float CinemachineTargetPitch = 0;
 
-    float TopClamp = 70.0f;
-    float BottomClamp = -20.0f;
-    #endregion
 
-    #region  상호작용
-    // 상호작용 가능한
-    List<Interaction_UI> InteractionUI_List = new List<Interaction_UI>();
-    public int ChangeInteractionCount = 0;
-    #endregion
-
+    // 테스트용
+    public bool TestPlayer = false;
 
     protected CharacterController Controller;
+
+    public static Player_Ctrl LocalInst;
+
 
     void Awake()
     {
@@ -63,38 +53,37 @@ public class Player_Ctrl : NetworkBehaviour
         Controller = GetComponent<CharacterController>();
         m_Animator = GetComponent<Animator>();
 
-        CameraTargetRoot = GameObject.Find("CameraTargetRoot");
-
+        if (TestPlayer)
+            LocalInst = this;
     }
 
-    void Start()
+    public override void OnNetworkSpawn()
     {
-
+        if (IsLocalPlayer || TestPlayer)
+            LocalInst = this;
     }
 
     void Update()
     {
-        // 마우스 휠
-        MouseScroll();
-
         // 내가 조작하는 플레이어 인 경우
-        if (IsLocalPlayer)
+        if (IsLocalPlayer || TestPlayer)
         {
-            // 카메라 타겟 설정
-            if (Camera_Mgr.Inst != null && Camera_Mgr.Inst.VirtualCamera.Follow == null)
+            // 마우스 휠
+            MouseScroll();
+
+            if (Mgr_Game.Inst && Mgr_Game.Inst.bCanMove)
             {
-                Camera_Mgr.Inst.VirtualCamera.Follow = this.transform;
+                // 무브 입력
+                InputMove = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+
+                CharMove();
+
+                if (Input.GetKeyDown(KeyCode.F))
+                {
+                    UI_ObjPool.Inst.Interaction();
+                }
             }
-
-            // 무브 입력
-            InputMove = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
-
-            CharMove();
-
-            if (Input.GetKeyDown(KeyCode.F))
-            {
-                Interaction();
-            }
+            
         }
 
         // 내가 조작하는 플레이어가 아닌 경우
@@ -132,10 +121,7 @@ public class Player_Ctrl : NetworkBehaviour
 
     void LateUpdate()
     {
-        // 마우스 입력
-        InputLook = new Vector2(Input.GetAxisRaw("Mouse X"), Input.GetAxisRaw("Mouse Y"));
-
-        CameraRotation();
+          
     }
 
     // 움직임
@@ -199,177 +185,51 @@ public class Player_Ctrl : NetworkBehaviour
         );
     }
 
-    // 카메라 회전
-    void CameraRotation()
-    {
-        Vector2 look = InputLook;
-
-        if (look.sqrMagnitude >= 0.01f)
-        {
-            CinemachineTargetYaw += look.x;
-            CinemachineTargetPitch += look.y;
-        }
-
-        CinemachineTargetYaw = GlobalValue.ClampAngle(CinemachineTargetYaw, float.MinValue, float.MaxValue);
-        CinemachineTargetPitch = GlobalValue.ClampAngle(CinemachineTargetPitch, BottomClamp, TopClamp);
-
-        // Cinemachine will follow this target
-        CameraTargetRoot.transform.rotation = Quaternion.Euler(CinemachineTargetPitch + 0.0f,
-            CinemachineTargetYaw, 0.0f);
-    }
-
-
-    // 상호작용
-    void Interaction()
-    {
-        if (InteractionUI_List.Count <= 0) return;
-
-        InteractionUI_List[ChangeInteractionCount].Interaction();
-
-        // 삭제
-        Destroy(InteractionUI_List[ChangeInteractionCount].gameObject);
-        InteractionUI_List.RemoveAt(ChangeInteractionCount);
-
-        // 선택된 상호작용 순서 변경
-        if (InteractionUI_List.Count < ChangeInteractionCount)
-            ChangeInteractionCount = InteractionUI_List.Count;
-    }
 
     // 마우스 휠
     void MouseScroll()
     {
-        if (Input.GetAxis("Mouse ScrollWheel") == 0) return;
+        float scroll = Input.GetAxis("Mouse ScrollWheel");
 
-        ChangeInteraction(Input.GetAxis("Mouse ScrollWheel"));
-    }
-
-    // 상호작용 마우스 휠로 조작
-    void ChangeInteraction(float scroll)
-    {
-        if (InteractionUI_List.Count == 0) return;
-
-        // 휠 키다운
-        if (scroll == 0) return;
-
-        if (scroll > 0) // 마우스 휠 업 (앞으로 스크롤)
-        {
-            ChangeInteractionCount--;
-
-            if (ChangeInteractionCount < 0)
-                ChangeInteractionCount = InteractionUI_List.Count - 1;
-        }
-        else if (scroll < 0) // 마우스 휠 다운 (뒤로 스크롤)
-        {
-            ChangeInteractionCount++;
-
-            if (InteractionUI_List.Count <= ChangeInteractionCount)
-                ChangeInteractionCount = 0;
-        }
-
-
-        for (int i = 0; i < InteractionUI_List.Count; i++)
-        {
-            InteractionUI_List[i].Change(i == ChangeInteractionCount);
-        }
+        if(scroll == 0.1f)
+            UI_ObjPool.Inst.ChangeInteraction(true);
+        else if (scroll == -0.1f)
+            UI_ObjPool.Inst.ChangeInteraction(false);
 
     }
+
+    
 
 
     private void OnTriggerEnter(Collider other)
     {
-        // 상호작용 오브젝트가 아니라면 리턴
-        if (other.tag != "Interaction") return;
-        Interaction interaction = other.gameObject.GetComponent<Interaction>();
-        if (interaction == null) return;
-
-
-        // 중복 체크
-        bool isDuplicate = false;
-        for (int i = 0; i < InteractionUI_List.Count; i++)
+        // 내가 조작하는 플레이어 인 경우
+        if (IsLocalPlayer || TestPlayer)
         {
-            if (InteractionUI_List[i].InteractionType != interaction.InteractionType) continue;
+            // 상호작용 오브젝트가 아니라면 리턴
+            if (other.tag != "Interaction") return;
+            Interaction interaction = other.gameObject.GetComponent<Interaction>();
+            if (interaction == null) return;
 
-            switch (InteractionUI_List[i].InteractionType)
-            {
-                // 아이템 타입
-                case EInteractionType.Itme:
-                    {
-                        Interaction_Item interaction_Item = interaction.GetComponent<Interaction_Item>();
 
-                        // 아이템 코드가 같은 아이템일 경우 합치기
-                        if (InteractionUI_List[i].Item_Obj_List[0].ItemData.Get_Item_Index == interaction_Item.ItemData.Get_Item_Index)
-                        {
-                            InteractionUI_List[i].Item_Obj_List.Add(interaction_Item);
-                            InteractionUI_List[i].UI_Update();
-                            isDuplicate = true;
-                        }
-                        break;
-                    }
-            }
+            UI_ObjPool.Inst.AddInteractionUI(interaction);
         }
 
-        if (isDuplicate == false)
-        {
-            InteractionUI_List.Add(UI_ObjPool.Inst.Spawn_Interaction_UI(interaction));
-        }
-
-        for (int i = 0; i < InteractionUI_List.Count; i++)
-        {
-            InteractionUI_List[i].Change(i == ChangeInteractionCount);
-        }
-
+            
     }
 
     private void OnTriggerExit(Collider other)
     {
-        // 상호작용 오브젝트가 아니라면 리턴
-        if (other.tag != "Interaction") return;
-        Interaction interaction = other.gameObject.GetComponent<Interaction>();
-        if (interaction == null) return;
-
-
-        bool isDestroy = false;
-        foreach (Interaction_UI ui in InteractionUI_List)
+        // 내가 조작하는 플레이어 인 경우
+        if (IsLocalPlayer || TestPlayer)
         {
-            // 상호작용 오브젝트와 UI가 같은 타입이 아니라면 넘기기
-            if (ui.InteractionType != interaction.InteractionType) continue;
+            // 상호작용 오브젝트가 아니라면 리턴
+            if (other.tag != "Interaction") return;
+            Interaction interaction = other.gameObject.GetComponent<Interaction>();
+            if (interaction == null) return;
 
-            switch (ui.InteractionType)
-            {
-                // 아이템 타입
-                case EInteractionType.Itme:
-                    {
-                        Interaction_Item interaction_Item = interaction.GetComponent<Interaction_Item>();
 
-                        ui.Item_Obj_List.Remove(interaction_Item);
-                        ui.UI_Update();
-
-                        if (ui.Item_Obj_List.Count <= 0)
-                        {
-                            InteractionUI_List.Remove(ui);
-                            Destroy(ui.gameObject);
-
-                            isDestroy = true;
-                        }
-                        break;
-                    }
-            }
-
-            if (isDestroy)
-                break;
-        }
-
-        // 만약 삭제 했다면
-        if (isDestroy)
-        {
-            // 선택된 상호작용 순서 변경
-            if (InteractionUI_List.Count < ChangeInteractionCount)
-                ChangeInteractionCount = InteractionUI_List.Count;
-        }
-
-        for (int i = 0; i < InteractionUI_List.Count; i++)
-        {
-            InteractionUI_List[i].Change(i == ChangeInteractionCount);
+            UI_ObjPool.Inst.RemoveInteractionUI(interaction);
         }
     }
 
