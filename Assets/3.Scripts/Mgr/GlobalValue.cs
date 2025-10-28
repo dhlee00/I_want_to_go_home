@@ -4,6 +4,7 @@ using UnityEngine;
 public static class GlobalValue
 {
     public static Dictionary<int, Item> User_Inventory = new Dictionary<int, Item>();
+    public static List<Item> Equipment_Inventory = new List<Item>();
 
     public static string Nickname;
 

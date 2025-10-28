@@ -10,6 +10,7 @@ public class Mgr_Inventory : MonoBehaviour
 {
     [Header("Inven_Item_Slot")]
     [SerializeField] List<Inven_Slot> Inven_ItemSlotList = new List<Inven_Slot>();
+    public List<Inven_Slot> Get_Inven_ItemSlotList { get => Inven_ItemSlotList; }
     [SerializeField] GameObject Inven_ItemSlot_Prefab;
     [SerializeField] Transform ItemSlot_Tr;
     [SerializeField] int ItemSlot_Amount;
@@ -36,7 +37,7 @@ public class Mgr_Inventory : MonoBehaviour
         Spawn_Slot<Equip_Slot>(EquipSlot_Amount, Inven_EquipSlot_Prefab, EquipSlot_Tr, Inven_EquipSlotList);
 
         // 불러온 데이터 인벤토리에 추가를 위해 새로고침
-        Refresh_Inventory();
+        //Refresh_Inventory();
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -64,12 +65,15 @@ public class Mgr_Inventory : MonoBehaviour
     #region Refresh Inventory
     public void Refresh_Inventory()
     {
-        int index = 0;
+        // int index = 0;
         foreach(var item in GlobalValue.User_Inventory)
         {
-            Inven_ItemSlotList[index].Set_SlotInfo(item.Value, item.Value.Get_Item_Amount);
-            item.Value.Get_Item_SlotIndex = index;
-            index++;
+            Inven_ItemSlotList[item.Value.Get_Item_SlotIndex].Set_SlotInfo(item.Value, item.Value.Get_Item_Amount);
+        }
+
+        foreach(var item in GlobalValue.Equipment_Inventory)
+        {
+            Inven_ItemSlotList[item.Get_Item_SlotIndex].Set_SlotInfo(item, item.Get_Item_Amount);
         }
     }
     #endregion

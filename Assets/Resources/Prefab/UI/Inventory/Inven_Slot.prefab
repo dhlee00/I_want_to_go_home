@@ -167,8 +167,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SlotNum: 0
   Item_Icon: {fileID: 3693457037080131410}
+  Item_Amount: {fileID: 4326126006457835592}
   ItemData:
-    Item_Index: 0
+    Item_Index: -1
     Item_Name: 
     ItemType: 0
     Item_Amount: 0
@@ -176,7 +177,6 @@ MonoBehaviour:
     Item_Equip: 0
     Item_Desc: 
     Item_Icon: {fileID: 0}
-  Item_Amount: {fileID: 4326126006457835592}
 --- !u!1 &8929932435932500611
 GameObject:
   m_ObjectHideFlags: 0

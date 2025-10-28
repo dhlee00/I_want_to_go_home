@@ -3,7 +3,7 @@ using UnityEngine;
 // 상호작용 타입
 public enum EInteractionType
 {
-    Itme,
+    item,
 }
 
 public class Interaction : MonoBehaviour
