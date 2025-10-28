@@ -80,7 +80,7 @@ public class Player_Ctrl : NetworkBehaviour
 
                 if (Input.GetKeyDown(KeyCode.F))
                 {
-                    UI_ObjPool.Inst.Interaction();
+                    Mgr_UI.Inst.Interaction();
                 }
             }
             
@@ -192,9 +192,9 @@ public class Player_Ctrl : NetworkBehaviour
         float scroll = Input.GetAxis("Mouse ScrollWheel");
 
         if(scroll == 0.1f)
-            UI_ObjPool.Inst.ChangeInteraction(true);
+            Mgr_UI.Inst.ChangeInteraction(true);
         else if (scroll == -0.1f)
-            UI_ObjPool.Inst.ChangeInteraction(false);
+            Mgr_UI.Inst.ChangeInteraction(false);
 
     }
 
@@ -212,7 +212,7 @@ public class Player_Ctrl : NetworkBehaviour
             if (interaction == null) return;
 
 
-            UI_ObjPool.Inst.AddInteractionUI(interaction);
+            Mgr_UI.Inst.AddInteractionUI(interaction);
         }
 
             
@@ -229,7 +229,7 @@ public class Player_Ctrl : NetworkBehaviour
             if (interaction == null) return;
 
 
-            UI_ObjPool.Inst.RemoveInteractionUI(interaction);
+            Mgr_UI.Inst.RemoveInteractionUI(interaction);
         }
     }
 

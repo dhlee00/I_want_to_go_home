@@ -11,7 +11,7 @@ public class Interaction_Item : Interaction
 
     void Awake()
     {
-        InteractionType = EInteractionType.Itme;
+        InteractionType = EInteractionType.item;
     }
 
     void Start()
@@ -27,7 +27,7 @@ public class Interaction_Item : Interaction
         if (GlobalValue.User_Inventory.ContainsKey(ItemData.Get_Item_Index) == true)
         {
             // 장비아이템이 아니라면
-            if(ItemData.Get_ItemType != ITEM_TYPE.EQUIPMENT)
+            if (ItemData.Get_ItemType != ITEM_TYPE.EQUIPMENT)
             {
                 GlobalValue.User_Inventory[ItemData.Get_Item_Index].Get_Item_Amount += ItemData.Get_Item_Amount;
             }
@@ -50,9 +50,42 @@ public class Interaction_Item : Interaction
 
     void Add_Inventory(int _amount)
     {
+        int slotNum = -1;
         Item item = new Item(ItemData);
 
-        GlobalValue.User_Inventory.Add(item.Get_Item_Index, item);
-        GlobalValue.User_Inventory[ItemData.Get_Item_Index].Get_Item_Amount = _amount;
+        if (item.Get_ItemType != ITEM_TYPE.EQUIPMENT)
+        {
+            // 아이템 인벤토리 슬롯 번호 설정
+            for (int i = 0; i < Mgr_Inventory.Inst.Get_Inven_ItemSlotList.Count; i++)
+            {
+                if (Mgr_Inventory.Inst.Get_Inven_ItemSlotList[i].isUse == false)
+                {
+                    slotNum = i;
+                    break;
+                }
+            }
+
+            // 재료 아이템, 음식 아이템
+            GlobalValue.User_Inventory.Add(item.Get_Item_Index, item);
+            GlobalValue.User_Inventory[ItemData.Get_Item_Index].Get_Item_Amount = _amount;
+            GlobalValue.User_Inventory[ItemData.Get_Item_Index].Get_Item_SlotIndex = slotNum;
+        }
+        else
+        {
+            // 아이템 인벤토리 슬롯 번호 설정
+            for (int i = 0; i < Mgr_Inventory.Inst.Get_Inven_ItemSlotList.Count; i++)
+            {
+                if (Mgr_Inventory.Inst.Get_Inven_ItemSlotList[i].isUse == false)
+                {
+                    slotNum = i;
+                    break;
+                }
+            }
+
+            // 장비 아이템
+            item.Get_Item_Amount = _amount;
+            item.Get_Item_SlotIndex = slotNum;
+            GlobalValue.Equipment_Inventory.Add(item);
+        }
     }
 }

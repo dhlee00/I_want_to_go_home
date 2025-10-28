@@ -22,7 +22,7 @@ public class Interaction_UI : MonoBehaviour
     {
         switch(InteractionType)
         {
-            case EInteractionType.Itme:
+            case EInteractionType.item:
                 {
                     SetItmeInfo();
                     break;
@@ -61,7 +61,6 @@ public class Interaction_UI : MonoBehaviour
         {
             ItemName_Text.text = $"{Item_Obj_List[0].ItemData.Get_Item_Name}";
         }
-        
     }
 
 
@@ -70,7 +69,7 @@ public class Interaction_UI : MonoBehaviour
     {
         switch (InteractionType)
         {
-            case EInteractionType.Itme:
+            case EInteractionType.item:
                 {
                     foreach(Interaction_Item itme in Item_Obj_List)
                     {

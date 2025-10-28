@@ -131,9 +131,6 @@ PrefabInstance:
       propertyPath: m_LocalPosition.x
       value: 2.69
       objectReference: {fileID: 0}
-      propertyPath: m_LocalPosition.y
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 330122084159264606, guid: ae74a6b3e1554f84e997cdde906a5b81, type: 3}
       propertyPath: m_LocalPosition.z
       value: 6
@@ -945,6 +942,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   UI_Parent: {fileID: 280957680}
   Inventory_Prefab: {fileID: 8956878327985670401, guid: beb10bcec31dc73468f7800d93e38a95, type: 3}
+  ChangeInteractionCount: 0
 --- !u!114 &1472913412
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -959,7 +957,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Interact_UI_Prefab: {fileID: 7964521508119599444, guid: 504a3fd60722f974499496a5f97c5766, type: 3}
   Interact_UI_Tr: {fileID: 5568421520673081474}
-  ChangeInteractionCount: 0
 --- !u!1 &1570857502
 GameObject:
   m_ObjectHideFlags: 0
