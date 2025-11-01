@@ -82,7 +82,7 @@ public class Mgr_Account : MonoBehaviour
                 }
 
                 // 데이터 불러오기
-                Mgr_Data.Inst.TestLoad();
+                Mgr_Data.Inst.DataLoad();
             },
             error =>
             {

@@ -2,9 +2,11 @@ using UnityEngine;
 
 public enum ITEM_TYPE
 {
+    NONE,
     INGREDIENT,
     FOOD,
-    EQUIPMENT
+    EQUIPMENT,
+    TOOL,
 }
 
 [System.Serializable]
@@ -38,7 +40,7 @@ public class Item
     public string Get_Item_Desc { get => Item_Desc; }
 
     // 아이템 아이콘
-    [SerializeField] Sprite Item_Icon;
+    Sprite Item_Icon;
     public Sprite Get_Item_Icon { get => Item_Icon; }
 
     [SerializeField] string Item_IconPath;
@@ -46,7 +48,7 @@ public class Item
 
     // 생성자
     #region Constructor
-    public Item(int _index, string _name, ITEM_TYPE _itemType, string _itemDesc, int _amount, string _iconPath, int _slotIndex = -1, bool _isEquip = false)
+    public Item(string _name, ITEM_TYPE _itemType, string _itemDesc, int _amount, string _iconPath, int _index = -1, int _slotIndex = -1, bool _isEquip = false)
     {
         Item_Index = _index;
         Item_Name = _name;
