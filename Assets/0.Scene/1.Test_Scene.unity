@@ -330,7 +330,7 @@ Canvas:
   m_Enabled: 1
   serializedVersion: 3
   m_RenderMode: 0
-  m_Camera: {fileID: 0}
+  m_Camera: {fileID: 1855181828}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
@@ -942,6 +942,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   UI_Parent: {fileID: 280957680}
   Inventory_Prefab: {fileID: 8956878327985670401, guid: beb10bcec31dc73468f7800d93e38a95, type: 3}
+  raycaster: {fileID: 280957677}
+  eventSystem: {fileID: 1685111492}
   ChangeInteractionCount: 0
 --- !u!114 &1472913412
 MonoBehaviour:

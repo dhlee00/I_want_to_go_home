@@ -1,5 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class Mgr_UI : MonoBehaviour
 {
@@ -10,6 +12,10 @@ public class Mgr_UI : MonoBehaviour
     [Header("Inventory")]
     [SerializeField] GameObject Inventory_Prefab;
     GameObject Inventory_UI;
+
+    [Header("Pointer")]
+    public GraphicRaycaster raycaster;
+    public EventSystem eventSystem;
 
     public bool OnInventory() { return Spawn_UI(Inventory_Prefab, Inventory_UI); }
 
