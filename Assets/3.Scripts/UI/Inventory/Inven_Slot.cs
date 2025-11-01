@@ -134,6 +134,22 @@ public class Inven_Slot : MonoBehaviour, ISlot,
                     result.gameObject.GetComponent<Inven_Slot>().Set_SlotInfo(DragItem, DragItem.Get_Item_Amount);
 
                     Set_SlotInfo(null, 0, false);
+
+                    // 장착 => 인벤 
+                    if (SlotType == SLOT_TYPE.EQUIP)
+                    {
+                        // 장착 슬롯 삭제 => 인벤토리로 데이터 옮기기
+                        if (DragItem.Get_ItemType != ITEM_TYPE.EQUIPMENT)
+                        {
+                            GlobalValue.User_Inventory.Add(DragItem.Get_Item_Index, DragItem);
+                            GlobalValue.User_EquipSlot.Remove(DragItem.Get_Item_Index);
+                        }
+                        else
+                        {
+                            GlobalValue.Equipment_Inventory.Add(DragItem);
+                            GlobalValue.Equipment_EquipSlot.Remove(DragItem);
+                        }
+                    }
                 }
                 // 사용하고 있는 슬롯이라면
                 else
@@ -149,32 +165,40 @@ public class Inven_Slot : MonoBehaviour, ISlot,
 
                     if (SlotType == SLOT_TYPE.EQUIP)
                     {
+                        // 장착 -> 인벤
                         if (ChangeSlot_Item.Get_ItemType != ITEM_TYPE.EQUIPMENT)
                         {
+                            // 바꾸는 아이템이 장비라면
+                            if (DragItem.Get_ItemType == ITEM_TYPE.EQUIPMENT)
+                            {
+                                GlobalValue.Equipment_Inventory.Add(DragItem);
+                                GlobalValue.Equipment_EquipSlot.Remove(DragItem);
+                            }
+                            else
+                            {
+                                GlobalValue.User_Inventory.Add(DragItem.Get_Item_Index, DragItem);
+                                GlobalValue.User_EquipSlot.Remove(DragItem.Get_Item_Index);
+                            }
+
                             GlobalValue.User_EquipSlot.Add(ChangeSlot_Item.Get_Item_Index, ChangeSlot_Item);
-                            GlobalValue.User_Inventory.Remove(DragItem.Get_Item_Index);
+                            GlobalValue.User_Inventory.Remove(ChangeSlot_Item.Get_Item_Index);
                         }
                         else
                         {
-                            GlobalValue.Equipment_EquipSlot.Add(ChangeSlot_Item);
-                            GlobalValue.Equipment_Inventory.Remove(DragItem);
-                        }
-                    }
-                }
+                            if (DragItem.Get_ItemType == ITEM_TYPE.EQUIPMENT)
+                            {
+                                GlobalValue.Equipment_Inventory.Add(DragItem);
+                                GlobalValue.Equipment_EquipSlot.Remove(DragItem);
+                            }
+                            else
+                            {
+                                GlobalValue.User_Inventory.Add(DragItem.Get_Item_Index, DragItem);
+                                GlobalValue.User_EquipSlot.Remove(DragItem.Get_Item_Index);
+                            }
 
-                // 장착 슬롯 => 인벤 
-                if(SlotType == SLOT_TYPE.EQUIP)
-                {
-                    // 장착 슬롯 삭제 => 인벤토리로 데이터 옮기기
-                    if (DragItem.Get_ItemType != ITEM_TYPE.EQUIPMENT)
-                    {
-                        GlobalValue.User_Inventory.Add(DragItem.Get_Item_Index, DragItem);
-                        GlobalValue.User_EquipSlot.Remove(DragItem.Get_Item_Index);
-                    }
-                    else
-                    {
-                        GlobalValue.Equipment_Inventory.Add(DragItem);
-                        GlobalValue.Equipment_EquipSlot.Remove(DragItem);
+                            GlobalValue.Equipment_EquipSlot.Add(ChangeSlot_Item);
+                            GlobalValue.Equipment_Inventory.Remove(ChangeSlot_Item);
+                        }
                     }
                 }
 
@@ -200,45 +224,74 @@ public class Inven_Slot : MonoBehaviour, ISlot,
                     result.gameObject.GetComponent<Inven_Slot>().Set_SlotInfo(DragItem, DragItem.Get_Item_Amount);
 
                     Set_SlotInfo(null, 0, false);
-                }
-                else
-                {
-                    Item ChangeSlot_Item = result.gameObject.GetComponent<Inven_Slot>().Get_ItemData;
-                    // 변경할 슬롯의 아이템 정보 변경
-                    Set_SlotInfo(ChangeSlot_Item, ChangeSlot_Item.Get_Item_Amount);
-                    result.gameObject.GetComponent<Inven_Slot>().Get_ItemData.Get_Item_SlotIndex = SlotNum;
-
-                    // 해당 슬롯의 아이템 정보 변경
-                    DragItem.Get_Item_SlotIndex = result.gameObject.GetComponent<Inven_Slot>().Get_SlotNum;
-                    result.gameObject.GetComponent<Inven_Slot>().Set_SlotInfo(DragItem, DragItem.Get_Item_Amount);
 
                     if (SlotType == SLOT_TYPE.INVEN)
                     {
-                        if (ChangeSlot_Item.Get_ItemType != ITEM_TYPE.EQUIPMENT)
+                        // 인벤에서 삭제 => 장착 슬롯으로 데이터 옮기기
+                        if (DragItem.Get_ItemType != ITEM_TYPE.EQUIPMENT)
                         {
-                            GlobalValue.User_EquipSlot.Add(ChangeSlot_Item.Get_Item_Index, DragItem);
+                            GlobalValue.User_EquipSlot.Add(DragItem.Get_Item_Index, DragItem);
                             GlobalValue.User_Inventory.Remove(DragItem.Get_Item_Index);
                         }
                         else
                         {
-                            GlobalValue.Equipment_EquipSlot.Add(ChangeSlot_Item);
+                            GlobalValue.Equipment_EquipSlot.Add(DragItem);
                             GlobalValue.Equipment_Inventory.Remove(DragItem);
                         }
                     }
                 }
-
-                if (SlotType == SLOT_TYPE.INVEN)
+                else
                 {
-                    // 인벤에서 삭제 => 장착 슬롯으로 데이터 옮기기
-                    if (DragItem.Get_ItemType != ITEM_TYPE.EQUIPMENT)
+                    // 바꿀 슬롯에 있는 아이템 정보
+                    Item ChangeSlot_Item = result.gameObject.GetComponent<Inven_Slot>().Get_ItemData;
+
+                    // 변경할 슬롯의 아이템 정보 변경
+                    Set_SlotInfo(ChangeSlot_Item, ChangeSlot_Item.Get_Item_Amount);
+                    result.gameObject.GetComponent<Inven_Slot>().Get_ItemData.Get_Item_SlotIndex = SlotNum;
+                    // 해당 슬롯의 아이템 정보 변경
+                    DragItem.Get_Item_SlotIndex = result.gameObject.GetComponent<Inven_Slot>().Get_SlotNum;
+
+                    result.gameObject.GetComponent<Inven_Slot>().Set_SlotInfo(DragItem, DragItem.Get_Item_Amount);
+
+                    // 인벤 -> 장착
+                    if (SlotType == SLOT_TYPE.INVEN)
                     {
-                        GlobalValue.User_EquipSlot.Add(DragItem.Get_Item_Index, DragItem);
-                        GlobalValue.User_Inventory.Remove(DragItem.Get_Item_Index);
-                    }
-                    else
-                    {
-                        GlobalValue.Equipment_EquipSlot.Add(DragItem);
-                        GlobalValue.Equipment_Inventory.Remove(DragItem);
+                        //  바꿀 위치 아이템이 재료 아이템이라면
+                        if (ChangeSlot_Item.Get_ItemType != ITEM_TYPE.EQUIPMENT)
+                        {
+                            // 바꾸는 아이템이 장비라면
+                            if (DragItem.Get_ItemType == ITEM_TYPE.EQUIPMENT)
+                            {
+                                GlobalValue.Equipment_EquipSlot.Add(DragItem);
+                                GlobalValue.Equipment_Inventory.Remove(DragItem);
+                            }
+                            else
+                            {
+                                GlobalValue.User_EquipSlot.Add(DragItem.Get_Item_Index, DragItem);
+                                GlobalValue.User_Inventory.Remove(DragItem.Get_Item_Index);
+                            }
+
+                            GlobalValue.User_Inventory.Add(ChangeSlot_Item.Get_Item_Index, ChangeSlot_Item);
+                            GlobalValue.User_EquipSlot.Remove(ChangeSlot_Item.Get_Item_Index);
+                        }
+                        // 바꿀 위치 아이템이 장비라면
+                        else
+                        {
+                            if (DragItem.Get_ItemType == ITEM_TYPE.EQUIPMENT)
+                            {
+                                GlobalValue.Equipment_EquipSlot.Add(DragItem);
+                                GlobalValue.Equipment_Inventory.Remove(DragItem);
+
+                            }
+                            else
+                            {
+                                GlobalValue.User_EquipSlot.Add(DragItem.Get_Item_Index, DragItem);
+                                GlobalValue.User_Inventory.Remove(DragItem.Get_Item_Index);
+                            }
+
+                            GlobalValue.Equipment_Inventory.Add(ChangeSlot_Item);
+                            GlobalValue.Equipment_EquipSlot.Remove(ChangeSlot_Item);
+                        }
                     }
                 }
 
@@ -247,8 +300,33 @@ public class Inven_Slot : MonoBehaviour, ISlot,
             #endregion
         }
 
-        Debug.Log($"재료 : 인벤:{GlobalValue.User_Inventory.Count} / 장착{GlobalValue.User_EquipSlot.Count}");
-        Debug.Log($"장비 : 인벤:{GlobalValue.Equipment_Inventory.Count} / 장착{GlobalValue.Equipment_EquipSlot.Count}");
+        #region Test
+        string debug = "재료 인벤";
+        foreach(var item in GlobalValue.User_Inventory)
+        {
+            debug += $" {item.Value.Get_Item_Name}, ";
+        }
+        debug += "\n재료 장착";
+
+        foreach (var item in GlobalValue.User_EquipSlot)
+        {
+            debug += $" {item.Value.Get_Item_Name}, ";
+        }
+
+        debug += "\n장비 인벤";
+        for (int i = 0; i < GlobalValue.Equipment_Inventory.Count; i++)
+        {
+            debug += $" {GlobalValue.Equipment_Inventory[i].Get_Item_Name}, ";
+        }
+        debug += "\n장비 장착";
+        for (int i = 0; i < GlobalValue.Equipment_EquipSlot.Count; i++)
+        {
+            debug += $" {GlobalValue.Equipment_EquipSlot[i].Get_Item_Name}, ";
+        }
+        debug += "\n";
+
+        Debug.Log(debug);
+        #endregion
 
         DragItem = null;
         Mgr_Inventory.Inst.Refresh_Inventory();
