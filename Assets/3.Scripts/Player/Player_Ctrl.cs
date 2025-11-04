@@ -32,6 +32,27 @@ public class Player_Ctrl : NetworkBehaviour
     float AnimationMoveBlend;      // 이동시 애니메이션 블랜드
     #endregion
 
+    [Header("Grounded")]
+    public bool Grounded = true;
+    public LayerMask GroundLayers = 0;
+    public float GroundedOffset = -0.14f;   // 땅을 체크할 높이 값
+    protected float GroundedRadius = 0.1f;
+
+    [Tooltip("캐릭터 전용 중력")]
+    float CharacterGravity;
+
+
+    public float VerticalVelocity; // 수직 속도
+    protected float _terminalVelocity = 53.0f; // 종착 속도
+
+    protected float JumpHeight = 2.5f; // 점프높이
+    protected float _jumpTimeoutDelta; // 점프타임 아웃델타
+    protected float JumpTimeout = 0.50f; // 다음 점프까지 필요한 시간
+
+    protected float _fallTimeoutDelta; // 낙하 시간
+    protected float FallTimeout = 0.15f; // 낙하 상태에 들어가기 전에 소요되는 시간
+
+
     // 애니메이션
     [Header("Animator")]
     Animator m_Animator;
@@ -55,6 +76,8 @@ public class Player_Ctrl : NetworkBehaviour
 
         if (TestPlayer)
             LocalInst = this;
+
+        CharacterGravity = Physics.gravity.y;
     }
 
     public override void OnNetworkSpawn()
@@ -76,11 +99,13 @@ public class Player_Ctrl : NetworkBehaviour
                 // 무브 입력
                 InputMove = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
 
-                CharMove();
+                JumpAndGravity();   // 점프 및 중력
+                GroundedCheck();    // 땅에 닿은지 체크
+                CharMove();         // 이동
 
                 if (Input.GetKeyDown(KeyCode.F))
                 {
-                    Mgr_UI.Inst.Interaction();
+                    Mgr_UI.Inst.Interaction();  // 상호작용
                 }
             }
             
@@ -124,6 +149,78 @@ public class Player_Ctrl : NetworkBehaviour
           
     }
 
+    void JumpAndGravity()
+    {
+        if (Grounded)
+        {
+            // 낙하 타임아웃 타이머 재설정
+            _fallTimeoutDelta = FallTimeout;
+
+            // 점프
+            if (Input.GetKey(KeyCode.Space) && _jumpTimeoutDelta <= 0.0f)
+            {
+                // H * -2 * G의 제곱근 = 원하는 높이에 도달하는 데 필요한 속도
+                VerticalVelocity = Mathf.Sqrt(JumpHeight * -2f * CharacterGravity);
+            }
+            else
+            {
+                // 착지 시 속도가 계속 떨어지는 것을 차단
+                if (VerticalVelocity < 0.0f)
+                {
+                    VerticalVelocity = -2f;
+                }
+            }
+
+
+            if (_jumpTimeoutDelta >= 0.0f)
+            {
+                _jumpTimeoutDelta -= Time.deltaTime;
+            }
+        }
+        else
+        {
+            // 점프 딜레이
+            _jumpTimeoutDelta = JumpTimeout;
+
+            // 낙하 timeout
+            if (_fallTimeoutDelta >= 0.0f)
+            {
+                _fallTimeoutDelta -= Time.deltaTime;
+            }
+        }
+
+        if (VerticalVelocity < _terminalVelocity)
+        {
+            VerticalVelocity += CharacterGravity * Time.deltaTime;
+        }
+    }
+
+    // 땅에 닿아져있는지 확인
+    void GroundedCheck()
+    {
+        Vector3 spherePosition = this.transform.position;
+        spherePosition.y += GroundedOffset;
+
+
+        Collider[] hits = Physics.OverlapCapsule(this.transform.position, spherePosition, GroundedRadius, GroundLayers, QueryTriggerInteraction.Ignore);
+
+        Grounded = false;
+        foreach (Collider hit in hits)
+        {
+            if (hit.gameObject == gameObject)
+                continue;
+            else
+                Grounded = true;
+            break;
+        }
+
+        // 애니메이션 점프
+        if (m_Animator)
+        {
+            m_Animator.SetBool("Grounded", Grounded);
+        }
+    }
+
     // 움직임
     void CharMove()
     {
@@ -164,7 +261,8 @@ public class Player_Ctrl : NetworkBehaviour
         Vector3 targetDirection = Quaternion.Euler(0.0f, TargetRotation, 0.0f) * Vector3.forward;
 
         // 이동
-        Controller.Move(targetDirection.normalized * (Speed * Time.deltaTime));
+        Controller.Move(targetDirection.normalized * (Speed * Time.deltaTime) +
+                             new Vector3(0.0f, VerticalVelocity, 0.0f) * Time.deltaTime);
 
         // 애니메이션
         if (m_Animator)

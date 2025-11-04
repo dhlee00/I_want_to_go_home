@@ -20,3 +20,10 @@ public static class GlobalValue
         return Mathf.Clamp(lfAngle, lfMin, lfMax);
     }
 }
+
+
+
+public interface ITakeDamage
+{
+    public void TakeDamage(GameObject DamageOwner, float Damage);
+}

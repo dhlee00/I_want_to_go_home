@@ -101,8 +101,7 @@ public class Mgr_UI : MonoBehaviour
         else
         {
             // UI 업데이트
-            for (int i = 0; i < InteractionUI_List.Count; i++)
-                InteractionUI_List[i].Change(i == ChangeInteractionCount);
+            InteractionUI_Update();
         }
 
     }
@@ -129,8 +128,7 @@ public class Mgr_UI : MonoBehaviour
         }
 
         // UI 업데이트
-        for (int i = 0; i < InteractionUI_List.Count; i++)
-            InteractionUI_List[i].Change(i == ChangeInteractionCount);
+        InteractionUI_Update();
 
     }
 
@@ -172,10 +170,7 @@ public class Mgr_UI : MonoBehaviour
         {
             InteractionUI_List.Add(Mgr_UI.Inst.Spawn_Interaction_UI(interaction));
 
-            for (int i = 0; i < InteractionUI_List.Count; i++)
-            {
-                InteractionUI_List[i].Change(i == ChangeInteractionCount);
-            }
+            InteractionUI_Update();
         }
     }
 
@@ -215,6 +210,16 @@ public class Mgr_UI : MonoBehaviour
         // 만약 삭제 했다면
         if (isDestroy && ChangeInteractionCount >= InteractionUI_List.Count)
             ChangeInteraction(true);
+
+        InteractionUI_Update();
+    }
+
+    void InteractionUI_Update()
+    {
+        for (int i = 0; i < InteractionUI_List.Count; i++)
+        {
+            InteractionUI_List[i].Change(i == ChangeInteractionCount);
+        }
     }
 
     public Interaction_UI Spawn_Interaction_UI(Interaction interaction)

@@ -33,3 +33,9 @@ MonoBehaviour:
     ITEM_AMOUNT: 1
     ITEM_DESC: "\uD14C\uC2A4\uD2B8 \uC7A5\uBE44"
     ITEM_ICON_PATH: Image/Item/Icon/heal
+  - ITEM_INDEX: 3
+    ITEM_NAME: "\uACE1\uAD2D\uC774"
+    ITEM_TYPE: EQUIPMENT
+    ITEM_AMOUNT: 1
+    ITEM_DESC: "\uACE1\uAD2D\uC774\uB2E4"
+    ITEM_ICON_PATH: Image/Item/Icon/nian
