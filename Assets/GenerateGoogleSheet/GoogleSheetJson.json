@@ -23,6 +23,14 @@
       "ITEM_AMOUNT": 1,
       "ITEM_DESC": "테스트 장비",
       "ITEM_ICON_PATH": "Image/Item/Icon/heal"
+    },
+    {
+      "ITEM_INDEX": 3,
+      "ITEM_NAME": "곡괭이",
+      "ITEM_TYPE": "EQUIPMENT",
+      "ITEM_AMOUNT": 1,
+      "ITEM_DESC": "곡괭이다",
+      "ITEM_ICON_PATH": "Image/Item/Icon/nian"
     }
   ],
   "Interact_Obj": []

@@ -1,12 +1,10 @@
+using Unity.Services.Apis.Admin.CloudSave;
 using UnityEngine;
 
 public class Interaction_Item : Interaction
 {
     // 아이템 정보
     public Item ItemData;
-
-    // 테스트용
-    public int Test = 0;
 
 
     void Awake()
@@ -16,8 +14,20 @@ public class Interaction_Item : Interaction
 
     void Start()
     {
-        // 테스트(아이템 데이터 설정)
-        ItemData = ItemList.Inst.Item_List[Test];
+        
+    }
+
+    public void SetInteractionItem(int Index, int Amount, Vector3 SpawnPos, Vector3 ForceDir = default)
+    {
+        ItemData = ItemList.Inst.GetItemData(Index);
+        ItemData.Get_Item_Amount = Amount;
+
+        this.gameObject.transform.position = SpawnPos;
+
+        if(ForceDir != default)
+        {
+            GetComponent<Rigidbody>().AddForce(ForceDir * 4, ForceMode.Impulse);
+        }
     }
 
     public override void OnInteraction()

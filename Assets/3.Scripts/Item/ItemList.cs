@@ -1,9 +1,12 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class ItemList : MonoBehaviour
 {
-    public List<Item> Item_List = new List<Item>();
+    List<Item> Item_List = new List<Item>();
+    public Item GetItemData(int index) { return new Item(ItemList.Inst.Item_List[index]); }
+
     public static ItemList Inst = null;
 
     void Awake()
@@ -22,4 +25,7 @@ public class ItemList : MonoBehaviour
             Item_List.Add(item);
         }
     }
+
+    
+
 }
