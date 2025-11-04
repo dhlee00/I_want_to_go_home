@@ -3,8 +3,13 @@ using UnityEngine;
 
 public static class GlobalValue
 {
+    // ¿Œ∫•≈‰∏Æ ΩΩ∑‘
     public static Dictionary<int, Item> User_Inventory = new Dictionary<int, Item>();
     public static List<Item> Equipment_Inventory = new List<Item>();
+
+    // ¿Â¬¯ ΩΩ∑‘
+    public static Dictionary<int, Item> User_EquipSlot = new Dictionary<int, Item>();
+    public static List<Item> Equipment_EquipSlot = new List<Item>();
 
     public static string Nickname;
 

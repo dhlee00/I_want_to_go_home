@@ -34,12 +34,23 @@ public class Interaction_Item : Interaction
     {
         // 인벤토리로 들어가는 아이템 획득 코드
         // 이미 존재한다면
-        if (GlobalValue.User_Inventory.ContainsKey(ItemData.Get_Item_Index) == true)
+        if (GlobalValue.User_Inventory.ContainsKey(ItemData.Get_Item_Index) == true ||
+            GlobalValue.User_EquipSlot.ContainsKey(ItemData.Get_Item_Index) == true)
         {
             // 장비아이템이 아니라면
             if (ItemData.Get_ItemType != ITEM_TYPE.EQUIPMENT)
             {
-                GlobalValue.User_Inventory[ItemData.Get_Item_Index].Get_Item_Amount += ItemData.Get_Item_Amount;
+                // 인벤토리에 존재하면
+                if(GlobalValue.User_Inventory.ContainsKey(ItemData.Get_Item_Index) == true)
+                {
+                    GlobalValue.User_Inventory[ItemData.Get_Item_Index].Get_Item_Amount += ItemData.Get_Item_Amount;
+                }
+                // 장착 슬롯에 존재하면
+                else if (GlobalValue.User_EquipSlot.ContainsKey(ItemData.Get_Item_Index) == true)
+                {
+                    GlobalValue.User_EquipSlot[ItemData.Get_Item_Index].Get_Item_Amount += ItemData.Get_Item_Amount;
+                }
+                
             }
             else
             {

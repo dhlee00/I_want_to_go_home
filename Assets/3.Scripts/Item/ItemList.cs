@@ -20,8 +20,9 @@ public class ItemList : MonoBehaviour
         {
             ITEM_TYPE.TryParse(GoogleSheetManager.SO<GoogleSheetSO>().Item_DataList[i].ITEM_TYPE, out ITEM_TYPE itemType);
 
-            Item item = new Item(GoogleSheetManager.SO<GoogleSheetSO>().Item_DataList[i].ITEM_INDEX, GoogleSheetManager.SO<GoogleSheetSO>().Item_DataList[i].ITEM_NAME, itemType,
-                GoogleSheetManager.SO<GoogleSheetSO>().Item_DataList[i].ITEM_DESC, GoogleSheetManager.SO<GoogleSheetSO>().Item_DataList[i].ITEM_AMOUNT, GoogleSheetManager.SO<GoogleSheetSO>().Item_DataList[i].ITEM_ICON_PATH);
+            Item item = new Item(GoogleSheetManager.SO<GoogleSheetSO>().Item_DataList[i].ITEM_NAME, itemType,
+                GoogleSheetManager.SO<GoogleSheetSO>().Item_DataList[i].ITEM_DESC, GoogleSheetManager.SO<GoogleSheetSO>().Item_DataList[i].ITEM_AMOUNT, GoogleSheetManager.SO<GoogleSheetSO>().Item_DataList[i].ITEM_ICON_PATH,
+                GoogleSheetManager.SO<GoogleSheetSO>().Item_DataList[i].ITEM_INDEX);
             Item_List.Add(item);
         }
     }
