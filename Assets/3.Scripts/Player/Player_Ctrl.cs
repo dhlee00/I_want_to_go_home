@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using Unity.Netcode;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -13,11 +15,24 @@ public class Player_Ctrl : NetworkBehaviour
     NetworkVariable<float> serverAnimMoveBlend = new NetworkVariable<float>();
     #endregion
 
+    #region 플레이어 스텟
+    //[Header("Stets")]
+    
+
+    #endregion
+
+    #region 플레이어의 상태
+    //[Header("Stets")]
+
+    #endregion
+
     #region InPut
+    [Header("InPut")]
     Vector2 InputMove; // 입력을 받을 변수
     #endregion
 
     #region Move
+    [Header("Move")]
     Vector2 Move = Vector2.zero;
     public float Speed;                  // 이동 변수
     public float MoveSpeed = 4.0f;       // 걷기 속도
@@ -32,15 +47,14 @@ public class Player_Ctrl : NetworkBehaviour
     float AnimationMoveBlend;      // 이동시 애니메이션 블랜드
     #endregion
 
-    [Header("Grounded")]
+    #region 중력 및 점프
+    [Header("Grounded and Jump")]
     public bool Grounded = true;
     public LayerMask GroundLayers = 0;
     public float GroundedOffset = -0.14f;   // 땅을 체크할 높이 값
     protected float GroundedRadius = 0.1f;
 
-    [Tooltip("캐릭터 전용 중력")]
-    float CharacterGravity;
-
+    float CharacterGravity; // 캐릭터 전용 중력
 
     public float VerticalVelocity; // 수직 속도
     protected float _terminalVelocity = 53.0f; // 종착 속도
@@ -51,17 +65,24 @@ public class Player_Ctrl : NetworkBehaviour
 
     protected float _fallTimeoutDelta; // 낙하 시간
     protected float FallTimeout = 0.15f; // 낙하 상태에 들어가기 전에 소요되는 시간
+    #endregion
 
 
     // 애니메이션
     [Header("Animator")]
     Animator m_Animator;
+    int m_Animator_UpBody;
 
 
+    Transform GripPos; // 무기가 손에 잡힐 위치
+    Weapon EquipWeapon = null; // 현제 손에 들고있는 무기
 
 
     // 테스트용
+    [Header("Test")]
     public bool TestPlayer = false;
+
+
 
     protected CharacterController Controller;
 
@@ -73,6 +94,11 @@ public class Player_Ctrl : NetworkBehaviour
         // 컴포넌트
         Controller = GetComponent<CharacterController>();
         m_Animator = GetComponent<Animator>();
+        m_Animator_UpBody = m_Animator.GetLayerIndex("UpBody");
+
+        // 손에 무기를 쥘 포지션
+        GripPos = transform.Find("metarig.001/pelvis/spine_01/spine_02/spine_03/shoulder.R/upperarm_r/lowerarm_r/hand_r/GripPos");
+
 
         if (TestPlayer)
             LocalInst = this;
@@ -146,7 +172,46 @@ public class Player_Ctrl : NetworkBehaviour
 
     void LateUpdate()
     {
-          
+        // 테스트 공격
+        if (Mgr_Game.Inst && Mgr_Game.Inst.bCanMove)
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                Anim_Attack();
+            }
+        }
+        
+
+        // 테스트 모든 아이템 획득
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            for(int i = 0; i <= 3; i++)
+            {
+                Item ItemData = ItemList.Inst.GetItemData(i);
+                ItemData.Get_Item_Amount = 1;
+                GlobalValue.AddItme(ItemData);
+            }
+        }
+
+        // 테스트 무기 장착
+        if (Input.GetKeyDown(KeyCode.O))
+        {
+            if (EquipWeapon)
+            {
+                Destroy(EquipWeapon.gameObject);
+                EquipWeapon = null;
+            }
+            else
+            {
+                Weapon we = Instantiate(Resources.Load<GameObject>("Prefab/Weapon_Pickax_Prefab"), GripPos).GetComponent<Weapon>();
+                we.SapwnWeapon(this.gameObject);
+
+                EquipWeapon = we;
+            }
+                
+        }
+
+        
     }
 
     void JumpAndGravity()
@@ -289,6 +354,7 @@ public class Player_Ctrl : NetworkBehaviour
     {
         float scroll = Input.GetAxis("Mouse ScrollWheel");
 
+        // 상호작용이 가능한 오브젝트 선택
         if(scroll == 0.1f)
             Mgr_UI.Inst.ChangeInteraction(true);
         else if (scroll == -0.1f)
@@ -296,7 +362,31 @@ public class Player_Ctrl : NetworkBehaviour
 
     }
 
-    
+
+    #region 애니메이션 함수
+    void Anim_Attack()
+    {
+        if (EquipWeapon == null || EquipWeapon?.isAttacking == true) return;
+
+        Debug.Log("공격 시작");
+        m_Animator.SetLayerWeight(m_Animator_UpBody, 1.0f);
+        m_Animator.SetTrigger("Attack");
+
+        EquipWeapon.Attacking(true);
+    }
+
+
+    // 애니메이션 이벤트
+    void AE_EndAttack()
+    {
+        Debug.Log("공격 끝");
+        m_Animator.SetLayerWeight(m_Animator_UpBody, 0f);
+
+        EquipWeapon.Attacking(false);
+    }
+
+
+    #endregion
 
 
     private void OnTriggerEnter(Collider other)
@@ -330,6 +420,10 @@ public class Player_Ctrl : NetworkBehaviour
             Mgr_UI.Inst.RemoveInteractionUI(interaction);
         }
     }
+
+
+
+
 
     // 서버에 값 전송
     [Rpc(SendTo.Server)]

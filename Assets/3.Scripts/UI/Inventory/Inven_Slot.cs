@@ -1,8 +1,10 @@
-using UnityEngine;
-using UnityEngine.UI;
-using TMPro;
-using UnityEngine.EventSystems;
+using NUnit.Framework.Interfaces;
 using System.Collections.Generic;
+using TMPro;
+using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
+using static UnityEditor.PlayerSettings;
 
 public enum SLOT_TYPE
 {
@@ -108,6 +110,21 @@ public class Inven_Slot : MonoBehaviour, ISlot,
         // Raycast로 받은게 아무것도 없다면
         if (results.Count <= 0)
         {
+            Mgr_Game.Inst.DropItem(ItemData);
+
+            // 인벤토리에서 데이터 지움
+            if (DragItem.Get_ItemType != ITEM_TYPE.EQUIPMENT)
+            {
+                GlobalValue.User_Inventory.Remove(DragItem.Get_Item_Index);
+            }
+            else
+            {
+                GlobalValue.Equipment_Inventory.Remove(DragItem);
+            }
+
+            // 인벤토리에서 지움
+            Set_SlotInfo(null, 0, false);
+
             return;
         }
 
