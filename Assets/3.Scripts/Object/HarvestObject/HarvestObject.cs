@@ -1,9 +1,18 @@
 using Unity.VisualScripting;
 using UnityEngine;
 
+public enum EHarvestObjectType
+{
+    Stone
+
+
+}
+
 
 public class HarvestObject : MonoBehaviour, ITakeDamage
 {
+    public EHarvestObjectType HarvestObjectType;
+
     public float MaxHp = 100f;   // 최대 체력
     public float Hp = 100f;      // 현재 체력
 
@@ -44,17 +53,30 @@ public class HarvestObject : MonoBehaviour, ITakeDamage
             }
 
         }
-        else if(Input.GetKeyDown(KeyCode.P))
-        {
-            TakeDamage(Player_Ctrl.LocalInst.gameObject, 10f);
-        }
     }
 
-    public void TakeDamage(GameObject DamageOwner, float Damage)
+    public void TakeDamage(GameObject DamageOwner, float Damage, EWeaponType DamageType)
     {
         if (bIsSapwn == false) return;
 
+        // 곡괭이 도끼등 특정 무기가 들어왔을 경우 추가 데미지
+        switch (HarvestObjectType)
+        {
+            case EHarvestObjectType.Stone:
+                {
+                    if (DamageType == EWeaponType.pickax)
+                        Damage *= 2;
+                }
+                break;
+
+
+        }
+        
+
+
         Hp -= Damage;
+
+        Debug.Log($"{Damage}만큼 데미지 받음 (데미지 연출로 교체할 예정)");
 
         // 체력 비율에 따라 Count갱신
         {
@@ -64,9 +86,14 @@ public class HarvestObject : MonoBehaviour, ITakeDamage
 
             // count가 실제로 감소할 때만 처리
             int dropped = (MaxCount - Count) - (int)newCount;
-            Count += dropped;
 
-            DropItems(DamageOwner, dropped);
+            if(dropped > 0)
+            {
+                Count += dropped;
+
+                DropItems(DamageOwner, dropped);
+            }
+            
         }
 
         if(Hp <= 0f)
@@ -83,11 +110,6 @@ public class HarvestObject : MonoBehaviour, ITakeDamage
 
     void DropItems(GameObject DamageOwner, int num)
     {
-        Interaction_Item ItemPrefab = Resources.Load<Interaction_Item>("Prefab/Interaction_Prefab");
-
-        Interaction_Item item = Instantiate(ItemPrefab.gameObject).GetComponent<Interaction_Item>();
-        
-
         // 스폰될 위치
         Vector3 pos = Vector3.zero;
         {
@@ -107,7 +129,8 @@ public class HarvestObject : MonoBehaviour, ITakeDamage
 
         // 날라갈 방향
         Vector3 forceDir = (DamageOwner.gameObject.transform.position - this.gameObject.transform.position).normalized;
-        
+
+        Interaction_Item item = Mgr_Game.Inst.SpawnItme();
 
         item.SetInteractionItem(Harvest_Item_Index, num, pos, forceDir);
     }

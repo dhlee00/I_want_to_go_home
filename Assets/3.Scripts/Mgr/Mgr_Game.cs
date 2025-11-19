@@ -45,4 +45,29 @@ public class Mgr_Game : MonoBehaviour
             
         }
     }
+
+
+    public Interaction_Item DropItem(Item ItemData)
+    {
+        Interaction_Item item = Mgr_Game.Inst.SpawnItme();
+        Vector3 dropPos = Player_Ctrl.LocalInst.transform.position;
+        dropPos.y += 1;
+
+
+        item.SetInteractionItem(ItemData.Get_Item_Index, ItemData.Get_Item_Amount, dropPos, Player_Ctrl.LocalInst.transform.forward.normalized);
+
+        return item;
+    }
+
+
+    Interaction_Item ItemPrefab;
+    public Interaction_Item SpawnItme()
+    {
+        if(ItemPrefab == null)
+        {
+            ItemPrefab = Resources.Load<Interaction_Item>("Prefab/Interaction_Prefab");
+        }
+        
+        return Instantiate(ItemPrefab.gameObject).GetComponent<Interaction_Item>();
+    }
 }
