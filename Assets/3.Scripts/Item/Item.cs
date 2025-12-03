@@ -78,6 +78,7 @@ public class Item
         Item_SlotIndex = _item.Item_SlotIndex;
         Item_Equip = _item.Item_Equip;
         Item_IconPath = _item.Get_Item_IconPath;
+        Item_Prefab = _item.Get_Item_Prefab;
 
         Item_Icon = Resources.Load<Sprite>(_item.Item_IconPath);
     }

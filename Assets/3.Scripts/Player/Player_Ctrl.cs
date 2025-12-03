@@ -80,7 +80,6 @@ public class Player_Ctrl : NetworkBehaviour
     Transform GripPos; // 무기가 손에 잡힐 위치
     Weapon EquipWeaponData = null; // 현제 손에 들고있는 무기
 
-
     // 테스트용
     [Header("Test")]
     public bool TestPlayer = false;
@@ -231,11 +230,26 @@ public class Player_Ctrl : NetworkBehaviour
         // 테스트 무기 장착
         if (Input.GetKeyDown(KeyCode.O))
         {
-            //GlobalValue.AddItme(ItemList.Inst.GetItemData(3));
-            Debug.Log($"{ItemList.Inst.GetItemData(3).Get_Item_Name} / {ItemList.Inst.GetItemData(3).Get_Item_Prefab}");
+            GlobalValue.AddItme(ItemList.Inst.GetItemData(3));
+            GlobalValue.AddItme(ItemList.Inst.GetItemData(1));
         }
 
-        
+        for (KeyCode key = KeyCode.Alpha0; key <= KeyCode.Alpha9; key++)
+        {
+            if (Input.GetKeyDown(key))
+            {
+                int num = int.Parse(key.ToString().Replace("Alpha", ""));
+
+                // 0을 10으로 변환
+                if (num == 0)
+                    num = 10;
+
+                Mgr_Inventory.Inst.Equip_Slot_Index = num;
+            }
+        }
+
+
+
     }
 
     void JumpAndGravity()
@@ -415,16 +429,17 @@ public class Player_Ctrl : NetworkBehaviour
 
     public void EquipWeapon(string Prefab_Str = "")
     {
-        if (EquipWeaponData || Prefab_Str == "")
+        if (EquipWeaponData != null)
         {
             Destroy(EquipWeaponData.gameObject);
             EquipWeaponData = null;
         }
-        else
+        
+        if (Prefab_Str != "")
         {
             Weapon we = Instantiate(Resources.Load<GameObject>(Prefab_Str), GripPos).GetComponent<Weapon>();
             we.SapwnWeapon(this.gameObject);
-
+        
             EquipWeaponData = we;
         }
     }
