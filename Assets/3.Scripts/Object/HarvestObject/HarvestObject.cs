@@ -55,7 +55,7 @@ public class HarvestObject : MonoBehaviour, ITakeDamage
         }
     }
 
-    public void TakeDamage(GameObject DamageOwner, float Damage, EWeaponType DamageType)
+    public void TakeDamage(GameObject DamageOwner, GameObject DamageObj, float Damage, EWeaponType DamageType)
     {
         if (bIsSapwn == false) return;
 
@@ -71,12 +71,27 @@ public class HarvestObject : MonoBehaviour, ITakeDamage
 
 
         }
-        
-
 
         Hp -= Damage;
 
-        Debug.Log($"{Damage}만큼 데미지 받음 (데미지 연출로 교체할 예정)");
+
+        // 데미지 연출
+        {
+            Vector3 start = DamageObj.transform.position;
+            Vector3 dir = (this.transform.position - start).normalized;
+
+            Vector3 hitPos = start;
+            Vector3 hitDir = dir;
+            if (Physics.Raycast(start, dir, out RaycastHit hitRay, 3f))
+            {
+                hitPos = hitRay.point + hitRay.normal * 0.3f;
+                //hitDir = start - hitPos;
+            }
+
+            Mgr_Game.Inst.SpawnDamageText(hitPos, Damage);      // 데미지 텍스트
+            Mgr_Game.Inst.SpawnHitParticle(hitPos, -hitDir);    // 임팩트
+        }
+
 
         // 체력 비율에 따라 Count갱신
         {

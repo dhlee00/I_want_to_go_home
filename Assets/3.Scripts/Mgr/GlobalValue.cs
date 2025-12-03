@@ -111,5 +111,5 @@ public enum EWeaponType
 }
 public interface ITakeDamage
 {
-    public void TakeDamage(GameObject DamageOwner, float Damage, EWeaponType DamageType);
+    public void TakeDamage(GameObject DamageOwner, GameObject DamageObj, float Damage, EWeaponType DamageType);
 }

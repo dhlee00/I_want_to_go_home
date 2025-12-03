@@ -47,7 +47,7 @@ public class Weapon : MonoBehaviour
             if (damage == takeDamage) return;
         }
 
-        takeDamage.TakeDamage(this.gameObject, AttackPower, WeaponType);
+        takeDamage.TakeDamage(this.gameObject, this.gameObject, AttackPower, WeaponType);
         TakeDamageList.Add(takeDamage);
     }
 

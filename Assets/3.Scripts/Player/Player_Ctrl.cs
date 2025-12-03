@@ -17,12 +17,14 @@ public class Player_Ctrl : NetworkBehaviour
 
     #region 플레이어 스텟
     //[Header("Stets")]
-    
+
 
     #endregion
 
     #region 플레이어의 상태
-    //[Header("Stets")]
+    [Header("Stets")]
+
+    [SerializeField] bool IsZoom = false;   // 우클릭을 누르며 줌을 유지한 상태
 
     #endregion
 
@@ -33,9 +35,9 @@ public class Player_Ctrl : NetworkBehaviour
 
     #region Move
     [Header("Move")]
-    Vector2 Move = Vector2.zero;
-    public float Speed;                  // 이동 변수
-    public float MoveSpeed = 4.0f;       // 걷기 속도
+    [SerializeField] Vector2 Move = Vector2.zero;
+    [SerializeField] float Speed;                  // 이동 변수
+    [SerializeField] float MoveSpeed = 4.0f;       // 걷기 속도
 
     float TargetRotation = 0.0f;  // 회전 타겟 방향
     float RotationVelocity;       // 회전 속도
@@ -51,8 +53,8 @@ public class Player_Ctrl : NetworkBehaviour
     [Header("Grounded and Jump")]
     public bool Grounded = true;
     public LayerMask GroundLayers = 0;
-    public float GroundedOffset = -0.14f;   // 땅을 체크할 높이 값
-    protected float GroundedRadius = 0.1f;
+    public float GroundedOffset = -0.3f;   // 땅을 체크할 높이 값
+    float GroundedRadius;  // 캡슐 반지름(두께)
 
     float CharacterGravity; // 캐릭터 전용 중력
 
@@ -86,7 +88,7 @@ public class Player_Ctrl : NetworkBehaviour
 
     protected CharacterController Controller;
 
-    public static Player_Ctrl LocalInst;
+    public static Player_Ctrl LocalPlayer;
 
 
     void Awake()
@@ -101,15 +103,16 @@ public class Player_Ctrl : NetworkBehaviour
 
 
         if (TestPlayer)
-            LocalInst = this;
+            LocalPlayer = this;
 
         CharacterGravity = Physics.gravity.y;
+        GroundedRadius = Controller.radius;
     }
 
     public override void OnNetworkSpawn()
     {
         if (IsLocalPlayer || TestPlayer)
-            LocalInst = this;
+            LocalPlayer = this;
     }
 
     void Update()
@@ -122,6 +125,18 @@ public class Player_Ctrl : NetworkBehaviour
 
             if (Mgr_Game.Inst && Mgr_Game.Inst.bCanMove)
             {
+                IsZoom = Input.GetMouseButton(1);
+
+                if (IsZoom)
+                {
+                    // 카메라이동에 대한 회전
+                    Vector3 camForward = Camera.main.transform.forward;
+                    camForward.y = 0f;
+                    camForward.Normalize();
+
+                    transform.rotation = Quaternion.LookRotation(camForward);
+                }
+
                 // 무브 입력
                 InputMove = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
 
@@ -172,6 +187,25 @@ public class Player_Ctrl : NetworkBehaviour
 
     void LateUpdate()
     {
+        {
+            // 애니메이션
+            if (m_Animator)
+            {
+                AnimationMoveBlend = Mathf.Lerp(AnimationMoveBlend, Move != Vector2.zero ? 1 : 0, Time.deltaTime * SpeedChangeRate);
+                if (AnimationMoveBlend < 0.01f) AnimationMoveBlend = 0f;
+
+                // 파라미터
+                m_Animator.SetBool("Grounded", Grounded);
+                m_Animator.SetFloat("Move", AnimationMoveBlend);
+                m_Animator.SetBool("IsZoom", IsZoom);
+                if (IsZoom)
+                {
+                    m_Animator.SetFloat("MoveX", Move.x);
+                    m_Animator.SetFloat("MoveY", Move.y);
+                }
+            }
+        }
+
         // 테스트 공격
         if (Mgr_Game.Inst && Mgr_Game.Inst.bCanMove)
         {
@@ -278,12 +312,6 @@ public class Player_Ctrl : NetworkBehaviour
                 Grounded = true;
             break;
         }
-
-        // 애니메이션 점프
-        if (m_Animator)
-        {
-            m_Animator.SetBool("Grounded", Grounded);
-        }
     }
 
     // 움직임
@@ -311,32 +339,40 @@ public class Player_Ctrl : NetworkBehaviour
         // 노멀라이즈
         Vector3 inputDirection = new Vector3(Move.x, 0.0f, Move.y).normalized;
 
+
         //이동 입력이 있는 경우 플레이어가 이동할 때 회전
+        Vector3 targetDirection = Vector3.zero;
         if (Move != Vector2.zero)
         {
-            TargetRotation = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg +
-                              Camera.main.transform.eulerAngles.y;
-            float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, TargetRotation, ref RotationVelocity,
-                RotationSmoothTime);
+            if(IsZoom)
+            {
+                // 움직임
+                if (Move.x != 0f)
+                    targetDirection += (Move.x > 0f) ? Camera.main.transform.right : -Camera.main.transform.right;
+                
+                if (Move.y != 0f)
+                    targetDirection += (Move.y > 0f) ? Camera.main.transform.forward : -Camera.main.transform.forward;
+
+            }
+            else
+            {
+                TargetRotation = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg +
+                                  Camera.main.transform.eulerAngles.y;
+                float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, TargetRotation, ref RotationVelocity,
+                    RotationSmoothTime);
 
 
-            transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
+                transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
+
+                targetDirection = Quaternion.Euler(0.0f, TargetRotation, 0.0f) * Vector3.forward;
+            }
         }
 
-        Vector3 targetDirection = Quaternion.Euler(0.0f, TargetRotation, 0.0f) * Vector3.forward;
+        
 
         // 이동
         Controller.Move(targetDirection.normalized * (Speed * Time.deltaTime) +
                              new Vector3(0.0f, VerticalVelocity, 0.0f) * Time.deltaTime);
-
-        // 애니메이션
-        if (m_Animator)
-        {
-            AnimationMoveBlend = Mathf.Lerp(AnimationMoveBlend, Move != Vector2.zero ? 1 : 0, Time.deltaTime * SpeedChangeRate);
-            if (AnimationMoveBlend < 0.01f) AnimationMoveBlend = 0f;
-
-            m_Animator.SetFloat("Move", AnimationMoveBlend);
-        }
 
         // 서버로 상태값 전송
         SendStateRpc
@@ -368,7 +404,6 @@ public class Player_Ctrl : NetworkBehaviour
     {
         if (EquipWeapon == null || EquipWeapon?.isAttacking == true) return;
 
-        Debug.Log("공격 시작");
         m_Animator.SetLayerWeight(m_Animator_UpBody, 1.0f);
         m_Animator.SetTrigger("Attack");
 
@@ -379,7 +414,6 @@ public class Player_Ctrl : NetworkBehaviour
     // 애니메이션 이벤트
     void AE_EndAttack()
     {
-        Debug.Log("공격 끝");
         m_Animator.SetLayerWeight(m_Animator_UpBody, 0f);
 
         EquipWeapon.Attacking(false);

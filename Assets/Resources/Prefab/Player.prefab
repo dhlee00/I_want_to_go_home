@@ -2079,9 +2079,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6514470208025967866}
-  - component: {fileID: 727498631794315921}
   - component: {fileID: 2899713375817045858}
   - component: {fileID: 8831963954456498165}
+  - component: {fileID: 727498631794315921}
   - component: {fileID: 8672731710898708196}
   m_Layer: 3
   m_Name: Player
@@ -2108,28 +2108,6 @@ Transform:
   - {fileID: 6278684731106471685}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!95 &727498631794315921
-Animator:
-  serializedVersion: 7
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7687429643865414945}
-  m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: 5c3bba73191dcff4eb30854e19ef3dc4, type: 3}
-  m_Controller: {fileID: 9100000, guid: 3713a1a8bfa11bd4ea0f045de3213137, type: 2}
-  m_CullingMode: 1
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 1
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_AnimatePhysics: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!114 &2899713375817045858
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2168,6 +2146,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
+  IsZoom: 0
+  Move: {x: 0, y: 0}
   Speed: 0
   MoveSpeed: 4
   Grounded: 1
@@ -2177,6 +2157,28 @@ MonoBehaviour:
   GroundedOffset: -0.14
   VerticalVelocity: 0
   TestPlayer: 1
+--- !u!95 &727498631794315921
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7687429643865414945}
+  m_Enabled: 1
+  m_Avatar: {fileID: 9000000, guid: 5c3bba73191dcff4eb30854e19ef3dc4, type: 3}
+  m_Controller: {fileID: 9100000, guid: 3713a1a8bfa11bd4ea0f045de3213137, type: 2}
+  m_CullingMode: 1
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 1
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!143 &8672731710898708196
 CharacterController:
   m_ObjectHideFlags: 0
@@ -2196,7 +2198,7 @@ CharacterController:
   m_Enabled: 1
   serializedVersion: 3
   m_Height: 2
-  m_Radius: 0.4
+  m_Radius: 0.3
   m_SlopeLimit: 45
   m_StepOffset: 0.5
   m_SkinWidth: 0.08
