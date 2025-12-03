@@ -24,6 +24,8 @@ public class Mgr_Inventory : MonoBehaviour
     [SerializeField] Transform EquipSlot_Tr;
     [SerializeField] int EquipSlot_Amount;
 
+    [SerializeField] GameObject ArmorSlot;
+    [SerializeField] GameObject EquipSlot;
 
     [SerializeField] Image DragItem;
     public Image Get_DragItem { get => DragItem; }
@@ -89,6 +91,22 @@ public class Mgr_Inventory : MonoBehaviour
         foreach (var item in GlobalValue.Equipment_EquipSlot)
         {
             Inven_EquipSlotList[item.Get_Item_SlotIndex].Set_SlotInfo(item, item.Get_Item_Amount);
+        }
+    }
+    #endregion
+
+    #region Change_ArmorSlot
+    public void Change_ArmorSlot(bool _isOn)
+    {
+        if (_isOn)
+        {
+            ArmorSlot.SetActive(_isOn);
+            EquipSlot.SetActive(!_isOn);
+        }
+        else
+        {
+            ArmorSlot.SetActive(_isOn);
+            EquipSlot.SetActive(!_isOn);
         }
     }
     #endregion
