@@ -46,9 +46,14 @@ public class Item
     [SerializeField] string Item_IconPath;
     public string Get_Item_IconPath { get => Item_IconPath; }
 
+    // 아이템 프리팹
+    [SerializeField] string Item_Prefab;
+    public string Get_Item_Prefab { get => Item_Prefab; }
+
+
     // 생성자
     #region Constructor
-    public Item(string _name, ITEM_TYPE _itemType, string _itemDesc, int _amount, string _iconPath, int _index = -1, int _slotIndex = -1, bool _isEquip = false)
+    public Item(string _name, ITEM_TYPE _itemType, string _itemDesc, int _amount, string _iconPath, string _item_Prefab = "", int _index = -1, int _slotIndex = -1, bool _isEquip = false)
     {
         Item_Index = _index;
         Item_Name = _name;
@@ -58,6 +63,7 @@ public class Item
         Item_SlotIndex = _slotIndex;
         Item_Equip = _isEquip;
         Item_IconPath = _iconPath;
+        Item_Prefab = _item_Prefab;
 
         Load_Image();
     }

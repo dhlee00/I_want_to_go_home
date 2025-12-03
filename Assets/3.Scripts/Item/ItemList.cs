@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class ItemList : MonoBehaviour
 {
-    List<Item> Item_List = new List<Item>();
-    public Item GetItemData(int index) { return new Item(ItemList.Inst.Item_List[index]); }
+    [SerializeField] List<Item> Item_List = new List<Item>();
+    public Item GetItemData(int index) { return new Item(Item_List[index]); }
 
     public static ItemList Inst = null;
 
@@ -21,7 +21,10 @@ public class ItemList : MonoBehaviour
             ITEM_TYPE.TryParse(GoogleSheetManager.SO<GoogleSheetSO>().Item_DataList[i].ITEM_TYPE, out ITEM_TYPE itemType);
 
             Item item = new Item(GoogleSheetManager.SO<GoogleSheetSO>().Item_DataList[i].ITEM_NAME, itemType,
-                GoogleSheetManager.SO<GoogleSheetSO>().Item_DataList[i].ITEM_DESC, GoogleSheetManager.SO<GoogleSheetSO>().Item_DataList[i].ITEM_AMOUNT, GoogleSheetManager.SO<GoogleSheetSO>().Item_DataList[i].ITEM_ICON_PATH,
+                GoogleSheetManager.SO<GoogleSheetSO>().Item_DataList[i].ITEM_DESC, 
+                GoogleSheetManager.SO<GoogleSheetSO>().Item_DataList[i].ITEM_AMOUNT, 
+                GoogleSheetManager.SO<GoogleSheetSO>().Item_DataList[i].ITEM_ICON_PATH,
+                GoogleSheetManager.SO<GoogleSheetSO>().Item_DataList[i].ITEM_PREFAB, 
                 GoogleSheetManager.SO<GoogleSheetSO>().Item_DataList[i].ITEM_INDEX);
             Item_List.Add(item);
         }

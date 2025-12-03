@@ -1,3 +1,4 @@
+using NUnit.Framework.Interfaces;
 using System;
 using System.Collections.Generic;
 using Unity.Netcode;
@@ -77,7 +78,7 @@ public class Player_Ctrl : NetworkBehaviour
 
 
     Transform GripPos; // 무기가 손에 잡힐 위치
-    Weapon EquipWeapon = null; // 현제 손에 들고있는 무기
+    Weapon EquipWeaponData = null; // 현제 손에 들고있는 무기
 
 
     // 테스트용
@@ -230,19 +231,8 @@ public class Player_Ctrl : NetworkBehaviour
         // 테스트 무기 장착
         if (Input.GetKeyDown(KeyCode.O))
         {
-            if (EquipWeapon)
-            {
-                Destroy(EquipWeapon.gameObject);
-                EquipWeapon = null;
-            }
-            else
-            {
-                Weapon we = Instantiate(Resources.Load<GameObject>("Prefab/Weapon_Pickax_Prefab"), GripPos).GetComponent<Weapon>();
-                we.SapwnWeapon(this.gameObject);
-
-                EquipWeapon = we;
-            }
-                
+            //GlobalValue.AddItme(ItemList.Inst.GetItemData(3));
+            Debug.Log($"{ItemList.Inst.GetItemData(3).Get_Item_Name} / {ItemList.Inst.GetItemData(3).Get_Item_Prefab}");
         }
 
         
@@ -402,12 +392,12 @@ public class Player_Ctrl : NetworkBehaviour
     #region 애니메이션 함수
     void Anim_Attack()
     {
-        if (EquipWeapon == null || EquipWeapon?.isAttacking == true) return;
+        if (EquipWeaponData == null || EquipWeaponData?.isAttacking == true) return;
 
         m_Animator.SetLayerWeight(m_Animator_UpBody, 1.0f);
         m_Animator.SetTrigger("Attack");
 
-        EquipWeapon.Attacking(true);
+        EquipWeaponData.Attacking(true);
     }
 
 
@@ -416,11 +406,28 @@ public class Player_Ctrl : NetworkBehaviour
     {
         m_Animator.SetLayerWeight(m_Animator_UpBody, 0f);
 
-        EquipWeapon.Attacking(false);
+        EquipWeaponData.Attacking(false);
     }
 
 
     #endregion
+
+
+    public void EquipWeapon(string Prefab_Str = "")
+    {
+        if (EquipWeaponData || Prefab_Str == "")
+        {
+            Destroy(EquipWeaponData.gameObject);
+            EquipWeaponData = null;
+        }
+        else
+        {
+            Weapon we = Instantiate(Resources.Load<GameObject>(Prefab_Str), GripPos).GetComponent<Weapon>();
+            we.SapwnWeapon(this.gameObject);
+
+            EquipWeaponData = we;
+        }
+    }
 
 
     private void OnTriggerEnter(Collider other)
