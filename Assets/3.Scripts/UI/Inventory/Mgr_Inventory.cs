@@ -56,7 +56,7 @@ public class Mgr_Inventory : MonoBehaviour
         Refresh_Inventory();
 
 
-        _Equip_Slot_Index = 1;
+        Equip_Slot_Index = 1;
     }
 
     // ½½·Ô »ý¼º
@@ -122,5 +122,12 @@ public class Mgr_Inventory : MonoBehaviour
     public void UpdateEquipSlot()
     {
         Player_Ctrl.LocalPlayer.EquipWeapon((Inven_EquipSlotList[Equip_Slot_Index - 1].Get_ItemData == null) ? "" : Inven_EquipSlotList[Equip_Slot_Index - 1].Get_ItemData?.Get_Item_Prefab);
+
+        for(int i = 0; i < Mgr_UI.Inst.EquipSlotInfo_List.Count; i++)
+        {
+            Mgr_UI.Inst.EquipSlotInfo_List[i].isSelect(i == Equip_Slot_Index - 1);
+        }
+
+        
     }
 }
