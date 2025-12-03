@@ -13,6 +13,10 @@ public class Mgr_UI : MonoBehaviour
     [SerializeField] GameObject Inventory_Prefab;
     GameObject Inventory_UI;
 
+    [Header("EquipSlot_Info")]
+    [SerializeField] Animator EquipSlot_Anim;
+    [SerializeField] List<EquipSlot_Info> EquipSlotInfo_List = new List<EquipSlot_Info>();
+
     [Header("Pointer")]
     public GraphicRaycaster raycaster;
     public EventSystem eventSystem;
@@ -33,12 +37,6 @@ public class Mgr_UI : MonoBehaviour
         #endregion  
 
         Init_UI(Inventory_Prefab, ref Inventory_UI);
-    }
-
-
-    void Update()
-    {
-
     }
 
     #region Spawn_UI
@@ -104,6 +102,7 @@ public class Mgr_UI : MonoBehaviour
             InteractionUI_Update();
         }
 
+        Mgr_UI.Inst.EquipInfo_Init();
     }
 
     // 선택 중인 상호작용UI 설정
@@ -243,6 +242,41 @@ public class Mgr_UI : MonoBehaviour
         interaction_UI.UI_Update();
 
         return interaction_UI;
+    }
+    #endregion
+
+    #region EquipSlot_On/Off
+    public void EquipSlot_On(bool _isOn)
+    {
+        if (_isOn)
+        {
+            EquipSlot_Anim.Play("EquipSlot_Open");
+        }
+        else
+        {
+            EquipSlot_Anim.Play("EquipSlot_Close");
+        }
+    }
+    #endregion
+
+    #region SceneEquipSlot_Init
+    // 화면에 보이는 장착 슬롯 초기화(수량, 정보, 슬롯 위치 초기화)
+    public void EquipInfo_Init()
+    {
+        for (int i = 0; i < EquipSlotInfo_List.Count; i++)
+        {
+            EquipSlotInfo_List[i].Set_UI();
+        }
+
+        foreach (var item in GlobalValue.User_EquipSlot)
+        {
+            EquipSlotInfo_List[item.Value.Get_Item_SlotIndex].Set_UI(item.Value);
+        }
+
+        for (int i = 0; i < GlobalValue.Equipment_EquipSlot.Count; i++)
+        {
+            EquipSlotInfo_List[GlobalValue.Equipment_EquipSlot[i].Get_Item_SlotIndex].Set_UI(GlobalValue.Equipment_EquipSlot[i]);
+        }
     }
     #endregion
 }

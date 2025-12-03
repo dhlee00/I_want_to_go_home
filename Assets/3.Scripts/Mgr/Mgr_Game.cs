@@ -30,6 +30,7 @@ public class Mgr_Game : MonoBehaviour
         {
             if (Mgr_UI.Inst.OnInventory())
             {// 인벤토리가 열릴 때
+                Mgr_UI.Inst.EquipSlot_On(false);
                 bCanMove = false;
                 Mgr_Camera.Inst.SetCameraLock(true);    // 카메라 잠금
 
@@ -37,6 +38,7 @@ public class Mgr_Game : MonoBehaviour
             }
             else
             {// 인벤토리가 닫힐 때
+                Mgr_UI.Inst.EquipSlot_On(true);
                 bCanMove = true;
                 Mgr_Camera.Inst.SetCameraLock(false);   // 카메라 잠금 풀기
                 

@@ -344,9 +344,10 @@ public class Inven_Slot : MonoBehaviour, ISlot,
 
         Debug.Log(debug);
         #endregion
-
+        
         DragItem = null;
         Mgr_Inventory.Inst.Refresh_Inventory();
+        Mgr_UI.Inst.EquipInfo_Init();
     }
     #endregion
 
