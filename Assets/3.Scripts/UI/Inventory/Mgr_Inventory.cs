@@ -28,7 +28,9 @@ public class Mgr_Inventory : MonoBehaviour
 
     [SerializeField] Image DragItem;
 
-    public int Equip_Slot_Index;    // ÇöÁ¦ ÀåÂøÁßÀÎ ½½·Ô ÀÎµ¦½º
+    int _Equip_Slot_Index;    // ÇöÁ¦ ÀåÂøÁßÀÎ ½½·Ô ÀÎµ¦½º
+    public int Equip_Slot_Index 
+    { get { return _Equip_Slot_Index; } set { _Equip_Slot_Index = value; UpdateEquipSlot(); } }
 
     public Image Get_DragItem { get => DragItem; }
 
@@ -54,7 +56,7 @@ public class Mgr_Inventory : MonoBehaviour
         Refresh_Inventory();
 
 
-        Equip_Slot_Index = 1;
+        _Equip_Slot_Index = 1;
     }
 
     // ½½·Ô »ý¼º
@@ -119,12 +121,6 @@ public class Mgr_Inventory : MonoBehaviour
 
     public void UpdateEquipSlot()
     {
-        Debug.Log($"{Equip_Slot_Index - 1} / {Inven_EquipSlotList[Equip_Slot_Index - 1].Get_ItemData?.Get_Item_Prefab}");
-        //
-
-        //Player_Ctrl.LocalPlayer.EquipWeapon();
-        
-
-
+        Player_Ctrl.LocalPlayer.EquipWeapon((Inven_EquipSlotList[Equip_Slot_Index - 1].Get_ItemData == null) ? "" : Inven_EquipSlotList[Equip_Slot_Index - 1].Get_ItemData?.Get_Item_Prefab);
     }
 }
