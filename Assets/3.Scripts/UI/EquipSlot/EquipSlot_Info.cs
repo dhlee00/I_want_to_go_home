@@ -8,7 +8,7 @@ public class EquipSlot_Info : MonoBehaviour
     [SerializeField] Item ItemData;
     [SerializeField] Image Item_Image;
     [SerializeField] TextMeshProUGUI Item_Amount;
-
+    [SerializeField] GameObject SelectFrame;
     public void Set_UI(Item _item = null)
     {
         if (_item != null)
@@ -29,5 +29,10 @@ public class EquipSlot_Info : MonoBehaviour
             Item_Amount.text = "";
             Item_Image.enabled = false;
         }
+    }
+
+    public void isSelect(bool _isSelect)
+    {
+        SelectFrame.SetActive(_isSelect);
     }
 }

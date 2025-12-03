@@ -15,7 +15,7 @@ public class Mgr_UI : MonoBehaviour
 
     [Header("EquipSlot_Info")]
     [SerializeField] Animator EquipSlot_Anim;
-    [SerializeField] List<EquipSlot_Info> EquipSlotInfo_List = new List<EquipSlot_Info>();
+    public List<EquipSlot_Info> EquipSlotInfo_List = new List<EquipSlot_Info>();
 
     [Header("Pointer")]
     public GraphicRaycaster raycaster;
