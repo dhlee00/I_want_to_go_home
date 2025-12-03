@@ -30,7 +30,7 @@ public class Mgr_Map : MonoBehaviour
     [SerializeField] float noiseScale;
 
     // 노이즈 오프셋
-    Vector2 noiseOffset;
+    [SerializeField] Vector2 noiseOffset;
 
     // 오브젝트들 넣을 부모
     [SerializeField] Transform objectsParent;
@@ -62,7 +62,7 @@ public class Mgr_Map : MonoBehaviour
         spawnRange = mapTerrain.terrainData.size.x / 2;
 
         // 오프셋 랜덤 설정
-        noiseOffset = new Vector2(Random.Range(0f, 100f), Random.Range(0f, 100f));
+        //noiseOffset = new Vector2(Random.Range(0f, 100f), Random.Range(0f, 100f));
 
         // 지정한 개수만큼 오브젝트 생성
         for (int i = 0; i < totalObjectCount; i++)

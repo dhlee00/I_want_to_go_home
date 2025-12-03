@@ -1,4 +1,5 @@
 using UnityEngine;
+using static UnityEngine.ParticleSystem;
 
 public class Mgr_Game : MonoBehaviour
 {
@@ -50,16 +51,17 @@ public class Mgr_Game : MonoBehaviour
     public Interaction_Item DropItem(Item ItemData)
     {
         Interaction_Item item = Mgr_Game.Inst.SpawnItme();
-        Vector3 dropPos = Player_Ctrl.LocalInst.transform.position;
+        Vector3 dropPos = Player_Ctrl.LocalPlayer.transform.position;
         dropPos.y += 1;
 
 
-        item.SetInteractionItem(ItemData.Get_Item_Index, ItemData.Get_Item_Amount, dropPos, Player_Ctrl.LocalInst.transform.forward.normalized);
+        item.SetInteractionItem(ItemData.Get_Item_Index, ItemData.Get_Item_Amount, dropPos, Player_Ctrl.LocalPlayer.transform.forward.normalized);
 
         return item;
     }
 
 
+    #region 아이템 오브젝트 스폰
     Interaction_Item ItemPrefab;
     public Interaction_Item SpawnItme()
     {
@@ -70,4 +72,42 @@ public class Mgr_Game : MonoBehaviour
         
         return Instantiate(ItemPrefab.gameObject).GetComponent<Interaction_Item>();
     }
+    #endregion
+
+
+    #region 데미지 텍스트
+    UIObj_DamageText DamageTextPrefab;
+    public UIObj_DamageText SpawnDamageText(Vector3 SpawnPos, float Deamge)
+    {
+        if(DamageTextPrefab == null)
+            DamageTextPrefab = Resources.Load<UIObj_DamageText>("Prefab/UIObj/DamageText_Prefab");
+
+
+        UIObj_DamageText obj = Instantiate(DamageTextPrefab.gameObject).GetComponent<UIObj_DamageText>();
+        obj.SpawnDamageText(SpawnPos, Deamge);
+
+        return obj;
+    }
+    #endregion
+
+
+    #region 히트 임팩트
+    ParticleSystem HitParticleSystem;
+    public ParticleSystem SpawnHitParticle(Vector3 SpawnPos, Vector3 Dir)
+    {
+        if(HitParticleSystem == null)
+            HitParticleSystem = Resources.Load<ParticleSystem>("Prefab/Effects/FX_Shoot_01_muzzle");
+
+        ParticleSystem obj = Instantiate(HitParticleSystem.gameObject).GetComponent<ParticleSystem>();
+        obj.gameObject.transform.position = SpawnPos;
+        obj.transform.LookAt(Dir);
+        obj.Play();
+
+        float duration = obj.main.duration + obj.main.startLifetime.constantMax;
+        Destroy(obj.gameObject, duration);
+
+        return obj;
+    }
+
+    #endregion
 }

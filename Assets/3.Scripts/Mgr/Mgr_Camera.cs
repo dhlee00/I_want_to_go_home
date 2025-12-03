@@ -24,7 +24,7 @@ public class Mgr_Camera : MonoBehaviour
 
     private void Start()
     {
-        VirtualCamera.Follow = Player_Ctrl.LocalInst.transform;
+        VirtualCamera.Follow = Player_Ctrl.LocalPlayer.transform;
     }
 
 
