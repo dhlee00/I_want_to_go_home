@@ -10,16 +10,15 @@ public interface ISlot
 
 public class Mgr_Inventory : MonoBehaviour
 {
-    [Header("Inven_Item_Slot")]
+    [Header("Inven_Item_Slot")] // 가방 슬롯
     [SerializeField] List<Inven_Slot> Inven_ItemSlotList = new List<Inven_Slot>();
     public List<Inven_Slot> Get_Inven_ItemSlotList { get => Inven_ItemSlotList; }
     [SerializeField] GameObject Inven_ItemSlot_Prefab;
     [SerializeField] Transform ItemSlot_Tr;
     [SerializeField] int ItemSlot_Amount;
 
-    [Header("Inven_Equip_Slot")]
+    [Header("Inven_Equip_Slot")] // 장착 슬롯
     [SerializeField] List<Inven_Slot> Inven_EquipSlotList = new List<Inven_Slot>();
-    public List<Inven_Slot> Get_Inven_EquipSlotList = new List<Inven_Slot>();
     [SerializeField] GameObject Inven_EquipSlot_Prefab;
     [SerializeField] Transform EquipSlot_Tr;
     [SerializeField] int EquipSlot_Amount;
@@ -28,6 +27,9 @@ public class Mgr_Inventory : MonoBehaviour
     [SerializeField] GameObject EquipSlot;
 
     [SerializeField] Image DragItem;
+
+    public int Equip_Slot_Index;    // 현제 장착중인 슬롯 인덱스
+
     public Image Get_DragItem { get => DragItem; }
 
     [SerializeField] Item_Desc ItemDesc;
@@ -50,6 +52,9 @@ public class Mgr_Inventory : MonoBehaviour
 
         // 불러온 데이터 인벤토리에 추가를 위해 새로고침
         Refresh_Inventory();
+
+
+        Equip_Slot_Index = 1;
     }
 
     // 슬롯 생성
@@ -110,4 +115,16 @@ public class Mgr_Inventory : MonoBehaviour
         }
     }
     #endregion
+
+
+    public void UpdateEquipSlot()
+    {
+        Debug.Log($"{Equip_Slot_Index - 1} / {Inven_EquipSlotList[Equip_Slot_Index - 1].Get_ItemData?.Get_Item_Prefab}");
+        //
+
+        //Player_Ctrl.LocalPlayer.EquipWeapon();
+        
+
+
+    }
 }

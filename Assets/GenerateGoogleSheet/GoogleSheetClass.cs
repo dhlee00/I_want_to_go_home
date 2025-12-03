@@ -17,5 +17,6 @@ public class Item_Data
 	public int ITEM_AMOUNT;
 	public string ITEM_DESC;
 	public string ITEM_ICON_PATH;
+	public string ITEM_PREFAB;
 }
 

@@ -107,7 +107,7 @@ public class Inven_Slot : MonoBehaviour, ISlot,
         List<RaycastResult> results = new List<RaycastResult>();
         Mgr_UI.Inst.raycaster.Raycast(pointerData, results);
 
-        // Raycast로 받은게 아무것도 없다면
+        // Raycast로 받은게 아무것도 없다면 아이템을 버림
         if (results.Count <= 0)
         {
             Mgr_Game.Inst.DropItem(ItemData);
@@ -125,6 +125,7 @@ public class Inven_Slot : MonoBehaviour, ISlot,
             // 인벤토리에서 지움
             Set_SlotInfo(null, 0, false);
 
+            Mgr_Inventory.Inst.UpdateEquipSlot();
             return;
         }
 
@@ -166,6 +167,8 @@ public class Inven_Slot : MonoBehaviour, ISlot,
                             GlobalValue.Equipment_Inventory.Add(DragItem);
                             GlobalValue.Equipment_EquipSlot.Remove(DragItem);
                         }
+
+                        Mgr_Inventory.Inst.UpdateEquipSlot();
                     }
                 }
                 // 사용하고 있는 슬롯이라면
@@ -216,6 +219,8 @@ public class Inven_Slot : MonoBehaviour, ISlot,
                             GlobalValue.Equipment_EquipSlot.Add(ChangeSlot_Item);
                             GlobalValue.Equipment_Inventory.Remove(ChangeSlot_Item);
                         }
+
+                        Mgr_Inventory.Inst.UpdateEquipSlot();
                     }
                 }
 
@@ -298,7 +303,6 @@ public class Inven_Slot : MonoBehaviour, ISlot,
                             {
                                 GlobalValue.Equipment_EquipSlot.Add(DragItem);
                                 GlobalValue.Equipment_Inventory.Remove(DragItem);
-
                             }
                             else
                             {
@@ -311,6 +315,8 @@ public class Inven_Slot : MonoBehaviour, ISlot,
                         }
                     }
                 }
+
+                Mgr_Inventory.Inst.UpdateEquipSlot();
 
                 break;
             }
@@ -342,7 +348,7 @@ public class Inven_Slot : MonoBehaviour, ISlot,
         }
         debug += "\n";
 
-        Debug.Log(debug);
+        //Debug.Log(debug);
         #endregion
         
         DragItem = null;
