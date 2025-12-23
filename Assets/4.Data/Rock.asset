@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df4b243d14ee966439e5e4f85a516b17, type: 3}
+  m_Name: Rock
+  m_EditorClassIdentifier: 
+  objectType: 3
+  prefab:
+  - {fileID: 1112927857913235624, guid: 12183abe6d6deb845b52e51f9e04030f, type: 3}
+  - {fileID: 3473859622998701818, guid: abb3b2a6e36956a4aa293bddb3e5d414, type: 3}
+  - {fileID: 7573709406005717830, guid: 50d48d32480aedd4dae83ba2e59396b6, type: 3}
+  - {fileID: 1261141267327871062, guid: ef35041933c012a4faaf31286d295153, type: 3}
+  - {fileID: 4594506167017561937, guid: c198d89c3db6bd346a3dee5f05b0d7b8, type: 3}
+  - {fileID: 5271031944266087351, guid: 7d190e098ceeb324293b900703f60c26, type: 3}
+  - {fileID: 3237805454136341236, guid: 6548788b73fe0d44b8f8a25e325f936a, type: 3}
+  - {fileID: 8613674658842689458, guid: a28a65cc3d9909243839139ca0b82b0b, type: 3}
+  - {fileID: 3250996805562472357, guid: 6e0d711a72f59794c9f5c49618a9806e, type: 3}
+  hp: 20
