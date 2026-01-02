@@ -9,17 +9,32 @@ public class Mgr_UI : MonoBehaviour
 
     [SerializeField] Transform UI_Parent;
 
+    #region Inventory
     [Header("Inventory")]
     [SerializeField] GameObject Inventory_Prefab;
     GameObject Inventory_UI;
+    #endregion
 
+    #region EquipSlot_Info
     [Header("EquipSlot_Info")]
     [SerializeField] Animator EquipSlot_Anim;
     public List<EquipSlot_Info> EquipSlotInfo_List = new List<EquipSlot_Info>();
+    #endregion
 
+    #region Pointer
     [Header("Pointer")]
     public GraphicRaycaster raycaster;
     public EventSystem eventSystem;
+    #endregion
+
+    #region
+    [Header("Player Stets UI")]
+    [SerializeField] Image HpBar_Image;
+    [SerializeField] Image StaminaBar_Image;
+
+
+    #endregion
+
 
     public bool OnInventory() { return Spawn_UI(Inventory_Prefab, Inventory_UI); }
 
@@ -37,6 +52,24 @@ public class Mgr_UI : MonoBehaviour
         #endregion  
 
         Init_UI(Inventory_Prefab, ref Inventory_UI);
+    }
+
+    void Update()
+    {
+        if(Player_Ctrl.LocalPlayer)
+        {
+            HpBar_Image.fillAmount = Player_Ctrl.LocalPlayer.Current_Hp / Player_Ctrl.LocalPlayer.Max_Hp;
+
+            if(Player_Ctrl.LocalPlayer.Current_Stamina >= Player_Ctrl.LocalPlayer.Max_Stamina - 0.01f)
+            {
+                StaminaBar_Image.gameObject.SetActive(false);
+            }
+            else
+            {
+                StaminaBar_Image.gameObject.SetActive(true);
+                StaminaBar_Image.fillAmount = Player_Ctrl.LocalPlayer.Current_Stamina / Player_Ctrl.LocalPlayer.Max_Stamina;
+            }
+        }
     }
 
     #region Spawn_UI

@@ -17,15 +17,45 @@ public class Player_Ctrl : NetworkBehaviour
     #endregion
 
     #region 플레이어 스텟
-    //[Header("Stets")]
+    [Header("Stets")]
+    [SerializeField] float MoveSpeed_Walk = 4.0f;       // 걷기 속도
+    [SerializeField] float MoveSpeed_Run = 7.0f;       // 달리기 속도
 
+    public float Max_Hp = 100f;
+    public float Current_Hp = 100f;
+    
+    public float Max_Stamina = 100f;
+    [SerializeField] float _Current_Stamina = 100f;
+
+    public float Current_Stamina
+    {
+        get { return _Current_Stamina; }
+        set {
+            if (value < _Current_Stamina)
+            {
+                StaminaRegenDelayRemainingTime = StaminaRegenDelayTime;
+            }
+            _Current_Stamina = value;
+        }
+    }
+
+    public float StaminaRegenDelayTime = 0.5f; // 스테미너 회복까지의 딜레이 설정 시간
+    [SerializeField] float StaminaRegenDelayRemainingTime = 0f; // 스테미너 회복까지의 딜레이
+
+    public float StaminaRegenRate = 5f; // 초당 회복량
+    [SerializeField] float StaminaCost_Attack = 20f;
+    [SerializeField] float StaminaCost_Jump = 10f;
+    [SerializeField] float StaminaCost_Run = 3f;    // 달릴때 초당 스테미너 소모량
 
     #endregion
 
     #region 플레이어의 상태
-    [Header("Stets")]
+    [Header("Status")]
 
     [SerializeField] bool IsZoom = false;   // 우클릭을 누르며 줌을 유지한 상태
+    public bool IsAttacking = false;
+
+    Weapon EquipWeaponData = null; // 현재 손에 들고있는 무기
 
     #endregion
 
@@ -37,8 +67,8 @@ public class Player_Ctrl : NetworkBehaviour
     #region Move
     [Header("Move")]
     [SerializeField] Vector2 Move = Vector2.zero;
+    public bool IsRun;
     [SerializeField] float Speed;                  // 이동 변수
-    [SerializeField] float MoveSpeed = 4.0f;       // 걷기 속도
 
     float TargetRotation = 0.0f;  // 회전 타겟 방향
     float RotationVelocity;       // 회전 속도
@@ -48,6 +78,9 @@ public class Player_Ctrl : NetworkBehaviour
     float SpeedChangeRate = 10.0f;   // 속도 변화율
 
     float AnimationMoveBlend;      // 이동시 애니메이션 블랜드
+
+    float ZoomMoveX;
+    float ZoomMoveY;
     #endregion
 
     #region 중력 및 점프
@@ -70,15 +103,16 @@ public class Player_Ctrl : NetworkBehaviour
     protected float FallTimeout = 0.15f; // 낙하 상태에 들어가기 전에 소요되는 시간
     #endregion
 
-
-    // 애니메이션
+    #region 애니메이션
     [Header("Animator")]
     Animator m_Animator;
     int m_Animator_UpBody;
-
+    [SerializeField] Transform SpineBone; // 상체 본
 
     Transform GripPos; // 무기가 손에 잡힐 위치
-    Weapon EquipWeaponData = null; // 현제 손에 들고있는 무기
+    #endregion
+
+    
 
     // 테스트용
     [Header("Test")]
@@ -117,11 +151,60 @@ public class Player_Ctrl : NetworkBehaviour
 
     void Update()
     {
+        // 마우스 좌클릭
+        if (Mgr_Game.Inst && Mgr_Game.Inst.bCanMove)
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                Anim_Attack();
+            }
+        }
+
+        // 마우스 휠
+        MouseScroll();
+
+        // 테스트
+        {
+            // 테스트 모든 아이템 획득
+            if (Input.GetKeyDown(KeyCode.P))
+            {
+                for (int i = 0; i <= 3; i++)
+                {
+                    Item ItemData = ItemList.Inst.GetItemData(i);
+                    ItemData.Get_Item_Amount = 1;
+                    GlobalValue.AddItme(ItemData);
+                }
+            }
+
+            // 테스트
+            if (Input.GetKeyDown(KeyCode.T))
+            {
+
+            }
+        }
+        
+
+        for (KeyCode key = KeyCode.Alpha0; key <= KeyCode.Alpha9; key++)
+        {
+            if (Input.GetKeyDown(key))
+            {
+                int num = int.Parse(key.ToString().Replace("Alpha", ""));
+
+                // 0을 10으로 변환
+                if (num == 0)
+                    num = 10;
+
+                Mgr_Inventory.Inst.Equip_Slot_Index = num;
+            }
+        }
+        
+    }
+
+    void LateUpdate()
+    {
         // 내가 조작하는 플레이어 인 경우
         if (IsLocalPlayer || TestPlayer)
         {
-            // 마우스 휠
-            MouseScroll();
 
             if (Mgr_Game.Inst && Mgr_Game.Inst.bCanMove)
             {
@@ -139,17 +222,20 @@ public class Player_Ctrl : NetworkBehaviour
 
                 // 무브 입력
                 InputMove = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+                IsRun = Input.GetKey(KeyCode.LeftShift);
 
                 JumpAndGravity();   // 점프 및 중력
                 GroundedCheck();    // 땅에 닿은지 체크
                 CharMove();         // 이동
+
+                RegenerateStamina(); // 스테미너 관리
 
                 if (Input.GetKeyDown(KeyCode.F))
                 {
                     Mgr_UI.Inst.Interaction();  // 상호작용
                 }
             }
-            
+
         }
 
         // 내가 조작하는 플레이어가 아닌 경우
@@ -183,72 +269,30 @@ public class Player_Ctrl : NetworkBehaviour
             // 애니메이션
             m_Animator.SetFloat("Move", serverAnimMoveBlend.Value);
         }
-    }
 
-    void LateUpdate()
-    {
+
+        // 애니메이션
+        if (m_Animator)
         {
-            // 애니메이션
-            if (m_Animator)
-            {
-                AnimationMoveBlend = Mathf.Lerp(AnimationMoveBlend, Move != Vector2.zero ? 1 : 0, Time.deltaTime * SpeedChangeRate);
-                if (AnimationMoveBlend < 0.01f) AnimationMoveBlend = 0f;
+            AnimationMoveBlend = Mathf.Lerp(AnimationMoveBlend, (Move != Vector2.zero) ? (IsRun ? 2 : 1) : 0, Time.deltaTime * SpeedChangeRate);
+            if (AnimationMoveBlend < 0.01f) AnimationMoveBlend = 0f;
 
-                // 파라미터
-                m_Animator.SetBool("Grounded", Grounded);
-                m_Animator.SetFloat("Move", AnimationMoveBlend);
-                m_Animator.SetBool("IsZoom", IsZoom);
-                if (IsZoom)
-                {
-                    m_Animator.SetFloat("MoveX", Move.x);
-                    m_Animator.SetFloat("MoveY", Move.y);
-                }
+            ZoomMoveX = Mathf.Lerp(ZoomMoveX, Move.x, Time.deltaTime * SpeedChangeRate); 
+            ZoomMoveY = Mathf.Lerp(ZoomMoveY, Move.y, Time.deltaTime * SpeedChangeRate);
+
+            // 파라미터
+            m_Animator.SetBool("Grounded", Grounded);
+            m_Animator.SetFloat("Move", AnimationMoveBlend);
+            m_Animator.SetBool("IsZoom", IsZoom);
+            if (IsZoom)
+            {
+                m_Animator.SetFloat("MoveX", ZoomMoveX);
+                m_Animator.SetFloat("MoveY", ZoomMoveY);
+
+                // 허리를 정면으로 고정
+                SpineBone.rotation = Quaternion.LookRotation(Camera.main.transform.forward);
             }
         }
-
-        // 테스트 공격
-        if (Mgr_Game.Inst && Mgr_Game.Inst.bCanMove)
-        {
-            if (Input.GetMouseButtonDown(0))
-            {
-                Anim_Attack();
-            }
-        }
-        
-
-        // 테스트 모든 아이템 획득
-        if (Input.GetKeyDown(KeyCode.P))
-        {
-            for(int i = 0; i <= 3; i++)
-            {
-                Item ItemData = ItemList.Inst.GetItemData(i);
-                ItemData.Get_Item_Amount = 1;
-                GlobalValue.AddItme(ItemData);
-            }
-        }
-
-        // 테스트 무기 장착
-        if (Input.GetKeyDown(KeyCode.O))
-        {
-            GlobalValue.AddItme(ItemList.Inst.GetItemData(3));
-            GlobalValue.AddItme(ItemList.Inst.GetItemData(1));
-        }
-
-        for (KeyCode key = KeyCode.Alpha0; key <= KeyCode.Alpha9; key++)
-        {
-            if (Input.GetKeyDown(key))
-            {
-                int num = int.Parse(key.ToString().Replace("Alpha", ""));
-
-                // 0을 10으로 변환
-                if (num == 0)
-                    num = 10;
-
-                Mgr_Inventory.Inst.Equip_Slot_Index = num;
-            }
-        }
-
-
 
     }
 
@@ -260,10 +304,15 @@ public class Player_Ctrl : NetworkBehaviour
             _fallTimeoutDelta = FallTimeout;
 
             // 점프
-            if (Input.GetKey(KeyCode.Space) && _jumpTimeoutDelta <= 0.0f)
+            if (Input.GetKeyDown(KeyCode.Space) && _jumpTimeoutDelta <= 0.0f)
             {
-                // H * -2 * G의 제곱근 = 원하는 높이에 도달하는 데 필요한 속도
-                VerticalVelocity = Mathf.Sqrt(JumpHeight * -2f * CharacterGravity);
+                if(Current_Stamina - StaminaCost_Jump >= 0f)
+                {
+                    Current_Stamina -= StaminaCost_Jump;
+
+                    // H * -2 * G의 제곱근 = 원하는 높이에 도달하는 데 필요한 속도
+                    VerticalVelocity = Mathf.Sqrt(JumpHeight * -2f * CharacterGravity);
+                }
             }
             else
             {
@@ -327,12 +376,19 @@ public class Player_Ctrl : NetworkBehaviour
 
         // 속도 설정
         float targetSpeed = 0.0f;
+        
 
         // 입력이 있을경우 경우 속도를 설정
         if (Move != Vector2.zero)
         {
-            targetSpeed = MoveSpeed;
-        }
+            if(IsRun && Current_Stamina - (StaminaCost_Run * Time.deltaTime) > 0f)
+            {
+                Current_Stamina -= (StaminaCost_Run * Time.deltaTime);
+                targetSpeed = MoveSpeed_Run;
+            }
+            else
+                targetSpeed = MoveSpeed_Walk;
+        } 
         else
             targetSpeed = 0.0f;
 
@@ -388,6 +444,20 @@ public class Player_Ctrl : NetworkBehaviour
         );
     }
 
+    // 스테미너 자동회복
+    void RegenerateStamina()
+    {
+        if (Current_Stamina >= Max_Stamina) return;
+
+        if(StaminaRegenDelayRemainingTime > 0f)
+        {
+            StaminaRegenDelayRemainingTime -= Time.deltaTime;
+            if (StaminaRegenDelayRemainingTime > 0f) return;
+        }
+
+        Current_Stamina += StaminaRegenRate * Time.deltaTime;
+    }
+
 
     // 마우스 휠
     void MouseScroll()
@@ -406,20 +476,35 @@ public class Player_Ctrl : NetworkBehaviour
     #region 애니메이션 함수
     void Anim_Attack()
     {
-        if (EquipWeaponData == null || EquipWeaponData?.isAttacking == true) return;
+        // 장착중인 무기가 없다면 || 공격중이라면 || 스테미너가 없다면
+        if (EquipWeaponData == null || 
+            EquipWeaponData?.isAttacking == true || 
+            IsAttacking == true ||
+            Current_Stamina - StaminaCost_Attack < 0f
+            ) return;
+
+        IsAttacking = true;
+
+        Current_Stamina -= StaminaCost_Attack;
 
         m_Animator.SetLayerWeight(m_Animator_UpBody, 1.0f);
         m_Animator.SetTrigger("Attack");
-
-        EquipWeaponData.Attacking(true);
     }
 
+
+    // 애니메이션 이벤트
+    void AE_StartAttack()
+    {
+        
+        EquipWeaponData.Attacking(true);
+    }
 
     // 애니메이션 이벤트
     void AE_EndAttack()
     {
         m_Animator.SetLayerWeight(m_Animator_UpBody, 0f);
 
+        IsAttacking = false;
         EquipWeaponData.Attacking(false);
     }
 
