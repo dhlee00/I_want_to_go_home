@@ -2156,6 +2156,7 @@ MonoBehaviour:
     m_Bits: 9
   GroundedOffset: -0.14
   VerticalVelocity: 0
+  SpineBone: {fileID: 5831274100123578810}
   TestPlayer: 1
 --- !u!95 &727498631794315921
 Animator:
