@@ -1,0 +1,11 @@
+fileFormatVersion: 2
+guid: 620a0b80cd8640b43acd7967af0d0c8c
+ShaderImporter:
+  externalObjects: {}
+  defaultTextures:
+  - _DayCube: {instanceID: 0}
+  - _NightCube: {instanceID: 0}
+  nonModifiableTextures: []
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

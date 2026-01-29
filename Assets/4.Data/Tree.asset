@@ -12,8 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df4b243d14ee966439e5e4f85a516b17, type: 3}
   m_Name: Tree
   m_EditorClassIdentifier: 
-  objectType: 2
+  objectType: 1
   prefab:
-  - {fileID: 2996869220275199102, guid: 38bbe616996c3d044b685170c784caa1, type: 3}
-  - {fileID: 6432772362348625377, guid: 21fe53c714698934588756d36658af9a, type: 3}
-  hp: 10
+  - {fileID: 6432772362348625377, guid: eac80fea818d3a4478dfe334a7e27d42, type: 3}
+  - {fileID: 2996869220275199102, guid: 9d6a7a9050118a147958de34d9380695, type: 3}

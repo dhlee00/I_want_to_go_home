@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEditor.Rendering;
 using UnityEngine;
 
 
@@ -38,7 +39,7 @@ public class Weapon : MonoBehaviour
         if (Owner.gameObject == other.gameObject || isAttacking == false) return;
 
         // ITakeDamage를 상속 받지 않았다면 리턴
-        ITakeDamage takeDamage = other.GetComponent<ITakeDamage>();
+        ITakeDamage takeDamage = other.GetComponentInParent<ITakeDamage>(); // 메쉬의 부모에서 받아오기
         if (takeDamage == null) return;
 
         // 중복 체크
