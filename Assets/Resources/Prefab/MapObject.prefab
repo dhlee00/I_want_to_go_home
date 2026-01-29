@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4710426206403641556}
-  - component: {fileID: 8487566329771655080}
+  - component: {fileID: -4001135799701982808}
   m_Layer: 0
   m_Name: MapObject
   m_TagString: Untagged
@@ -32,7 +32,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8487566329771655080
+--- !u!114 &-4001135799701982808
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -41,8 +41,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 1478642916119823146}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b5f797390d20243498eb71038a8f6b8a, type: 3}
+  m_Script: {fileID: 11500000, guid: bc07b649644b9c64db67ef5b53b02dcb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mesh: {fileID: 0}
-  hp: 100
+  HarvestObjectType: 0
+  uniqueKey: 
+  MaxHp: 100
+  Hp: 100
+  Harvest_Item_Index: 0
+  MaxCount: 20
+  Count: 0
+  bIsSapwn: 1
+  ReSpawnTime: 5
+  ReSpawn: 0

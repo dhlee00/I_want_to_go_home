@@ -1,17 +1,11 @@
-using Unity.VisualScripting;
 using UnityEngine;
-
-public enum EHarvestObjectType
-{
-    Stone
-
-
-}
-
 
 public class HarvestObject : MonoBehaviour, ITakeDamage
 {
     public EHarvestObjectType HarvestObjectType;
+
+    // 오브젝트 고유 키
+    public string uniqueKey;
 
     public float MaxHp = 100f;   // 최대 체력
     public float Hp = 100f;      // 현재 체력
@@ -26,14 +20,9 @@ public class HarvestObject : MonoBehaviour, ITakeDamage
     public float ReSpawnTime = 5.0f;
     public float ReSpawn = 0;
 
-    MeshRenderer m_MeshRenderer;
-    Collider m_Collider;
-
-    private void Awake()
-    {
-        m_MeshRenderer = GetComponent<MeshRenderer>();
-        m_Collider = GetComponent<Collider>();
-    }
+    [HideInInspector] public MeshRenderer m_MeshRenderer;
+    [HideInInspector] public MeshCollider m_Collider;
+    [HideInInspector] public Mgr_Map mgr_Map;
 
     void Start()
     {
@@ -50,6 +39,7 @@ public class HarvestObject : MonoBehaviour, ITakeDamage
             if(ReSpawn > ReSpawnTime)
             {
                 SetSpawn(true);
+                ReSpawn = 0;
             }
 
         }
@@ -62,7 +52,7 @@ public class HarvestObject : MonoBehaviour, ITakeDamage
         // 곡괭이 도끼등 특정 무기가 들어왔을 경우 추가 데미지
         switch (HarvestObjectType)
         {
-            case EHarvestObjectType.Stone:
+            case EHarvestObjectType.Rock:
                 {
                     if (DamageType == EWeaponType.pickax)
                         Damage *= 2;
@@ -110,6 +100,9 @@ public class HarvestObject : MonoBehaviour, ITakeDamage
             }
             
         }
+
+        // 맵에 변경사항 저장
+        mgr_Map.mapData[uniqueKey] = this;
 
         if(Hp <= 0f)
         {

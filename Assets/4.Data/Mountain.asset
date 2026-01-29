@@ -12,7 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df4b243d14ee966439e5e4f85a516b17, type: 3}
   m_Name: Mountain
   m_EditorClassIdentifier: 
-  objectType: 0
+  objectType: 3
   prefab:
-  - {fileID: 3846544384908030634, guid: 1a9726cc4677d00429a3a4ad5a3d758d, type: 3}
-  hp: 100
+  - {fileID: 3846544384908030634, guid: 58322689bac060b4d9a3b36f19095d84, type: 3}

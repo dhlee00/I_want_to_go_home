@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using static UnityEngine.ParticleSystem;
 
 public class Mgr_Game : MonoBehaviour
@@ -15,7 +16,10 @@ public class Mgr_Game : MonoBehaviour
     void Start()
     {
         // 테스트
-        Cursor.lockState = CursorLockMode.Locked;
+        //Cursor.lockState = CursorLockMode.Locked;
+
+        // UI 씬 로드
+        SceneManager.LoadScene("UI_Scene", LoadSceneMode.Additive);
     }
 
     void Update()

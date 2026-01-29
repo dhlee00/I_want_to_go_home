@@ -56,7 +56,7 @@ public class Mgr_UI : MonoBehaviour
 
     void Update()
     {
-        if(Player_Ctrl.LocalPlayer)
+        if (Player_Ctrl.LocalPlayer && HpBar_Image && StaminaBar_Image)
         {
             HpBar_Image.fillAmount = Player_Ctrl.LocalPlayer.Current_Hp / Player_Ctrl.LocalPlayer.Max_Hp;
 
