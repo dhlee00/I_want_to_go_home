@@ -21,6 +21,7 @@ public class Inven_Slot : MonoBehaviour, ISlot,
 
     [SerializeField] int SlotNum;
     [SerializeField] Image Item_Icon;
+    [SerializeField] Sprite Item_Null_Icon;
     [SerializeField] TextMeshProUGUI Item_Amount;
     [SerializeField] Item ItemData;
     public bool isUse;
@@ -57,7 +58,7 @@ public class Inven_Slot : MonoBehaviour, ISlot,
         else
         {
             ItemData = _item;
-            Item_Icon.sprite = null;
+            Item_Icon.sprite = Item_Null_Icon;
             isUse = _isUse;
         }
 
