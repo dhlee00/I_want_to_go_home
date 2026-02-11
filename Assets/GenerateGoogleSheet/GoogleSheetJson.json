@@ -2,39 +2,111 @@
   "Item_Data": [
     {
       "ITEM_INDEX": 0,
-      "ITEM_NAME": "나뭇가지",
-      "ITEM_TYPE": "INGREDIENT",
+      "ITEM_NAME": "데모 아이템",
+      "ITEM_TYPE": "EQUIPMENT",
       "ITEM_AMOUNT": 1,
-      "ITEM_DESC": "나무를 잘라 획득한 도구를 제작할 수 있는 재료로 사용된다.",
+      "ITEM_DESC": "테스트용 아이템",
       "ITEM_ICON_PATH": "Image/Item/Icon/nian",
       "ITEM_PREFAB": ""
     },
     {
       "ITEM_INDEX": 1,
-      "ITEM_NAME": "돌멩이",
+      "ITEM_NAME": "돌",
       "ITEM_TYPE": "INGREDIENT",
       "ITEM_AMOUNT": 1,
-      "ITEM_DESC": "땅에 떨어져 있는 돌 조각으로 제작 재료로 사용된다.",
-      "ITEM_ICON_PATH": "Image/Item/Icon/heal",
+      "ITEM_DESC": "땅에 떨어져 있는 돌 (분석기에 넣어 철,니켈,규소 획득)",
+      "ITEM_ICON_PATH": "Image/Item/Icon/Ingredient/Rock",
       "ITEM_PREFAB": ""
     },
     {
       "ITEM_INDEX": 2,
-      "ITEM_NAME": "테스트장비",
-      "ITEM_TYPE": "EQUIPMENT",
+      "ITEM_NAME": "운석",
+      "ITEM_TYPE": "INGREDIENT",
       "ITEM_AMOUNT": 1,
-      "ITEM_DESC": "테스트 장비",
-      "ITEM_ICON_PATH": "Image/Item/Icon/heal",
+      "ITEM_DESC": "운석 (돌과 다른점 니켈, 규소 확률 업)",
+      "ITEM_ICON_PATH": "Image/Item/Icon/Ingredient/Mateo",
       "ITEM_PREFAB": ""
     },
     {
       "ITEM_INDEX": 3,
+      "ITEM_NAME": "유기물",
+      "ITEM_TYPE": "INGREDIENT",
+      "ITEM_AMOUNT": 1,
+      "ITEM_DESC": "탄소로 구성되어 있다 (나무 처럼 사용)",
+      "ITEM_ICON_PATH": "Image/Item/Icon/Ingredient/Carbon",
+      "ITEM_PREFAB": ""
+    },
+    {
+      "ITEM_INDEX": 4,
+      "ITEM_NAME": "얼음 덩어리",
+      "ITEM_TYPE": "INGREDIENT",
+      "ITEM_AMOUNT": 1,
+      "ITEM_DESC": "물이 얼어있다",
+      "ITEM_ICON_PATH": "Image/Item/Icon/Ingredient/Ice",
+      "ITEM_PREFAB": ""
+    },
+    {
+      "ITEM_INDEX": 5,
+      "ITEM_NAME": "우주 특식",
+      "ITEM_TYPE": "FOOD",
+      "ITEM_AMOUNT": 1,
+      "ITEM_DESC": "먹을 수 있어 보인다(그냥 먹었을 때 기분수치 감소)",
+      "ITEM_ICON_PATH": "Image/Item/Icon/Food/Space_Food",
+      "ITEM_PREFAB": ""
+    },
+    {
+      "ITEM_INDEX": 6,
+      "ITEM_NAME": "철",
+      "ITEM_TYPE": "INGREDIENT",
+      "ITEM_AMOUNT": 1,
+      "ITEM_DESC": "철이다 (장비 제작에 사용)",
+      "ITEM_ICON_PATH": "Image/Item/Icon/Ingredient/Iron",
+      "ITEM_PREFAB": ""
+    },
+    {
+      "ITEM_INDEX": 7,
+      "ITEM_NAME": "니켈",
+      "ITEM_TYPE": "INGREDIENT",
+      "ITEM_AMOUNT": 1,
+      "ITEM_DESC": "고급 금속인 니켈이다  (탈출선 내구도 자원)",
+      "ITEM_ICON_PATH": "Image/Item/Icon/Ingredient/Nickel",
+      "ITEM_PREFAB": ""
+    },
+    {
+      "ITEM_INDEX": 8,
+      "ITEM_NAME": "규소",
+      "ITEM_TYPE": "INGREDIENT",
+      "ITEM_AMOUNT": 1,
+      "ITEM_DESC": "첨단 장비를 제작할수있는 재료인 규소다 (탈출 시스템 해금 자원)",
+      "ITEM_ICON_PATH": "Image/Item/Icon/Ingredient/Silicon",
+      "ITEM_PREFAB": ""
+    },
+    {
+      "ITEM_INDEX": 9,
+      "ITEM_NAME": "양동이",
+      "ITEM_TYPE": "INGREDIENT",
+      "ITEM_AMOUNT": 1,
+      "ITEM_DESC": "담을 수 있는 양동이다 (물, 석유 원료)",
+      "ITEM_ICON_PATH": "Image/Item/Icon/Tool/Pail",
+      "ITEM_PREFAB": ""
+    },
+    {
+      "ITEM_INDEX": 10,
       "ITEM_NAME": "곡괭이",
       "ITEM_TYPE": "EQUIPMENT",
       "ITEM_AMOUNT": 1,
-      "ITEM_DESC": "곡괭이다",
-      "ITEM_ICON_PATH": "Image/Item/Icon/nian",
+      "ITEM_DESC": "곡괭이다 (게임 시작 시 기본제공)",
+      "ITEM_ICON_PATH": "Image/Item/Icon/Tool/Pick",
       "ITEM_PREFAB": "Prefab/Weapon_Pickax_Prefab"
+    },
+    {
+      "ITEM_INDEX": 11,
+      "ITEM_NAME": "망치",
+      "ITEM_TYPE": "EQUIPMENT",
+      "ITEM_AMOUNT": 1,
+      "ITEM_DESC": "(우주선에 장비를 수리 또는 업그레이드 할때 사용)",
+      "ITEM_ICON_PATH": "Image/Item/Icon/Tool/Repair_kit",
+      "ITEM_PREFAB": ""
     }
   ],
   "Interact_Obj": []
