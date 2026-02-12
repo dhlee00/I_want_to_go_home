@@ -168,7 +168,7 @@ public class Player_Ctrl : NetworkBehaviour
             // 테스트 모든 아이템 획득
             if (Input.GetKeyDown(KeyCode.P))
             {
-                for (int i = 0; i <= 3; i++)
+                for (int i = 0; i < GoogleSheetManager.SO<GoogleSheetSO>().Item_DataList.Count; i++)
                 {
                     Item ItemData = ItemList.Inst.GetItemData(i);
                     ItemData.Get_Item_Amount = 1;
@@ -184,19 +184,20 @@ public class Player_Ctrl : NetworkBehaviour
         }
         
 
-        for (KeyCode key = KeyCode.Alpha0; key <= KeyCode.Alpha9; key++)
-        {
-            if (Input.GetKeyDown(key))
+        if(!IsAttacking)
+            for (KeyCode key = KeyCode.Alpha0; key <= KeyCode.Alpha9; key++)
             {
-                int num = int.Parse(key.ToString().Replace("Alpha", ""));
+                if (Input.GetKeyDown(key))
+                {
+                    int num = int.Parse(key.ToString().Replace("Alpha", ""));
 
-                // 0을 10으로 변환
-                if (num == 0)
-                    num = 10;
+                    // 0을 10으로 변환
+                    if (num == 0)
+                        num = 10;
 
-                Mgr_Inventory.Inst.Equip_Slot_Index = num;
+                    Mgr_Inventory.Inst.Equip_Slot_Index = num;
+                }
             }
-        }
         
     }
 
@@ -206,7 +207,7 @@ public class Player_Ctrl : NetworkBehaviour
         if (IsLocalPlayer || TestPlayer)
         {
 
-            if (Mgr_Game.Inst && Mgr_Game.Inst.bCanMove)
+            if (Mgr_Game.Inst)
             {
                 IsZoom = Input.GetMouseButton(1);
 
@@ -304,7 +305,7 @@ public class Player_Ctrl : NetworkBehaviour
             _fallTimeoutDelta = FallTimeout;
 
             // 점프
-            if (Input.GetKeyDown(KeyCode.Space) && _jumpTimeoutDelta <= 0.0f)
+            if (Input.GetKeyDown(KeyCode.Space) && _jumpTimeoutDelta <= 0.0f && Mgr_Game.Inst.bCanMove)
             {
                 if(Current_Stamina - StaminaCost_Jump >= 0f)
                 {
@@ -371,7 +372,10 @@ public class Player_Ctrl : NetworkBehaviour
     void CharMove()
     {
         // 인풋시스템에서 Vector2값 가져오기
-        Move = InputMove;
+        if (Mgr_Game.Inst.bCanMove)
+            Move = InputMove;
+        else
+            Move = Vector2.zero;
 
 
         // 속도 설정

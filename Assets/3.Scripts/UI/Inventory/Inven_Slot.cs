@@ -383,4 +383,11 @@ public class Inven_Slot : MonoBehaviour, ISlot,
     }
 
     #endregion
+
+    public int UseItem(int inUseAmount)
+    {
+        ItemData.Get_Item_Amount -= inUseAmount;
+
+        return ItemData.Get_Item_Amount;
+    }
 }
