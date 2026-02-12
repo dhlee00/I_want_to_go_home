@@ -113,3 +113,17 @@ public interface ITakeDamage
 {
     public void TakeDamage(GameObject DamageOwner, GameObject DamageObj, float Damage, EWeaponType DamageType);
 }
+
+[System.Serializable]
+public struct FItemStack
+{
+    public int Item_Index;  // 아이템 인덱스
+    public int Item_Amount; // 아이템 갯수
+}
+
+[System.Serializable]
+public struct FCraftingRecipe
+{
+    public FItemStack ResultItem; // 목표 아이템
+    public List<FItemStack> IngredientsItemList; // 재료 아이템 리스트
+}

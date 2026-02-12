@@ -13,6 +13,7 @@ public class Mgr_UI : MonoBehaviour
     [Header("Inventory")]
     [SerializeField] GameObject Inventory_Prefab;
     GameObject Inventory_UI;
+    bool IsInventory_UI;
     #endregion
 
     #region EquipSlot_Info
@@ -35,8 +36,14 @@ public class Mgr_UI : MonoBehaviour
 
     #endregion
 
+    #region CraftingStation
+    [Header("CraftingStation")]
+    [SerializeField] UI_CraftingStation CraftingStation_Obj;
+    bool IsCraftingStation_UI;
+    #endregion
 
-    public bool OnInventory() { return Spawn_UI(Inventory_Prefab, Inventory_UI); }
+
+    public bool OnInventory() { return IsInventory_UI = Spawn_UI(Inventory_Prefab, Inventory_UI); }
 
     void Start()
     {
@@ -52,6 +59,9 @@ public class Mgr_UI : MonoBehaviour
         #endregion  
 
         Init_UI(Inventory_Prefab, ref Inventory_UI);
+
+        // 시작시 제작대 끄기
+        CraftingStation(false);
     }
 
     void Update()
@@ -71,6 +81,11 @@ public class Mgr_UI : MonoBehaviour
             }
         }
     }
+
+    // UI가 켜져있는지 체크하여 bool로 리턴
+    public bool IsUIActive() { return IsInventory_UI || IsCraftingStation_UI; }
+
+
 
     #region Spawn_UI
     bool Spawn_UI(GameObject _uiPrefab, GameObject _ui)
@@ -107,33 +122,41 @@ public class Mgr_UI : MonoBehaviour
 
     #region Interact_UI
     List<Interaction_UI> InteractionUI_List = new List<Interaction_UI>();
-    public int ChangeInteractionCount = 0;
+    int ChangeInteractionCount = 0;
 
 
     public void Interaction()
     {
         if (InteractionUI_List.Count <= 0) return;
 
+        // 상호작용
         InteractionUI_List[ChangeInteractionCount].Interaction();
 
-        // 삭제
+
+        switch (InteractionUI_List[ChangeInteractionCount].InteractionType)
         {
-            Destroy(InteractionUI_List[ChangeInteractionCount].gameObject);
-            InteractionUI_List.Remove(InteractionUI_List[ChangeInteractionCount]);
+            case EInteractionType.item:
+                {
+                    // 삭제
+                    Destroy(InteractionUI_List[ChangeInteractionCount].gameObject);
+                    InteractionUI_List.Remove(InteractionUI_List[ChangeInteractionCount]);
+
+                    if (ChangeInteractionCount >= InteractionUI_List.Count)// 마지막 인덱스를 상호작용했을때
+                    {
+                        // 선택된 상호작용 순서 변경
+                        ChangeInteraction(true);
+                    }
+                    else
+                    {
+                        // UI 업데이트
+                        InteractionUI_Update();
+                    }
+                    break;
+                }
+
         }
 
-
-
-        if (ChangeInteractionCount >= InteractionUI_List.Count)// 마지막 인덱스를 상호작용했을때
-        {
-            // 선택된 상호작용 순서 변경
-            ChangeInteraction(true);
-        }
-        else
-        {
-            // UI 업데이트
-            InteractionUI_Update();
-        }
+        
 
         Mgr_UI.Inst.EquipInfo_Init();
     }
@@ -170,32 +193,42 @@ public class Mgr_UI : MonoBehaviour
         // 중복 체크
         bool isDuplicate = false;
 
-
-        if (interaction.InteractionType == EInteractionType.item &&
-            interaction is Interaction_Item item)
+        switch (interaction.InteractionType)
         {
-            if (item.ItemData.Get_ItemType != ITEM_TYPE.EQUIPMENT)
-            {
-                for (int i = 0; i < InteractionUI_List.Count; i++)
+
+            // 아이템 타입
+            case EInteractionType.item:
                 {
-                    switch (InteractionUI_List[i].InteractionType)
+                    if(interaction is Interaction_Item item)
                     {
-                        // 아이템 타입
-                        case EInteractionType.item:
+                        for (int i = 0; i < InteractionUI_List.Count; i++)
+                        {
+                            if (InteractionUI_List[i].Item_Obj_List.Count == 0) continue;
+
+                            // 아이템 코드가 같은 아이템일 경우 합치기
+                            if (InteractionUI_List[i].Item_Obj_List[0].ItemData.Get_Item_Index == item.ItemData.Get_Item_Index)
                             {
-                                // 아이템 코드가 같은 아이템일 경우 합치기
-                                if (InteractionUI_List[i].Item_Obj_List[0].ItemData.Get_Item_Index == item.ItemData.Get_Item_Index)
-                                {
-                                    InteractionUI_List[i].Item_Obj_List.Add(item);
-                                    InteractionUI_List[i].UI_Update();
-                                    isDuplicate = true;
-                                }
-                                break;
+                                InteractionUI_List[i].Item_Obj_List.Add(item);
+                                InteractionUI_List[i].UI_Update();
+                                isDuplicate = true;
                             }
+                        }
                     }
+                    break;
                 }
-            }
+
+            default:
+                {
+                    for (int i = 0; i < InteractionUI_List.Count; i++)
+                    {
+                        if (InteractionUI_List[i] == isDuplicate)
+                            isDuplicate = true;
+                    }
+
+                    break;
+                }
         }
+
 
 
         if (isDuplicate == false)
@@ -233,6 +266,14 @@ public class Mgr_UI : MonoBehaviour
                         }
                         break;
                     }
+
+                default:
+                    {
+                        InteractionUI_List.Remove(ui);
+                        Destroy(ui.gameObject);
+                        isDestroy = true;
+                        break;
+                    }
             }
 
             if (isDestroy)
@@ -246,6 +287,8 @@ public class Mgr_UI : MonoBehaviour
         InteractionUI_Update();
     }
 
+
+    // 어떤 상호작용을 선택중인지 업데이트
     void InteractionUI_Update()
     {
         for (int i = 0; i < InteractionUI_List.Count; i++)
@@ -261,6 +304,8 @@ public class Mgr_UI : MonoBehaviour
         obj.transform.SetParent(UI_ObjPool.Inst.Get_Interact_UI_Tr, false);
 
 
+        interaction_UI.InteractionType = interaction.InteractionType; // 타입복사
+
         switch (interaction.InteractionType)
         {
             case EInteractionType.item:
@@ -269,9 +314,15 @@ public class Mgr_UI : MonoBehaviour
 
                     break;
                 }
+
+            default:
+                {
+                    interaction_UI.Interaction_Obj = interaction;
+                    break;
+                }
         }
 
-        interaction_UI.InteractionType = interaction.InteractionType;
+        
         interaction_UI.UI_Update();
 
         return interaction_UI;
@@ -312,4 +363,21 @@ public class Mgr_UI : MonoBehaviour
         }
     }
     #endregion
+
+
+    // 제작대 UI
+    #region CraftingStation
+    public void CraftingStation(bool isOn, Interaction_CraftingStation inCraftingStationData = null)
+    {
+        CraftingStation_Obj.gameObject.SetActive(isOn);
+        IsCraftingStation_UI = isOn;
+
+        if (!isOn || inCraftingStationData == null) return;
+
+        // 제작대 셋팅
+        CraftingStation_Obj.SetUICraftingStation(inCraftingStationData);
+    }
+    #endregion
+
+
 }

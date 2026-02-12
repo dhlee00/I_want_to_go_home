@@ -26,7 +26,7 @@ public class HarvestObject : MonoBehaviour, ITakeDamage
 
     void Start()
     {
-        
+
     }
 
 
