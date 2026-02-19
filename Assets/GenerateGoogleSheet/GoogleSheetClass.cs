@@ -6,6 +6,7 @@ using UnityEngine;
 public class GoogleSheetSO : ScriptableObject
 {
 	public List<Item_Data> Item_DataList;
+	public List<Craft_Data> Craft_DataList;
 }
 
 [Serializable]
@@ -18,5 +19,15 @@ public class Item_Data
 	public string ITEM_DESC;
 	public string ITEM_ICON_PATH;
 	public string ITEM_PREFAB;
+}
+
+[Serializable]
+public class Craft_Data
+{
+	public int CRAFT_INDEX;
+	public int ITEM_DATA;
+	public string CRAFT_NAME;
+	public int CRAFT_AMOUNT;
+	public string CRAFT_INGREDIENT;
 }
 
