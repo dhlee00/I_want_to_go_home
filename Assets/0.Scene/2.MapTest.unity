@@ -693,7 +693,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isAccessGoogleSheet: 1
   googleSheetUrl: https://script.google.com/macros/s/AKfycbyFlNwMDqXyre0421aIG78iWwJdE5EZv7LhaLIlWfGYGUhS3LdqLmCGN0GafRe0iRHm/exec
-  availSheets: Item_Data
+  availSheets: Item_Data/Craft_Data
   generateFolderPath: /GenerateGoogleSheet
   googleSheetSO: {fileID: 11400000, guid: 7cb7cb1831387bd4f921567a258a18ce, type: 2}
 --- !u!114 &1416915847
@@ -796,7 +796,7 @@ MonoBehaviour:
   eventSystem: {fileID: 1685111492}
   HpBar_Image: {fileID: 0}
   StaminaBar_Image: {fileID: 0}
-  ChangeInteractionCount: 0
+  CraftingStation_Obj: {fileID: 0}
 --- !u!114 &1472913412
 MonoBehaviour:
   m_ObjectHideFlags: 0

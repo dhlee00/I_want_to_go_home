@@ -3,9 +3,9 @@
     {
       "ITEM_INDEX": 0,
       "ITEM_NAME": "데모 아이템",
-      "ITEM_TYPE": "EQUIPMENT",
+      "ITEM_TYPE": "INGREDIENT",
       "ITEM_AMOUNT": 1,
-      "ITEM_DESC": "테스트용 아이템",
+      "ITEM_DESC": "테스트용 아이템(제작)",
       "ITEM_ICON_PATH": "Image/Item/Icon/nian",
       "ITEM_PREFAB": ""
     },
@@ -107,6 +107,38 @@
       "ITEM_DESC": "(우주선에 장비를 수리 또는 업그레이드 할때 사용)",
       "ITEM_ICON_PATH": "Image/Item/Icon/Tool/Repair_kit",
       "ITEM_PREFAB": ""
+    },
+    {
+      "ITEM_INDEX": 12,
+      "ITEM_NAME": "물양동이",
+      "ITEM_TYPE": "INGREDIENT",
+      "ITEM_AMOUNT": 1,
+      "ITEM_DESC": "물이든 양동이",
+      "ITEM_ICON_PATH": "",
+      "ITEM_PREFAB": ""
+    }
+  ],
+  "Craft_Data": [
+    {
+      "CRAFT_INDEX": 0,
+      "ITEM_DATA": 12,
+      "CRAFT_NAME": "물양동이",
+      "CRAFT_AMOUNT": 1,
+      "CRAFT_INGREDIENT": "4,1,9,1"
+    },
+    {
+      "CRAFT_INDEX": 1,
+      "ITEM_DATA": 10,
+      "CRAFT_NAME": "곡괭이",
+      "CRAFT_AMOUNT": 1,
+      "CRAFT_INGREDIENT": "3,2,1,3"
+    },
+    {
+      "CRAFT_INDEX": 2,
+      "ITEM_DATA": 11,
+      "CRAFT_NAME": "망치",
+      "CRAFT_AMOUNT": 1,
+      "CRAFT_INGREDIENT": "1,5"
     }
   ],
   "Interact_Obj": []
