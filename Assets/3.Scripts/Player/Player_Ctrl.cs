@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 
-public class Player_Ctrl : NetworkBehaviour
+public class Player_Ctrl : MonoBehaviour //NetworkBehaviour
 {
     #region 동기화 변수
     NetworkVariable<Vector3> serverPos = new NetworkVariable<Vector3>();
@@ -144,11 +144,11 @@ public class Player_Ctrl : NetworkBehaviour
         GroundedRadius = Controller.radius;
     }
 
-    public override void OnNetworkSpawn()
-    {
-        if (IsLocalPlayer || TestPlayer)
-            LocalPlayer = this;
-    }
+    //public override void OnNetworkSpawn()
+    //{
+    //    if (IsLocalPlayer || TestPlayer)
+    //        LocalPlayer = this;
+    //}
 
     void Update()
     {
@@ -197,7 +197,7 @@ public class Player_Ctrl : NetworkBehaviour
     void LateUpdate()
     {
         // 내가 조작하는 플레이어 인 경우
-        if (IsLocalPlayer || TestPlayer)
+        //if (IsLocalPlayer || TestPlayer)
         {
 
             if (Mgr_Game.Inst)
@@ -233,36 +233,36 @@ public class Player_Ctrl : NetworkBehaviour
         }
 
         // 내가 조작하는 플레이어가 아닌 경우
-        else
-        {
-            // 위치 동기화
-
-            // 위치 차이가 크면 보정
-            float distance = Vector3.Distance(transform.position, serverPos.Value);
-            if (distance > 0.1f)
-            {
-                // CharacterController 비활성화
-                Controller.enabled = false;
-
-                // 위치 직접 적용
-                transform.position = Vector3.Lerp(transform.position, serverPos.Value, Time.deltaTime / 0.2f);
-
-                // CharacterController 다시 활성화
-                Controller.enabled = true;
-            }
-
-            else
-            {
-                // 물리 기반 이동
-                Controller.Move(serverMove.Value);
-            }
-
-            // 회전
-            transform.rotation = Quaternion.Lerp(transform.rotation, serverRot.Value, Time.deltaTime / 0.2f);
-
-            // 애니메이션
-            m_Animator.SetFloat("Move", serverAnimMoveBlend.Value);
-        }
+        //else
+        //{
+        //    // 위치 동기화
+        //
+        //    // 위치 차이가 크면 보정
+        //    float distance = Vector3.Distance(transform.position, serverPos.Value);
+        //    if (distance > 0.1f)
+        //    {
+        //        // CharacterController 비활성화
+        //        Controller.enabled = false;
+        //
+        //        // 위치 직접 적용
+        //        transform.position = Vector3.Lerp(transform.position, serverPos.Value, Time.deltaTime / 0.2f);
+        //
+        //        // CharacterController 다시 활성화
+        //        Controller.enabled = true;
+        //    }
+        //
+        //    else
+        //    {
+        //        // 물리 기반 이동
+        //        Controller.Move(serverMove.Value);
+        //    }
+        //
+        //    // 회전
+        //    transform.rotation = Quaternion.Lerp(transform.rotation, serverRot.Value, Time.deltaTime / 0.2f);
+        //
+        //    // 애니메이션
+        //    m_Animator.SetFloat("Move", serverAnimMoveBlend.Value);
+        //}
 
 
         // 애니메이션
@@ -432,13 +432,13 @@ public class Player_Ctrl : NetworkBehaviour
                              new Vector3(0.0f, VerticalVelocity, 0.0f) * Time.deltaTime);
 
         // 서버로 상태값 전송
-        SendStateRpc
-        (
-            transform.position,
-            targetDirection.normalized * (Speed * Time.deltaTime),
-            transform.rotation,
-            AnimationMoveBlend
-        );
+        //SendStateRpc
+        //(
+        //    transform.position,
+        //    targetDirection.normalized * (Speed * Time.deltaTime),
+        //    transform.rotation,
+        //    AnimationMoveBlend
+        //);
     }
 
     // 스테미너 자동회복
@@ -535,7 +535,7 @@ public class Player_Ctrl : NetworkBehaviour
     private void OnTriggerEnter(Collider other)
     {
         // 내가 조작하는 플레이어 인 경우
-        if (IsLocalPlayer || TestPlayer)
+        //if (IsLocalPlayer || TestPlayer)
         {
             // 상호작용 오브젝트가 아니라면 리턴
             if (other.tag != "Interaction") return;
@@ -552,7 +552,7 @@ public class Player_Ctrl : NetworkBehaviour
     private void OnTriggerExit(Collider other)
     {
         // 내가 조작하는 플레이어 인 경우
-        if (IsLocalPlayer || TestPlayer)
+        //if (IsLocalPlayer || TestPlayer)
         {
             // 상호작용 오브젝트가 아니라면 리턴
             if (other.tag != "Interaction") return;
@@ -569,19 +569,19 @@ public class Player_Ctrl : NetworkBehaviour
 
 
     // 서버에 값 전송
-    [Rpc(SendTo.Server)]
-    void SendStateRpc(Vector3 pos, Vector3 move, Quaternion rot, float animMoveBlend)
-    {
-        // 위치값 전송
-        serverPos.Value = pos;
-
-        // 이동값 전송
-        serverMove.Value = move;
-
-        // 회전값 전송
-        serverRot.Value = rot;
-
-        // 애니메이션 전송
-        serverAnimMoveBlend.Value = animMoveBlend;
-    }
+    //[Rpc(SendTo.Server)]
+    //void SendStateRpc(Vector3 pos, Vector3 move, Quaternion rot, float animMoveBlend)
+    //{
+    //    // 위치값 전송
+    //    serverPos.Value = pos;
+    //
+    //    // 이동값 전송
+    //    serverMove.Value = move;
+    //
+    //    // 회전값 전송
+    //    serverRot.Value = rot;
+    //
+    //    // 애니메이션 전송
+    //    serverAnimMoveBlend.Value = animMoveBlend;
+    //}
 }
