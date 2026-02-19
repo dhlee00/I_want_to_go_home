@@ -9,8 +9,8 @@ public class Interaction_CraftingStation : Interaction
     [Header("Interaction_CraftingStation")]
     // 아이템 조합법 구조체
     public Image CraftProgressCircle_Image;
-    public List<FCraftingRecipe> CraftingRecipe = new List<FCraftingRecipe>();  // 제작 가능한 아이템 리스트
-    public bool IsCraftItem = false;    // 아이템이 제작중인지 체크
+    public List<int> CraftingRecipe_Index = new List<int>();  // 제작 가능한 아이템 리스트
+    [HideInInspector] public bool IsCraftItem = false;    // 아이템이 제작중인지 체크
     bool IsPlayerCraftItem = false;
     Item MakeItem;  // 만들어질 아이템
 
