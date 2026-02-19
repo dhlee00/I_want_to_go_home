@@ -1,13 +1,5 @@
 fileFormatVersion: 2
-guid: 4ff686c6a56f70740b7e713a169b327b
-AssetOrigin:
-  serializedVersion: 1
-  productId: 157920
-  packageName: Human Crafting Animations FREE
-  packageVersion: 2.2
-  assetPath: Assets/Kevin Iglesias/Human Animations/Animations/Male/Work/Mining/HumanM@MiningOneHand01_R
-    - Ground.fbx
-  uploadId: 762236
+guid: 618edf69b8f104948a120032f1395d72
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
@@ -24,6 +16,8 @@ ModelImporter:
     optimizeGameObjects: 0
     removeConstantScaleCurves: 0
     motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
     animationImportErrors: 
     animationImportWarnings: 
     animationRetargetingWarnings: 
@@ -39,18 +33,18 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: HumanM@MiningOneHand01_R - Ground
+      name: HumanM@Gathering01
       takeName: Untitled
       internalID: 3094330708855449807
       firstFrame: 0
-      lastFrame: 29
+      lastFrame: 30
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
       cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
-      loopTime: 0
+      loopTime: 1
       loopBlend: 0
       loopBlendOrientation: 1
       loopBlendPositionY: 1
@@ -62,21 +56,7 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events:
-      - time: 0.9510086
-        functionName: AE_EndAttack
-        data: 
-        objectReferenceParameter: {instanceID: 0}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
-      - time: 0.30701756
-        functionName: AE_StartAttack
-        data: 
-        objectReferenceParameter: {instanceID: 0}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
+      events: []
       transformMask:
       - path: 
         weight: 1
@@ -666,18 +646,18 @@ ModelImporter:
         length: 0
         modified: 0
     skeleton:
-    - name: HumanM_Model(Clone)
+    - name: Human_DummyModel_M(Clone)
       parentName: 
       position: {x: -0, y: 0, z: 0}
       rotation: {x: 0, y: -0, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: HumanM_BodyMesh
-      parentName: HumanM_Model(Clone)
+      parentName: Human_DummyModel_M(Clone)
       position: {x: -0, y: 0, z: 0}
       rotation: {x: 0, y: -0, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: Rig
-      parentName: HumanM_Model(Clone)
+      parentName: Human_DummyModel_M(Clone)
       position: {x: -0, y: 0, z: 0}
       rotation: {x: 0, y: -0, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1}
@@ -973,7 +953,8 @@ ModelImporter:
     hasTranslationDoF: 0
     hasExtraRoot: 0
     skeletonHasParents: 1
-  lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: 2faa610713d3b3c439473daa55e8c60a, type: 3}
+  lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: 2faa610713d3b3c439473daa55e8c60a,
+    type: 3}
   autoGenerateAvatarMappingIfUnspecified: 1
   animationType: 3
   humanoidOversampling: 1
@@ -985,3 +966,10 @@ ModelImporter:
   userData: 
   assetBundleName: 
   assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 147875
+  packageName: Human Crafting Animations
+  packageVersion: 2.2.1
+  assetPath: Assets/Kevin Iglesias/Human Animations/Animations/Male/Work/Gathering/HumanM@Gathering01.fbx
+  uploadId: 824628

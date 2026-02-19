@@ -45,6 +45,18 @@ public class Mgr_Game : MonoBehaviour
             SetGameplayMode(!Mgr_UI.Inst.IsUIActive());
 
         }
+
+        // 테스트 모든 아이템 획득
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            for (int i = 0; i < GoogleSheetManager.SO<GoogleSheetSO>().Item_DataList.Count; i++)
+            {
+                Item ItemData = ItemList.Inst.GetItemData(i);
+                ItemData.Get_Item_Amount = 2;
+                GlobalValue.AddItme(ItemData);
+            }
+        }
+
     }
 
     #region UI On/Off
