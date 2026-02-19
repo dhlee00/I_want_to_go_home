@@ -27,6 +27,8 @@ public class Player_Ctrl : NetworkBehaviour
     public float Max_Stamina = 100f;
     [SerializeField] float _Current_Stamina = 100f;
 
+    public float Craft_Speed = 10.0f;
+
     public float Current_Stamina
     {
         get { return _Current_Stamina; }
@@ -119,7 +121,6 @@ public class Player_Ctrl : NetworkBehaviour
     public bool TestPlayer = false;
 
 
-
     protected CharacterController Controller;
 
     public static Player_Ctrl LocalPlayer;
@@ -165,21 +166,13 @@ public class Player_Ctrl : NetworkBehaviour
 
         // 테스트
         {
-            // 테스트 모든 아이템 획득
-            if (Input.GetKeyDown(KeyCode.P))
-            {
-                for (int i = 0; i < GoogleSheetManager.SO<GoogleSheetSO>().Item_DataList.Count; i++)
-                {
-                    Item ItemData = ItemList.Inst.GetItemData(i);
-                    ItemData.Get_Item_Amount = 1;
-                    GlobalValue.AddItme(ItemData);
-                }
-            }
+            
 
             // 테스트
             if (Input.GetKeyDown(KeyCode.T))
             {
-
+                
+                
             }
         }
         
@@ -499,8 +492,7 @@ public class Player_Ctrl : NetworkBehaviour
     // 애니메이션 이벤트
     void AE_StartAttack()
     {
-        
-        EquipWeaponData.Attacking(true);
+        EquipWeaponData?.Attacking(true);
     }
 
     // 애니메이션 이벤트
@@ -509,9 +501,15 @@ public class Player_Ctrl : NetworkBehaviour
         m_Animator.SetLayerWeight(m_Animator_UpBody, 0f);
 
         IsAttacking = false;
-        EquipWeaponData.Attacking(false);
+        EquipWeaponData?.Attacking(false);
     }
 
+    // 아이템 제작 애니메이션
+    public void AE_CraftItem(bool isStart)
+    {
+        m_Animator.SetLayerWeight(m_Animator_UpBody, (isStart ? 1.0f : 0f));
+        m_Animator.SetTrigger("Craft_Item");
+    }
 
     #endregion
 

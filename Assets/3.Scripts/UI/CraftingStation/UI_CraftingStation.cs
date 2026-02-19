@@ -25,6 +25,7 @@ public class UI_CraftingStation : MonoBehaviour
 
     [SerializeField] Button Make_Button;                    // 제작버튼
 
+    Interaction_CraftingStation NowCraftingStation; // 제작대 오브젝트
 
     // 현재 선택된 제작 아이템 정보를 담는 변수
     FCraftingRecipe SelectedCraftItem;
@@ -57,6 +58,7 @@ public class UI_CraftingStation : MonoBehaviour
         // 제작 우측 패널 닫기 (리스트 버튼 클릭을 통해 켜질 예정)
         SetCraftingDetailPanel(false);
 
+        NowCraftingStation = inCraftingStationData;
 
         // 제작대의 제작가능한 리스트
         foreach (FCraftingRecipe data in inCraftingStationData.CraftingRecipe)
@@ -126,31 +128,11 @@ public class UI_CraftingStation : MonoBehaviour
             Mgr_Inventory.Inst.UseInventoryItem(item.Item_Index, item.Item_Amount);
         }
 
-        // 아이템 지급
+        // 아이템 제작 시작
         Item itme = ItemList.Inst.GetItemData(SelectedCraftItem.ResultItem.Item_Index);
         itme.Get_Item_Amount = SelectedCraftItem.ResultItem.Item_Amount;
 
-        GlobalValue.AddItme(itme);
-
-
-        // 재료 갯수 업데이트
-        {
-            foreach (Transform child in CraftingDetailContent.transform)
-            {
-                Destroy(child.gameObject);
-            }
-
-            foreach (FItemStack data in SelectedCraftItem.IngredientsItemList)
-            {
-                GameObject obj = Instantiate(CraftRequirementSlot_Prefab.gameObject, CraftingDetailContent.transform);
-                UI_CraftRequirementSlot slot = obj.GetComponent<UI_CraftRequirementSlot>();
-
-                Item item = ItemList.Inst.GetItemData(data.Item_Index);
-
-                slot.SetUICraftRequirementSlot(item.Get_Item_Icon, item.Get_Item_Name, data.Item_Amount, Mgr_Inventory.Inst.FindInventoryItme(item.Get_Item_Index));
-            }
-        }
-        
+        NowCraftingStation.StartCraftItem(itme);
 
     }
 }

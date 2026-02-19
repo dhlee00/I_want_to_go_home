@@ -1,13 +1,13 @@
 fileFormatVersion: 2
-guid: 4ff686c6a56f70740b7e713a169b327b
+guid: e81fde457e5ff274599a1396fc1de581
 AssetOrigin:
   serializedVersion: 1
-  productId: 157920
-  packageName: Human Crafting Animations FREE
-  packageVersion: 2.2
-  assetPath: Assets/Kevin Iglesias/Human Animations/Animations/Male/Work/Mining/HumanM@MiningOneHand01_R
-    - Ground.fbx
-  uploadId: 762236
+  productId: 147875
+  packageName: Human Crafting Animations
+  packageVersion: 2.2.1
+  assetPath: Assets/Kevin Iglesias/Human Animations/Animations/Female/Work/Hammering/HumanF@HammeringTable01_R
+    - Loop.fbx
+  uploadId: 824628
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
@@ -39,18 +39,18 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: HumanM@MiningOneHand01_R - Ground
+      name: HumanF@HammeringTable01_R - Loop
       takeName: Untitled
       internalID: 3094330708855449807
       firstFrame: 0
-      lastFrame: 29
+      lastFrame: 28
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
       cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
-      loopTime: 0
+      loopTime: 1
       loopBlend: 0
       loopBlendOrientation: 1
       loopBlendPositionY: 1
@@ -62,21 +62,7 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events:
-      - time: 0.9510086
-        functionName: AE_EndAttack
-        data: 
-        objectReferenceParameter: {instanceID: 0}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
-      - time: 0.30701756
-        functionName: AE_StartAttack
-        data: 
-        objectReferenceParameter: {instanceID: 0}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
+      events: []
       transformMask:
       - path: 
         weight: 1
