@@ -114,28 +114,28 @@
       "ITEM_TYPE": "INGREDIENT",
       "ITEM_AMOUNT": 1,
       "ITEM_DESC": "물이든 양동이",
-      "ITEM_ICON_PATH": "",
+      "ITEM_ICON_PATH": "Image/Item/Icon/Ingredient/WaterPail",
       "ITEM_PREFAB": ""
     }
   ],
   "Craft_Data": [
     {
-      "CRAFT_INDEX": 0,
-      "ITEM_DATA": 12,
+      "CRAFT_NUM": 0,
+      "ITEM_INDEX": 12,
       "CRAFT_NAME": "물양동이",
       "CRAFT_AMOUNT": 1,
       "CRAFT_INGREDIENT": "4,1,9,1"
     },
     {
-      "CRAFT_INDEX": 1,
-      "ITEM_DATA": 10,
+      "CRAFT_NUM": 1,
+      "ITEM_INDEX": 10,
       "CRAFT_NAME": "곡괭이",
       "CRAFT_AMOUNT": 1,
       "CRAFT_INGREDIENT": "3,2,1,3"
     },
     {
-      "CRAFT_INDEX": 2,
-      "ITEM_DATA": 11,
+      "CRAFT_NUM": 2,
+      "ITEM_INDEX": 11,
       "CRAFT_NAME": "망치",
       "CRAFT_AMOUNT": 1,
       "CRAFT_INGREDIENT": "1,5"
