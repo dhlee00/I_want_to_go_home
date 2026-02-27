@@ -1,5 +1,6 @@
-using UnityEngine;
 using System.Collections.Generic;
+using UnityEditor.ShaderKeywordFilter;
+using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
@@ -154,6 +155,18 @@ public class Mgr_UI : MonoBehaviour
                     break;
                 }
 
+            case EInteractionType.door:
+                {
+                    // UI 업데이트
+                    for (int i = 0; i < InteractionUI_List.Count; i++)
+                    {
+                        if (InteractionUI_List[i].InteractionType == EInteractionType.door)
+                        {
+                            InteractionUI_List[i].UI_Update();
+                        }
+                    }
+                }
+                break;
         }
 
         

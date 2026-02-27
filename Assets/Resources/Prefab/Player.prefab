@@ -183,6 +183,8 @@ SkinnedMeshRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -204,9 +206,11 @@ SkinnedMeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   serializedVersion: 2
   m_Quality: 0
   m_UpdateWhenOffscreen: 0
@@ -996,6 +1000,8 @@ SkinnedMeshRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -1017,9 +1023,11 @@ SkinnedMeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   serializedVersion: 2
   m_Quality: 0
   m_UpdateWhenOffscreen: 0
@@ -2079,7 +2087,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6514470208025967866}
-  - component: {fileID: 2899713375817045858}
   - component: {fileID: 8831963954456498165}
   - component: {fileID: 727498631794315921}
   - component: {fileID: 8672731710898708196}
@@ -2108,31 +2115,6 @@ Transform:
   - {fileID: 6278684731106471685}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2899713375817045858
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7687429643865414945}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 1657993639
-  InScenePlacedSourceGlobalObjectIdHash: 2888638845
-  DeferredDespawnTick: 0
-  Ownership: 1
-  AlwaysReplicateAsRoot: 0
-  SynchronizeTransform: 1
-  ActiveSceneSynchronization: 0
-  SceneMigrationSynchronization: 0
-  SpawnWithObservers: 1
-  DontDestroyWithOwner: 0
-  AutoObjectParentSync: 1
-  SyncOwnerTransformWhenParented: 1
-  AllowOwnerToParent: 0
 --- !u!114 &8831963954456498165
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2145,11 +2127,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b45974089fbb4643b083f6af827263c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ShowTopMostFoldoutHeaderGroup: 1
+  MoveSpeed_Walk: 4
+  MoveSpeed_Run: 7
+  Max_Hp: 100
+  Current_Hp: 100
+  Max_Stamina: 100
+  _Current_Stamina: 100
+  Craft_Speed: 10
+  StaminaRegenDelayTime: 0.5
+  StaminaRegenDelayRemainingTime: 0
+  StaminaRegenRate: 5
+  StaminaCost_Attack: 20
+  StaminaCost_Jump: 10
+  StaminaCost_Run: 3
   IsZoom: 0
+  IsAttacking: 0
   Move: {x: 0, y: 0}
+  IsRun: 0
   Speed: 0
-  MoveSpeed: 4
   Grounded: 1
   GroundLayers:
     serializedVersion: 2
