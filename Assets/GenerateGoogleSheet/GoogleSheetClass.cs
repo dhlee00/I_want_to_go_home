@@ -24,8 +24,8 @@ public class Item_Data
 [Serializable]
 public class Craft_Data
 {
-	public int CRAFT_INDEX;
-	public int ITEM_DATA;
+	public int CRAFT_NUM;
+	public int ITEM_INDEX;
 	public string CRAFT_NAME;
 	public int CRAFT_AMOUNT;
 	public string CRAFT_INGREDIENT;

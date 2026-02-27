@@ -136,6 +136,7 @@ public class Mgr_Map : MonoBehaviour
                 // 활성화 된 청크 목록에 추가
                 activeChunkList.Add(pos, chunkObj);
 
+
                 if ((pos.x == 0 || pos.x == -1 || pos.x == 1) && (pos.y == 0 || pos.y == -1 || pos.y == 1))
                 {
                     continue;
@@ -279,6 +280,7 @@ public class Mgr_Map : MonoBehaviour
         {
             objInfo.m_MeshRenderer = mesh.GetComponent<MeshRenderer>();
             objInfo.m_Collider = mesh.GetComponent<MeshCollider>();
+
             objInfo.m_Collider.enabled = true;
         }
 

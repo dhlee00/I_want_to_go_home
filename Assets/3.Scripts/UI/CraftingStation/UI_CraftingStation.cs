@@ -61,8 +61,10 @@ public class UI_CraftingStation : MonoBehaviour
         NowCraftingStation = inCraftingStationData;
 
         // 제작대의 제작가능한 리스트
-        foreach (FCraftingRecipe data in inCraftingStationData.CraftingRecipe)
+        foreach (int item_index in inCraftingStationData.CraftingRecipe_Index)
         {
+            FCraftingRecipe data = ItemList.Inst.GetCraftingRecipe(item_index);
+
             GameObject obj = Instantiate(UI_CraftingItem_Button_Prefab.gameObject, CraftingListContent.transform);
             UI_CraftingItem_Button btn = obj.GetComponent<UI_CraftingItem_Button>();
 
