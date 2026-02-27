@@ -5,7 +5,8 @@ using UnityEngine.UI;
 public enum EInteractionType
 {
     item,
-    craftingStation
+    craftingStation,
+    door
 }
 
 public class Interaction : MonoBehaviour
