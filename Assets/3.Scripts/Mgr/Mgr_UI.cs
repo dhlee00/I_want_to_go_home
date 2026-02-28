@@ -1,6 +1,5 @@
-using System.Collections.Generic;
-using UnityEditor.ShaderKeywordFilter;
 using UnityEngine;
+using System.Collections.Generic;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
@@ -168,8 +167,6 @@ public class Mgr_UI : MonoBehaviour
                 }
                 break;
         }
-
-        
 
         Mgr_UI.Inst.EquipInfo_Init();
     }

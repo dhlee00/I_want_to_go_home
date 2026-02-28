@@ -54,6 +54,3 @@ MonoBehaviour:
   bIsSapwn: 1
   ReSpawnTime: 5
   ReSpawn: 0
-  m_MeshRenderer: {fileID: 0}
-  m_Collider: {fileID: 0}
-  mgr_Map: {fileID: 0}
