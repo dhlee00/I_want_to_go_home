@@ -3,19 +3,19 @@ using UnityEngine;
 [System.Serializable]
 public class Craft_Item
 {
-    [SerializeField] int Craft_Index;
+    int Craft_Index;
     public int Get_Craft_Index { get => Craft_Index; }
 
-    [SerializeField] int ItemData_Index;
+    int ItemData_Index;
     public int Get_ItemData_Index { get => ItemData_Index; }
 
-    [SerializeField] string Craft_Name;
+    string Craft_Name;
     public string Get_Craft_Name { get => Craft_Name; }
 
-    [SerializeField] int[] Craft_Ingredient;
+    int[] Craft_Ingredient;
     public int[] Get_Craft_Ingredient { get => Craft_Ingredient; }
 
-    [SerializeField] int[] Ingredient_Amount;
+    int[] Ingredient_Amount;
     public int[] Get_Ingredient_Amount { get => Ingredient_Amount; }
 
     public Craft_Item(int _index, string _name, int _item, int[] _ingredient, int[] _ingredientAmount)
