@@ -31,6 +31,8 @@ public class Mgr_UI : MonoBehaviour
     #region
     [Header("Player Stets UI")]
     [SerializeField] Image HpBar_Image;
+    [SerializeField] Image HungerBar_Image;
+    [SerializeField] Image ThirstBar_Image;
     [SerializeField] Image StaminaBar_Image;
 
 
@@ -68,7 +70,18 @@ public class Mgr_UI : MonoBehaviour
     {
         if (Player_Ctrl.LocalPlayer && HpBar_Image && StaminaBar_Image)
         {
-            HpBar_Image.fillAmount = Player_Ctrl.LocalPlayer.Current_Hp / Player_Ctrl.LocalPlayer.Max_Hp;
+            // 스텟
+            {
+                // 체력
+                HpBar_Image.fillAmount = Player_Ctrl.LocalPlayer.Current_Hp / Player_Ctrl.LocalPlayer.Max_Hp;
+                
+                // 포만감
+                HungerBar_Image.fillAmount = Player_Ctrl.LocalPlayer.Current_Hunger / Player_Ctrl.LocalPlayer.Max_Hunger;
+                
+                // 수분
+                ThirstBar_Image.fillAmount = Player_Ctrl.LocalPlayer.Current_Thirst / Player_Ctrl.LocalPlayer.Max_Thirst;
+
+            }
 
             if(Player_Ctrl.LocalPlayer.Current_Stamina >= Player_Ctrl.LocalPlayer.Max_Stamina - 0.01f)
             {
