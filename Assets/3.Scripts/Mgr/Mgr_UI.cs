@@ -44,6 +44,11 @@ public class Mgr_UI : MonoBehaviour
     bool IsCraftingStation_UI;
     #endregion
 
+    #region Storage
+    [Header("Storage")]
+    [SerializeField] Storage_UI Storage_Obj;
+    bool Storage_UI;
+    #endregion
 
     public bool OnInventory() { return IsInventory_UI = Spawn_UI(Inventory_Prefab, Inventory_UI); }
 
@@ -402,5 +407,31 @@ public class Mgr_UI : MonoBehaviour
     }
     #endregion
 
+    // 창고 UI
+    #region Storage
+    public void Storage(bool isOn, int _storageSlotCount, Storage _storage = null)
+    {
+        Storage_Obj.gameObject.SetActive(isOn);
+        Storage_UI = isOn;
+
+        //켰을때
+        if(isOn)
+        {
+            // 업그레이드 되서 슬롯 개수가 달라지면
+            if (_storageSlotCount != Storage_Obj.Get_StorageSlotList.Count)
+            {
+                int makeCout = _storageSlotCount - Storage_Obj.Get_StorageSlotList.Count;
+                for(int i = 0; i < makeCout; i++)
+                {
+                    Storage_Obj.MakeStorageSlot();
+                }
+            }
+
+            Storage_Obj.Refresh_StorageInven();
+        }
+
+        if (!isOn || _storage == null) return;
+    }
+    #endregion
 
 }

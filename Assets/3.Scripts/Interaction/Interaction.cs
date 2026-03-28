@@ -6,7 +6,8 @@ public enum EInteractionType
 {
     item,
     craftingStation,
-    door
+    door,
+    storage
 }
 
 public class Interaction : MonoBehaviour

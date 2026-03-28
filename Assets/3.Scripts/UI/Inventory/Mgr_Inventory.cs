@@ -17,6 +17,7 @@ public class Mgr_Inventory : MonoBehaviour
     [SerializeField] GameObject Inven_ItemSlot_Prefab;
     [SerializeField] Transform ItemSlot_Tr;
     [SerializeField] int ItemSlot_Amount;
+    public int Get_ItemSlot_Amount { get => ItemSlot_Amount; }
 
     [Header("Inven_Equip_Slot")] // 장착 슬롯
     [SerializeField] List<Inven_Slot> Inven_EquipSlotList = new List<Inven_Slot>();
@@ -81,6 +82,16 @@ public class Mgr_Inventory : MonoBehaviour
     public void Refresh_Inventory()
     {
         // int index = 0;
+
+        for(int i = 0; i < Inven_ItemSlotList.Count; i++)
+        {
+            if(Inven_ItemSlotList[i].Get_ItemData != null)
+            {
+                Inven_ItemSlotList[i].Set_SlotInfo(null, 0, false);
+            }
+        }
+
+        // 인벤토리 파트
         foreach(var item in GlobalValue.User_Inventory)
         {
             Inven_ItemSlotList[item.Value.Get_Item_SlotIndex].Set_SlotInfo(item.Value, item.Value.Get_Item_Amount);
@@ -91,6 +102,7 @@ public class Mgr_Inventory : MonoBehaviour
             Inven_ItemSlotList[item.Get_Item_SlotIndex].Set_SlotInfo(item, item.Get_Item_Amount);
         }
 
+        // 장착 파트
         foreach (var item in GlobalValue.User_EquipSlot)
         {
             Inven_EquipSlotList[item.Value.Get_Item_SlotIndex].Set_SlotInfo(item.Value, item.Value.Get_Item_Amount);
@@ -128,8 +140,6 @@ public class Mgr_Inventory : MonoBehaviour
         {
             Mgr_UI.Inst.EquipSlotInfo_List[i].isSelect(i == Equip_Slot_Index - 1);
         }
-
-        
     }
 
 

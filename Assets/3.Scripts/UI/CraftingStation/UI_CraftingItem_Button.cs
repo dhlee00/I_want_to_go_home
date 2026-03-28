@@ -4,6 +4,7 @@ using UnityEngine.UI;
 public class UI_CraftingItem_Button : MonoBehaviour
 {
     public FCraftingRecipe CraftingRecipe;
+    public Image ItemIcon;
 
 
     public void SetUICraftingItemButton(UI_CraftingStation inOnwer, FCraftingRecipe inCraftingRecipe)
@@ -16,7 +17,9 @@ public class UI_CraftingItem_Button : MonoBehaviour
             CraftingItem_Button.onClick.AddListener(() => { inOnwer.SetCraftingDetailPanel(true, this); });
 
         Item item = ItemList.Inst.GetItemData(inCraftingRecipe.ResultItem.Item_Index);
-        GetComponent<Image>().sprite = item.Get_Item_Icon;
+        // GetComponent<Image>().sprite = item.Get_Item_Icon;
+
+        ItemIcon.sprite = item.Get_Item_Icon;
     }
 
 }
