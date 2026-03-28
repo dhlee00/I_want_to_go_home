@@ -35,6 +35,7 @@ public class Mgr_Game : MonoBehaviour
             if (Mgr_UI.Inst.OnInventory())
             {// 인벤토리가 열릴 때
                 Mgr_UI.Inst.EquipSlot_On(false);
+                Mgr_Inventory.Inst.Refresh_Inventory();
             }
             else
             {// 인벤토리가 닫힐 때
@@ -89,6 +90,16 @@ public class Mgr_Game : MonoBehaviour
 
     }
 
+    // 창고
+    public void OpenStorageUI(bool isOn, int _storageSlotCount = 0, Storage _storage = null)
+    {
+        SetGameplayMode(!isOn);
+
+        Mgr_UI.Inst.Storage(isOn, _storageSlotCount, _storage);
+
+        // 연출
+        Mgr_UI.Inst.EquipSlot_On(!isOn);
+    }
 
     #endregion
 

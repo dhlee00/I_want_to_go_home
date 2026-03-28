@@ -12,6 +12,10 @@ public static class GlobalValue
     public static Dictionary<int, Item> User_EquipSlot = new Dictionary<int, Item>();
     public static List<Item> Equipment_EquipSlot = new List<Item>();
 
+    // 창고 아이템
+    public static Dictionary<int, Item> StorageInven = new Dictionary<int, Item>();
+    public static List<Item> StorageEquip = new List<Item>();
+
     public static string Nickname;
 
 

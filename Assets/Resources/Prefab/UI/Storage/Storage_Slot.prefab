@@ -86,9 +86,9 @@ GameObject:
   - component: {fileID: 7598407559736408589}
   - component: {fileID: 1592225539577439777}
   - component: {fileID: 4952203054662829083}
-  - component: {fileID: 2221788938810333822}
+  - component: {fileID: 4887813944608464484}
   m_Layer: 5
-  m_Name: Inven_Slot
+  m_Name: Storage_Slot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -153,7 +153,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &2221788938810333822
+--- !u!114 &4887813944608464484
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -162,16 +162,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 5753185754483636890}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3d72d2594f67d1c4c9bac2de96c48d64, type: 3}
+  m_Script: {fileID: 11500000, guid: e836eb2cbb985a24680d9d88d01b1fe9, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: 
-  SlotType: 0
+  m_EditorClassIdentifier: Assembly-CSharp::Storage_Slot
+  SlotType: 2
   SlotNum: 0
   Item_Icon: {fileID: 3693457037080131410}
   Item_Null_Icon: {fileID: 21300000, guid: 06fb9914207e6403e9b316ff8e06e8f1, type: 3}
   Item_Amount: {fileID: 4326126006457835592}
   ItemData:
-    Item_Index: -1
+    Item_Index: 0
     Item_Name: 
     ItemType: 0
     Item_Amount: 0
