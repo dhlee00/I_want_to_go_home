@@ -115,19 +115,34 @@ public class Inven_Slot : MonoBehaviour, ISlot,
             Mgr_Game.Inst.DropItem(ItemData);
 
             // 인벤토리에서 데이터 지움
-            if (DragItem.Get_ItemType != ITEM_TYPE.EQUIPMENT)
+            if(SlotType == SLOT_TYPE.INVEN)
             {
-                GlobalValue.User_Inventory.Remove(DragItem.Get_Item_Index);
+                if (DragItem.Get_ItemType != ITEM_TYPE.EQUIPMENT)
+                {
+                    GlobalValue.User_Inventory.Remove(DragItem.Get_Item_Index);
+                }
+                else
+                {
+                    GlobalValue.Equipment_Inventory.Remove(DragItem);
+                }
             }
-            else
+            else if(SlotType == SLOT_TYPE.EQUIP)
             {
-                GlobalValue.Equipment_Inventory.Remove(DragItem);
+                if (DragItem.Get_ItemType != ITEM_TYPE.EQUIPMENT)
+                {
+                    GlobalValue.User_EquipSlot.Remove(DragItem.Get_Item_Index);
+                }
+                else
+                {
+                    GlobalValue.Equipment_EquipSlot.Remove(DragItem);
+                }
             }
 
             // 인벤토리에서 지움
             Set_SlotInfo(null, 0, false);
 
             Mgr_Inventory.Inst.UpdateEquipSlot();
+            Mgr_UI.Inst.EquipInfo_Init();
             return;
         }
 
