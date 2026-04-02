@@ -12,7 +12,7 @@ public class Weapon : MonoBehaviour
     public bool isAttacking = false;
 
     // 무기를 소유할 오너
-    GameObject Owner;
+    protected GameObject Owner;
 
     // 다단히트 및 중복처리를 막을 리스트 변수
     public List<ITakeDamage> TakeDamageList;
@@ -24,6 +24,14 @@ public class Weapon : MonoBehaviour
 
         TakeDamageList = new List<ITakeDamage>();
         TakeDamageList.Clear();
+    }
+
+    public virtual void Attack()
+    {
+        Player_Ctrl player = Owner.GetComponent<Player_Ctrl>();
+
+        if (player != null)
+            player.Anim_Attack();
     }
 
     public void Attacking(bool isStart)

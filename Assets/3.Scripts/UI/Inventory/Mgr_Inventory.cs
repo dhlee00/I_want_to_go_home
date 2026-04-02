@@ -1,4 +1,5 @@
 using NUnit.Framework.Interfaces;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -170,6 +171,21 @@ public class Mgr_Inventory : MonoBehaviour
     // 보유 아이템 사용
     public void UseInventoryItem(int inIndex, int inUseAmount)
     {
+        for (int i = 0; i < Inven_EquipSlotList.Count; i++)
+        {
+            if (Inven_EquipSlotList[i].Get_ItemData != null && Inven_EquipSlotList[i].Get_ItemData.Get_Item_Index == inIndex)
+            {
+                Inven_EquipSlotList[i].UseItem(inUseAmount);
+
+                // 보유 갯수가 0보다 작다면 인벤토리에서 삭제
+                if (Inven_EquipSlotList[i].Get_ItemData.Get_Item_Amount <= 0)
+                {
+                    GlobalValue.Equipment_Inventory.Remove(Inven_EquipSlotList[i].Get_ItemData);
+                    Inven_EquipSlotList[i].Set_SlotInfo(null, 0, false);
+                }
+            }
+        }
+
         for (int i = 0; i < Inven_ItemSlotList.Count; i++)
         {
             if (Inven_ItemSlotList[i].Get_ItemData != null && Inven_ItemSlotList[i].Get_ItemData.Get_Item_Index == inIndex)
@@ -182,27 +198,29 @@ public class Mgr_Inventory : MonoBehaviour
                     GlobalValue.User_Inventory.Remove(Inven_ItemSlotList[i].Get_ItemData.Get_Item_Index);
                     Inven_ItemSlotList[i].Set_SlotInfo(null, 0, false);
                 }
-                    
             }
         }
-
-        for (int i = 0; i < Inven_EquipSlotList.Count; i++)
-        {
-            if (Inven_EquipSlotList[i].Get_ItemData != null && Inven_EquipSlotList[i].Get_ItemData.Get_Item_Index == inIndex)
-            {
-                Inven_EquipSlotList[i].UseItem(inUseAmount);
-
-                // 보유 갯수가 0보다 작다면 인벤토리에서 삭제
-                if(Inven_EquipSlotList[i].Get_ItemData.Get_Item_Amount <= 0)
-                {
-                    GlobalValue.Equipment_Inventory.Remove(Inven_EquipSlotList[i].Get_ItemData);
-                    Inven_EquipSlotList[i].Set_SlotInfo(null, 0, false);
-                }
-                
-            }
-        }
-
         
         Refresh_Inventory();
+        Mgr_UI.Inst.EquipInfo_Init();
+    }
+
+    // 장착 아이템 사용
+    public void UseEquipInventoryItem(int inUseAmount)
+    {
+        Inven_EquipSlotList[Equip_Slot_Index - 1].UseItem(inUseAmount);
+
+        // 보유 갯수가 0보다 작다면 인벤토리에서 삭제
+        if (Inven_EquipSlotList[Equip_Slot_Index - 1].Get_ItemData.Get_Item_Amount <= 0)
+        {
+            GlobalValue.Equipment_Inventory.Remove(Inven_EquipSlotList[Equip_Slot_Index - 1].Get_ItemData);
+            Inven_EquipSlotList[Equip_Slot_Index - 1].Set_SlotInfo(null, 0, false);
+        
+            // 무기 제거
+            Player_Ctrl.LocalPlayer.EquipWeapon("");
+        }
+        
+        Refresh_Inventory();
+        Mgr_UI.Inst.EquipInfo_Init();
     }
 }

@@ -58,7 +58,7 @@ MonoBehaviour:
     ITEM_DESC: "\uBA39\uC744 \uC218 \uC788\uC5B4 \uBCF4\uC778\uB2E4(\uADF8\uB0E5
       \uBA39\uC5C8\uC744 \uB54C \uAE30\uBD84\uC218\uCE58 \uAC10\uC18C)"
     ITEM_ICON_PATH: Image/Item/Icon/Food/Space_Food
-    ITEM_PREFAB: 
+    ITEM_PREFAB: Prefab/DemoFood
   - ITEM_INDEX: 6
     ITEM_NAME: "\uCCA0"
     ITEM_TYPE: INGREDIENT

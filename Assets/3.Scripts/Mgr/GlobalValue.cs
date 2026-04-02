@@ -111,7 +111,8 @@ public static class GlobalValue
 public enum EWeaponType
 {
     Weapon, // ¹«±â
-    pickax  // °î±ªÀÌ
+    pickax,  // °î±ªÀÌ
+    food     // À½½Ä
 }
 public interface ITakeDamage
 {
