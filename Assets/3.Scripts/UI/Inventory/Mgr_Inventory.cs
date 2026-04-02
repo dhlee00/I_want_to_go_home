@@ -103,6 +103,17 @@ public class Mgr_Inventory : MonoBehaviour
             Inven_ItemSlotList[item.Get_Item_SlotIndex].Set_SlotInfo(item, item.Get_Item_Amount);
         }
 
+
+        //for (int i = 0; i < Inven_EquipSlotList.Count; i++)
+        //{
+        //    if (Inven_EquipSlotList[i].Get_ItemData != null)
+        //    {
+        //        Inven_EquipSlotList[i].Set_SlotInfo(null, 0, false);
+        //    }
+        //}
+
+        Debug.Log("아이템 : " + GlobalValue.User_EquipSlot.Count);
+        Debug.Log("장비 : " + GlobalValue.Equipment_EquipSlot.Count);
         // 장착 파트
         foreach (var item in GlobalValue.User_EquipSlot)
         {
@@ -210,17 +221,21 @@ public class Mgr_Inventory : MonoBehaviour
     {
         Inven_EquipSlotList[Equip_Slot_Index - 1].UseItem(inUseAmount);
 
+        Refresh_Inventory();
+        Mgr_UI.Inst.EquipInfo_Init();
+
         // 보유 갯수가 0보다 작다면 인벤토리에서 삭제
         if (Inven_EquipSlotList[Equip_Slot_Index - 1].Get_ItemData.Get_Item_Amount <= 0)
         {
-            GlobalValue.Equipment_Inventory.Remove(Inven_EquipSlotList[Equip_Slot_Index - 1].Get_ItemData);
+            // 장착슬롯에서 데이터 삭제
+            GlobalValue.User_EquipSlot.Remove(Inven_EquipSlotList[Equip_Slot_Index - 1].Get_ItemData.Get_Item_Index);
+            // 사용한 인벤토리의 장착슬롯 초기화
             Inven_EquipSlotList[Equip_Slot_Index - 1].Set_SlotInfo(null, 0, false);
-        
+            // 화면 UI 초기화
+            Mgr_UI.Inst.EquipSlotInfo_List[Equip_Slot_Index - 1].Set_UI();
+
             // 무기 제거
             Player_Ctrl.LocalPlayer.EquipWeapon("");
         }
-        
-        Refresh_Inventory();
-        Mgr_UI.Inst.EquipInfo_Init();
     }
 }
