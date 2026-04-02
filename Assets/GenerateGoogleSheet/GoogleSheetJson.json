@@ -52,7 +52,7 @@
       "ITEM_AMOUNT": 1,
       "ITEM_DESC": "먹을 수 있어 보인다(그냥 먹었을 때 기분수치 감소)",
       "ITEM_ICON_PATH": "Image/Item/Icon/Food/Space_Food",
-      "ITEM_PREFAB": ""
+      "ITEM_PREFAB": "Prefab/DemoFood"
     },
     {
       "ITEM_INDEX": 6,

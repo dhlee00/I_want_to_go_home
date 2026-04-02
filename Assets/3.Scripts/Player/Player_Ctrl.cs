@@ -1,5 +1,6 @@
 using NUnit.Framework.Interfaces;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
 using Unity.VisualScripting;
@@ -270,7 +271,8 @@ public class Player_Ctrl : MonoBehaviour //NetworkBehaviour
         {
             if (Input.GetMouseButtonDown(0))
             {
-                Anim_Attack();
+                if (EquipWeaponData != null)
+                    EquipWeaponData.Attack();
             }
         }
 
@@ -284,7 +286,6 @@ public class Player_Ctrl : MonoBehaviour //NetworkBehaviour
             // 테스트
             if (Input.GetKeyDown(KeyCode.T))
             {
-                
                 
             }
         }
@@ -604,7 +605,7 @@ public class Player_Ctrl : MonoBehaviour //NetworkBehaviour
 
 
     #region 애니메이션 함수
-    void Anim_Attack()
+    public void Anim_Attack()
     {
         // 장착중인 무기가 없다면 || 공격중이라면 || 스테미너가 없다면
         if (EquipWeaponData == null || 
