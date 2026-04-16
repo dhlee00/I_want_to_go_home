@@ -14,6 +14,14 @@ public class Mgr_UI : MonoBehaviour
     [SerializeField] GameObject Inventory_Prefab;
     GameObject Inventory_UI;
     bool IsInventory_UI;
+
+    public bool OnInventory() { return IsInventory_UI = Spawn_UI(Inventory_Prefab, Inventory_UI); }
+
+    // 인벤토리가 열려도 괜찮은 조건인지 확인
+    public bool IsCanOnInventory()
+    {
+        return !Storage_UI;
+    }
     #endregion
 
     #region EquipSlot_Info
@@ -50,7 +58,9 @@ public class Mgr_UI : MonoBehaviour
     bool Storage_UI;
     #endregion
 
-    public bool OnInventory() { return IsInventory_UI = Spawn_UI(Inventory_Prefab, Inventory_UI); }
+
+
+
 
     void Start()
     {
@@ -79,16 +89,16 @@ public class Mgr_UI : MonoBehaviour
             {
                 // 체력
                 HpBar_Image.fillAmount = Player_Ctrl.LocalPlayer.Current_Hp / Player_Ctrl.LocalPlayer.Max_Hp;
-                
+
                 // 포만감
                 HungerBar_Image.fillAmount = Player_Ctrl.LocalPlayer.Current_Hunger / Player_Ctrl.LocalPlayer.Max_Hunger;
-                
+
                 // 수분
                 ThirstBar_Image.fillAmount = Player_Ctrl.LocalPlayer.Current_Thirst / Player_Ctrl.LocalPlayer.Max_Thirst;
 
             }
 
-            if(Player_Ctrl.LocalPlayer.Current_Stamina >= Player_Ctrl.LocalPlayer.Max_Stamina - 0.01f)
+            if (Player_Ctrl.LocalPlayer.Current_Stamina >= Player_Ctrl.LocalPlayer.Max_Stamina - 0.01f)
             {
                 StaminaBar_Image.gameObject.SetActive(false);
             }
@@ -227,7 +237,7 @@ public class Mgr_UI : MonoBehaviour
             // 아이템 타입
             case EInteractionType.item:
                 {
-                    if(interaction is Interaction_Item item)
+                    if (interaction is Interaction_Item item)
                     {
                         for (int i = 0; i < InteractionUI_List.Count; i++)
                         {
@@ -350,7 +360,7 @@ public class Mgr_UI : MonoBehaviour
                 }
         }
 
-        
+
         interaction_UI.UI_Update();
 
         return interaction_UI;
@@ -415,13 +425,13 @@ public class Mgr_UI : MonoBehaviour
         Storage_UI = isOn;
 
         //켰을때
-        if(isOn)
+        if (isOn)
         {
             // 업그레이드 되서 슬롯 개수가 달라지면
             if (_storageSlotCount != Storage_Obj.Get_StorageSlotList.Count)
             {
                 int makeCout = _storageSlotCount - Storage_Obj.Get_StorageSlotList.Count;
-                for(int i = 0; i < makeCout; i++)
+                for (int i = 0; i < makeCout; i++)
                 {
                     Storage_Obj.MakeStorageSlot();
                 }

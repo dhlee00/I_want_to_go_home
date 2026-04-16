@@ -30,10 +30,11 @@ public class Mgr_Game : MonoBehaviour
         }
 
         // 인벤토리 열기
-        if (Input.GetKeyDown(KeyCode.I))
+        if (Input.GetKeyDown(KeyCode.I) && Mgr_UI.Inst.IsCanOnInventory())
         {
             if (Mgr_UI.Inst.OnInventory())
-            {// 인벤토리가 열릴 때
+            {
+                // 인벤토리가 열릴 때
                 Mgr_UI.Inst.EquipSlot_On(false);
                 Mgr_Inventory.Inst.Refresh_Inventory();
             }
@@ -75,7 +76,7 @@ public class Mgr_Game : MonoBehaviour
 
     void SetGameplayMode(bool isPlay)
     {
-        if(isPlay)
+        if (isPlay)
         {
             bCanMove = true;    // 움직임 풀기
             Mgr_Camera.Inst.SetCameraLock(false);   // 카메라 잠금 풀기
@@ -93,6 +94,7 @@ public class Mgr_Game : MonoBehaviour
     // 창고
     public void OpenStorageUI(bool isOn, int _storageSlotCount = 0, Storage _storage = null)
     {
+        // 움직임 막음
         SetGameplayMode(!isOn);
 
         Mgr_UI.Inst.Storage(isOn, _storageSlotCount, _storage);
@@ -120,11 +122,11 @@ public class Mgr_Game : MonoBehaviour
     Interaction_Item ItemPrefab;
     public Interaction_Item SpawnItme()
     {
-        if(ItemPrefab == null)
+        if (ItemPrefab == null)
         {
             ItemPrefab = Resources.Load<Interaction_Item>("Prefab/Interaction_Prefab");
         }
-        
+
         return Instantiate(ItemPrefab.gameObject).GetComponent<Interaction_Item>();
     }
     #endregion
@@ -134,7 +136,7 @@ public class Mgr_Game : MonoBehaviour
     UIObj_DamageText DamageTextPrefab;
     public UIObj_DamageText SpawnDamageText(Vector3 SpawnPos, float Deamge)
     {
-        if(DamageTextPrefab == null)
+        if (DamageTextPrefab == null)
             DamageTextPrefab = Resources.Load<UIObj_DamageText>("Prefab/UIObj/DamageText_Prefab");
 
 
@@ -150,7 +152,7 @@ public class Mgr_Game : MonoBehaviour
     ParticleSystem HitParticleSystem;
     public ParticleSystem SpawnHitParticle(Vector3 SpawnPos, Vector3 Dir)
     {
-        if(HitParticleSystem == null)
+        if (HitParticleSystem == null)
             HitParticleSystem = Resources.Load<ParticleSystem>("Prefab/Effects/FX_Shoot_01_muzzle");
 
         ParticleSystem obj = Instantiate(HitParticleSystem.gameObject).GetComponent<ParticleSystem>();

@@ -10,15 +10,15 @@ using UnityEngine.InputSystem;
 
 public class Player_Ctrl : MonoBehaviour //NetworkBehaviour
 {
-#region 동기화 변수
+    #region 동기화 변수
     NetworkVariable<Vector3> serverPos = new NetworkVariable<Vector3>();
     NetworkVariable<Vector3> serverMove = new NetworkVariable<Vector3>();
     NetworkVariable<Quaternion> serverRot = new NetworkVariable<Quaternion>();
     NetworkVariable<float> serverAnimMoveBlend = new NetworkVariable<float>();
-#endregion
+    #endregion
 
-#region 플레이어 스텟
-    [Header("Stets")]
+    #region 플레이어 스텟
+    [Header("이동속도")]
     #region 플레이어 이동속도
     [SerializeField] float _MoveSpeed_Walk = 4.0f;       // 걷기 속도
     public float MoveSpeed_Walk
@@ -28,9 +28,11 @@ public class Player_Ctrl : MonoBehaviour //NetworkBehaviour
             float value = _MoveSpeed_Walk;
 
             // 포만감 영향
-            if (Current_Hunger <= 0) value /= HungerDebuff_MoveSpeedDown;
+            if (Current_Hunger <= 0) value /= Hunger_Debuff_MoveSpeedDown;
             // 수분 영향
-            if (Current_Thirst <= 0) value /= ThirstDebuff_MoveSpeedDown;
+            if (Current_Thirst <= 0) value /= Thirst_Debuff_MoveSpeedDown;
+            // 호흡 영향
+            if (Current_Oxygen <= 0) value /= Oxygen_Debuff_MoveSpeedDown;
 
             return value;
         }
@@ -44,9 +46,11 @@ public class Player_Ctrl : MonoBehaviour //NetworkBehaviour
             float value = _MoveSpeed_Run;
 
             // 포만감 영향
-            if (Current_Hunger <= 0) value /= HungerDebuff_MoveSpeedDown;
+            if (Current_Hunger <= 0) value /= Hunger_Debuff_MoveSpeedDown;
             // 수분 영향
-            if (Current_Thirst <= 0) value /= ThirstDebuff_MoveSpeedDown;
+            if (Current_Thirst <= 0) value /= Thirst_Debuff_MoveSpeedDown;
+            // 호흡 영향
+            if (Current_Thirst <= 0) value /= Oxygen_Debuff_MoveSpeedDown;
 
             return value;
         }
@@ -55,11 +59,15 @@ public class Player_Ctrl : MonoBehaviour //NetworkBehaviour
     #endregion
 
     #region 플레이어 스텟
-    // HP
+
+    #region HP
+    [Header("HP")]
     public float Max_Hp = 100f;
     public float Current_Hp = 100f;
+    #endregion
 
-    // 포만감
+    #region 포만감
+    [Header("포만감")]
     public float Max_Hunger = 100;
     [SerializeField] float _Current_Hunger = 100;
     public float Current_Hunger
@@ -76,39 +84,65 @@ public class Player_Ctrl : MonoBehaviour //NetworkBehaviour
         }
     }
 
-    [SerializeField] float HungerDecreasePerSecond = 1f; // 초당 포만감 소모량
+    [SerializeField] float Hunger_DecreasePerSecond = 0.3f; // 초당 포만감 소모량
 
-    #region 포만감 디버프
-    float HungerDebuff_HPDrain = 0.5f;        // HP감소
-    float HungerDebuff_MoveSpeedDown = 2f;    // 이동속도 감소
-    float HungerDebuff_StaminaRegenDown = 2f; // 스태미나 감소
-
+    [Header("포만감 디버프")]
+    float Hunger_Debuff_HPDrain = 0.5f;        // HP감소
+    float Hunger_Debuff_MoveSpeedDown = 2f;    // 이동속도 감소
+    float Hunger_Debuff_StaminaRegenDown = 2f; // 스태미나 감소
     #endregion
 
-
-    // 수분
+    #region 수분
+    [Header("수분")]
     public float Max_Thirst = 100;
     [SerializeField] float _Current_Thirst = 100;
     public float Current_Thirst
     {
         get { return _Current_Thirst; }
-        set 
+        set
         {
             if (value <= 0)
             {
                 _Current_Thirst = 0;
                 return;
             }
-            _Current_Thirst = (value >= Max_Thirst) ? (Max_Thirst) : (value); 
+            _Current_Thirst = (value >= Max_Thirst) ? (Max_Thirst) : (value);
         }
     }
 
-    [SerializeField] float ThirstDecreasePerSecond = 2f; // 초당 수분 소모량
+    [SerializeField] float Thirst_DecreasePerSecond = 0.5f; // 초당 수분 소모량
 
-    #region 수분 디버프
-    float ThirstDebuff_MoveSpeedDown = 2f;    // 이동속도 감소
-    float ThirstDebuff_StaminaRegenDown = 2f; // 스태미나 감소
+    [Header("수분 디버프")]
+    float Thirst_Debuff_MoveSpeedDown = 2f;    // 이동속도 감소
+    float Thirst_Debuff_StaminaRegenDown = 2f; // 스태미나 감소
+    #endregion
 
+    #region 호흡
+    [Header("호흡")]
+    public float Max_Oxygen = 100f;
+    [SerializeField] float _Current_Oxygen = 100f;
+
+    public bool IsInBaseCamp = true;
+
+    public float Current_Oxygen
+    {
+        get { return _Current_Oxygen; }
+        set
+        {
+            if (value <= 0)
+            {
+                _Current_Oxygen = 0;
+                return;
+            }
+            _Current_Oxygen = (value >= Max_Oxygen) ? (Max_Oxygen) : (value);
+        }
+    }
+
+    [SerializeField] float Oxygen_DecreasePerSecond = 1f; // 초당 산소 소모량
+
+    [Header("호흡 디버프")]
+    float Oxygen_Debuff_MoveSpeedDown = 2f;    // 이동속도 감소
+    float Oxygen_Debuff_StaminaRegenDown = 2f; // 스태미나 감소
     #endregion
 
 
@@ -120,6 +154,7 @@ public class Player_Ctrl : MonoBehaviour //NetworkBehaviour
     #endregion
 
     #region 스태미나
+    [Header("스테미나")]
     public float Max_Stamina = 100f;
     [SerializeField] float _Current_Stamina = 100f;
 
@@ -127,7 +162,8 @@ public class Player_Ctrl : MonoBehaviour //NetworkBehaviour
     public float Current_Stamina
     {
         get { return _Current_Stamina; }
-        set {
+        set
+        {
             if (value < _Current_Stamina)
             {
                 StaminaRegenDelayRemainingTime = StaminaRegenDelayTime;
@@ -142,14 +178,16 @@ public class Player_Ctrl : MonoBehaviour //NetworkBehaviour
     [SerializeField] float _StaminaRegenRate = 5f; // 초당 회복량
     public float StaminaRegenRate
     {
-        get 
+        get
         {
-            float value = _StaminaRegenRate ;
+            float value = _StaminaRegenRate;
 
             // 포만감 영향
-            if (Current_Hunger <= 0) value /= HungerDebuff_StaminaRegenDown;
+            if (Current_Hunger <= 0) value /= Hunger_Debuff_StaminaRegenDown;
             // 수분 영향
-            if (Current_Thirst <= 0) value /= ThirstDebuff_StaminaRegenDown;
+            if (Current_Thirst <= 0) value /= Thirst_Debuff_StaminaRegenDown;
+            // 호흡 영향
+            if (Current_Thirst <= 0) value /= Oxygen_Debuff_StaminaRegenDown;
 
             return value;
         }
@@ -161,11 +199,10 @@ public class Player_Ctrl : MonoBehaviour //NetworkBehaviour
     [SerializeField] float StaminaCost_Run = 3f;    // 달릴때 초당 스테미너 소모량
     #endregion
 
-#endregion
+    #endregion
 
-#region 플레이어의 상태
+    #region 플레이어의 상태
     [Header("Status")]
-
     [SerializeField] bool IsZoom = false;   // 우클릭을 누르며 줌을 유지한 상태
     public bool IsAttacking = false;
 
@@ -173,12 +210,12 @@ public class Player_Ctrl : MonoBehaviour //NetworkBehaviour
 
     #endregion
 
-#region InPut
+    #region InPut
     [Header("InPut")]
     Vector2 InputMove; // 입력을 받을 변수
     #endregion
 
-#region Move
+    #region Move
     [Header("Move")]
     [SerializeField] Vector2 Move = Vector2.zero;
     public bool IsRun;
@@ -197,7 +234,7 @@ public class Player_Ctrl : MonoBehaviour //NetworkBehaviour
     float ZoomMoveY;
     #endregion
 
-#region 중력 및 점프
+    #region 중력 및 점프
     [Header("Grounded and Jump")]
     public bool Grounded = true;
     public LayerMask GroundLayers = 0;
@@ -217,7 +254,7 @@ public class Player_Ctrl : MonoBehaviour //NetworkBehaviour
     protected float FallTimeout = 0.15f; // 낙하 상태에 들어가기 전에 소요되는 시간
     #endregion
 
-#region 애니메이션
+    #region 애니메이션
     [Header("Animator")]
     Animator m_Animator;
     int m_Animator_UpBody;
@@ -226,9 +263,7 @@ public class Player_Ctrl : MonoBehaviour //NetworkBehaviour
     Transform GripPos; // 무기가 손에 잡힐 위치
     #endregion
 
-    
-
-    // 테스트용
+    #region 테스트용
     [Header("Test")]
     public bool TestPlayer = false;
 
@@ -236,7 +271,7 @@ public class Player_Ctrl : MonoBehaviour //NetworkBehaviour
     protected CharacterController Controller;
 
     public static Player_Ctrl LocalPlayer;
-
+    #endregion
 
     void Awake()
     {
@@ -281,17 +316,17 @@ public class Player_Ctrl : MonoBehaviour //NetworkBehaviour
 
         // 테스트
         {
-            
+
 
             // 테스트
             if (Input.GetKeyDown(KeyCode.T))
             {
-                
+
             }
         }
-        
 
-        if(!IsAttacking)
+
+        if (!IsAttacking)
             for (KeyCode key = KeyCode.Alpha0; key <= KeyCode.Alpha9; key++)
             {
                 if (Input.GetKeyDown(key))
@@ -305,7 +340,7 @@ public class Player_Ctrl : MonoBehaviour //NetworkBehaviour
                     Mgr_Inventory.Inst.Equip_Slot_Index = num;
                 }
             }
-        
+
     }
 
     void LateUpdate()
@@ -330,7 +365,7 @@ public class Player_Ctrl : MonoBehaviour //NetworkBehaviour
 
                 // 무브 입력
                 InputMove = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
-                IsRun = Input.GetKey(KeyCode.LeftShift);
+                IsRun = Input.GetKey(KeyCode.LeftShift) && Current_Stamina > Max_Stamina * 0.1f;
 
                 JumpAndGravity();   // 점프 및 중력
                 GroundedCheck();    // 땅에 닿은지 체크
@@ -338,7 +373,7 @@ public class Player_Ctrl : MonoBehaviour //NetworkBehaviour
 
                 RegenerateStamina(); // 스테미너 관리
 
-                ConsumeHungerAndThirst(); // 포만감과 수분
+                UpdateSurvivalStats(); // 생명스텟 업데이트
 
                 if (Input.GetKeyDown(KeyCode.F))
                 {
@@ -387,7 +422,7 @@ public class Player_Ctrl : MonoBehaviour //NetworkBehaviour
             AnimationMoveBlend = Mathf.Lerp(AnimationMoveBlend, (Move != Vector2.zero) ? (IsRun ? 2 : 1) : 0, Time.deltaTime * SpeedChangeRate);
             if (AnimationMoveBlend < 0.01f) AnimationMoveBlend = 0f;
 
-            ZoomMoveX = Mathf.Lerp(ZoomMoveX, Move.x, Time.deltaTime * SpeedChangeRate); 
+            ZoomMoveX = Mathf.Lerp(ZoomMoveX, Move.x, Time.deltaTime * SpeedChangeRate);
             ZoomMoveY = Mathf.Lerp(ZoomMoveY, Move.y, Time.deltaTime * SpeedChangeRate);
 
             // 파라미터
@@ -416,7 +451,7 @@ public class Player_Ctrl : MonoBehaviour //NetworkBehaviour
             // 점프
             if (Input.GetKeyDown(KeyCode.Space) && _jumpTimeoutDelta <= 0.0f && Mgr_Game.Inst.bCanMove)
             {
-                if(Current_Stamina - StaminaCost_Jump >= 0f)
+                if (Current_Stamina - StaminaCost_Jump >= 0f)
                 {
                     Current_Stamina -= StaminaCost_Jump;
 
@@ -489,19 +524,19 @@ public class Player_Ctrl : MonoBehaviour //NetworkBehaviour
 
         // 속도 설정
         float targetSpeed = 0.0f;
-        
+
 
         // 입력이 있을경우 경우 속도를 설정
         if (Move != Vector2.zero)
         {
-            if(IsRun && Current_Stamina - (StaminaCost_Run * Time.deltaTime) > 0f)
+            if (IsRun && Current_Stamina - (StaminaCost_Run * Time.deltaTime) > 0f)
             {
                 Current_Stamina -= (StaminaCost_Run * Time.deltaTime);
                 targetSpeed = MoveSpeed_Run;
             }
             else
                 targetSpeed = MoveSpeed_Walk;
-        } 
+        }
         else
             targetSpeed = 0.0f;
 
@@ -517,12 +552,12 @@ public class Player_Ctrl : MonoBehaviour //NetworkBehaviour
         Vector3 targetDirection = Vector3.zero;
         if (Move != Vector2.zero)
         {
-            if(IsZoom)
+            if (IsZoom)
             {
                 // 움직임
                 if (Move.x != 0f)
                     targetDirection += (Move.x > 0f) ? Camera.main.transform.right : -Camera.main.transform.right;
-                
+
                 if (Move.y != 0f)
                     targetDirection += (Move.y > 0f) ? Camera.main.transform.forward : -Camera.main.transform.forward;
 
@@ -541,7 +576,7 @@ public class Player_Ctrl : MonoBehaviour //NetworkBehaviour
             }
         }
 
-        
+
 
         // 이동
         Controller.Move(targetDirection.normalized * (Speed * Time.deltaTime) +
@@ -562,7 +597,7 @@ public class Player_Ctrl : MonoBehaviour //NetworkBehaviour
     {
         if (Current_Stamina >= Max_Stamina) return;
 
-        if(StaminaRegenDelayRemainingTime > 0f)
+        if (StaminaRegenDelayRemainingTime > 0f)
         {
             StaminaRegenDelayRemainingTime -= Time.deltaTime;
             if (StaminaRegenDelayRemainingTime > 0f) return;
@@ -571,21 +606,29 @@ public class Player_Ctrl : MonoBehaviour //NetworkBehaviour
         Current_Stamina += StaminaRegenRate * Time.deltaTime;
     }
 
-    // 포만감과 수분
-    void ConsumeHungerAndThirst()
+    // 생명 스텟 업데이트
+    void UpdateSurvivalStats()
     {
         // 포만감
         {
-            Current_Hunger -= HungerDecreasePerSecond * Time.deltaTime;
+            Current_Hunger -= Hunger_DecreasePerSecond * Time.deltaTime;
 
             // 포만감이 0일경우
             if (Current_Hunger <= 0)
-                Current_Hp -= HungerDebuff_HPDrain * Time.deltaTime;
+                Current_Hp -= Hunger_Debuff_HPDrain * Time.deltaTime;
         }
 
         // 수분
         {
-            Current_Thirst -= ThirstDecreasePerSecond * Time.deltaTime;
+            Current_Thirst -= Thirst_DecreasePerSecond * Time.deltaTime;
+        }
+
+        // 호흡
+        {
+            if (!IsInBaseCamp)
+                Current_Oxygen -= Oxygen_DecreasePerSecond * Time.deltaTime;
+            else
+                Current_Oxygen += (Oxygen_DecreasePerSecond * 2f) * Time.deltaTime;
         }
     }
 
@@ -596,7 +639,7 @@ public class Player_Ctrl : MonoBehaviour //NetworkBehaviour
         float scroll = Input.GetAxis("Mouse ScrollWheel");
 
         // 상호작용이 가능한 오브젝트 선택
-        if(scroll == 0.1f)
+        if (scroll == 0.1f)
             Mgr_UI.Inst.ChangeInteraction(true);
         else if (scroll == -0.1f)
             Mgr_UI.Inst.ChangeInteraction(false);
@@ -608,8 +651,8 @@ public class Player_Ctrl : MonoBehaviour //NetworkBehaviour
     public void Anim_Attack()
     {
         // 장착중인 무기가 없다면 || 공격중이라면 || 스테미너가 없다면
-        if (EquipWeaponData == null || 
-            EquipWeaponData?.isAttacking == true || 
+        if (EquipWeaponData == null ||
+            EquipWeaponData?.isAttacking == true ||
             IsAttacking == true ||
             Current_Stamina - StaminaCost_Attack < 0f
             ) return;
@@ -655,12 +698,12 @@ public class Player_Ctrl : MonoBehaviour //NetworkBehaviour
             Destroy(EquipWeaponData.gameObject);
             EquipWeaponData = null;
         }
-        
+
         if (Prefab_Str != "")
         {
             Weapon we = Instantiate(Resources.Load<GameObject>(Prefab_Str), GripPos).GetComponent<Weapon>();
             we.SapwnWeapon(this.gameObject);
-        
+
             EquipWeaponData = we;
         }
     }
@@ -671,6 +714,9 @@ public class Player_Ctrl : MonoBehaviour //NetworkBehaviour
         // 내가 조작하는 플레이어 인 경우
         //if (IsLocalPlayer || TestPlayer)
         {
+            if (other.tag == "BaseCamp")
+                IsInBaseCamp = true;
+
             // 상호작용 오브젝트가 아니라면 리턴
             if (other.tag != "Interaction") return;
             Interaction interaction = other.gameObject.GetComponent<Interaction>();
@@ -680,7 +726,7 @@ public class Player_Ctrl : MonoBehaviour //NetworkBehaviour
             Mgr_UI.Inst.AddInteractionUI(interaction);
         }
 
-            
+
     }
 
     private void OnTriggerExit(Collider other)
@@ -688,6 +734,9 @@ public class Player_Ctrl : MonoBehaviour //NetworkBehaviour
         // 내가 조작하는 플레이어 인 경우
         //if (IsLocalPlayer || TestPlayer)
         {
+            if (other.tag == "BaseCamp")
+                IsInBaseCamp = false;
+
             // 상호작용 오브젝트가 아니라면 리턴
             if (other.tag != "Interaction") return;
             Interaction interaction = other.gameObject.GetComponent<Interaction>();

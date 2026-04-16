@@ -112,8 +112,6 @@ public class Mgr_Inventory : MonoBehaviour
         //    }
         //}
 
-        Debug.Log("아이템 : " + GlobalValue.User_EquipSlot.Count);
-        Debug.Log("장비 : " + GlobalValue.Equipment_EquipSlot.Count);
         // 장착 파트
         foreach (var item in GlobalValue.User_EquipSlot)
         {
