@@ -30,10 +30,11 @@ public class Mgr_Game : MonoBehaviour
         }
 
         // 인벤토리 열기
-        if (Input.GetKeyDown(KeyCode.I))
+        if (Input.GetKeyDown(KeyCode.I) && Mgr_UI.Inst.IsCanOnInventory())
         {
             if (Mgr_UI.Inst.OnInventory())
-            {// 인벤토리가 열릴 때
+            {
+                // 인벤토리가 열릴 때
                 Mgr_UI.Inst.EquipSlot_On(false);
                 Mgr_Inventory.Inst.Refresh_Inventory();
             }
@@ -93,6 +94,7 @@ public class Mgr_Game : MonoBehaviour
     // 창고
     public void OpenStorageUI(bool isOn, int _storageSlotCount = 0, Storage _storage = null)
     {
+        // 움직임 막음
         SetGameplayMode(!isOn);
 
         Mgr_UI.Inst.Storage(isOn, _storageSlotCount, _storage);

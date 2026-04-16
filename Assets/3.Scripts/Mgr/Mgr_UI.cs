@@ -14,6 +14,14 @@ public class Mgr_UI : MonoBehaviour
     [SerializeField] GameObject Inventory_Prefab;
     GameObject Inventory_UI;
     bool IsInventory_UI;
+
+    public bool OnInventory() { return IsInventory_UI = Spawn_UI(Inventory_Prefab, Inventory_UI); }
+    
+    // 인벤토리가 열려도 괜찮은 조건인지 확인
+    public bool IsCanOnInventory()
+    {
+        return !Storage_UI;
+    }
     #endregion
 
     #region EquipSlot_Info
@@ -50,7 +58,9 @@ public class Mgr_UI : MonoBehaviour
     bool Storage_UI;
     #endregion
 
-    public bool OnInventory() { return IsInventory_UI = Spawn_UI(Inventory_Prefab, Inventory_UI); }
+
+
+    
 
     void Start()
     {

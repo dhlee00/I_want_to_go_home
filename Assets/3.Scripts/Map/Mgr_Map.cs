@@ -41,6 +41,7 @@ public class Mgr_Map : MonoBehaviour
 
     void Start()
     {
+        playerT = Player_Ctrl.LocalPlayer.transform;
         preChunkPos = GridToChunk(WorldToGrid(playerT.position));
         UpdateChunk();
     }
