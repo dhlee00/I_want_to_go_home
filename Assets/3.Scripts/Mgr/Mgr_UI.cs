@@ -16,8 +16,8 @@ public class Mgr_UI : MonoBehaviour
     bool IsInventory_UI;
 
     public bool OnInventory() { return IsInventory_UI = Spawn_UI(Inventory_Prefab, Inventory_UI); }
-
-    // ÀÎº¥Åä¸®°¡ ¿­·Áµµ ±¦ÂúÀº Á¶°ÇÀÎÁö È®ÀÎ
+    
+    // ì¸ë²¤í† ë¦¬ê°€ ì—´ë ¤ë„ ê´œì°®ì€ ì¡°ê±´ì¸ì§€ í™•ì¸
     public bool IsCanOnInventory()
     {
         return !Storage_UI;
@@ -59,9 +59,6 @@ public class Mgr_UI : MonoBehaviour
     #endregion
 
 
-
-
-
     void Start()
     {
         #region Singleton
@@ -77,7 +74,7 @@ public class Mgr_UI : MonoBehaviour
 
         Init_UI(Inventory_Prefab, ref Inventory_UI);
 
-        // ½ÃÀÛ½Ã Á¦ÀÛ´ë ²ô±â
+        // ì‹œì‘ì‹œ ì œì‘ëŒ€ ë„ê¸°
         CraftingStation(false);
     }
 
@@ -85,15 +82,15 @@ public class Mgr_UI : MonoBehaviour
     {
         if (Player_Ctrl.LocalPlayer && HpBar_Image && StaminaBar_Image)
         {
-            // ½ºÅİ
+            // ìŠ¤í…Ÿ
             {
-                // Ã¼·Â
-                HpBar_Image.fillAmount = Player_Ctrl.LocalPlayer.Current_Hp / Player_Ctrl.LocalPlayer.Max_Hp;
-
-                // Æ÷¸¸°¨
+                // ì²´ë ¥
+                HpBar_Image.fillAmount = Player_Ctrl.LocalPlayer.Hp / Player_Ctrl.LocalPlayer.Max_Hp;
+                
+                // í¬ë§Œê°
                 HungerBar_Image.fillAmount = Player_Ctrl.LocalPlayer.Current_Hunger / Player_Ctrl.LocalPlayer.Max_Hunger;
 
-                // ¼öºĞ
+                // ìˆ˜ë¶„
                 ThirstBar_Image.fillAmount = Player_Ctrl.LocalPlayer.Current_Thirst / Player_Ctrl.LocalPlayer.Max_Thirst;
 
             }
@@ -110,7 +107,7 @@ public class Mgr_UI : MonoBehaviour
         }
     }
 
-    // UI°¡ ÄÑÁ®ÀÖ´ÂÁö Ã¼Å©ÇÏ¿© bool·Î ¸®ÅÏ
+    // UIê°€ ì¼œì ¸ìˆëŠ”ì§€ ì²´í¬í•˜ì—¬ boolë¡œ ë¦¬í„´
     public bool IsUIActive() { return IsInventory_UI || IsCraftingStation_UI; }
 
 
@@ -119,13 +116,13 @@ public class Mgr_UI : MonoBehaviour
     bool Spawn_UI(GameObject _uiPrefab, GameObject _ui)
     {
         bool isOn = false;
-        // UI »ı¼º µÇÀÖ°í ºñÈ»¼ºÈ­ ÁßÀÌ¸é (¿­±â)
+        // UI ìƒì„± ë˜ìˆê³  ë¹„íš”ì„±í™” ì¤‘ì´ë©´ (ì—´ê¸°)
         if (_ui != null && _ui.activeSelf == false)
         {
             Inventory_UI.SetActive(true);
             isOn = true;
         }
-        // UI »ı¼º µÇÀÖ°í È»¼ºÈ­ ÁßÀÌ¸é (´İ±â)
+        // UI ìƒì„± ë˜ìˆê³  íš”ì„±í™” ì¤‘ì´ë©´ (ë‹«ê¸°)
         else if (_ui != null && _ui.activeSelf == true)
         {
             _ui.GetComponent<Animator>().Play("Close");
@@ -137,7 +134,7 @@ public class Mgr_UI : MonoBehaviour
 
     void Init_UI(GameObject _uiPrefab, ref GameObject _ui)
     {
-        // UI »ı¼º
+        // UI ìƒì„±
         if (_ui == null)
         {
             GameObject spawnUI = Instantiate(_uiPrefab);
@@ -157,7 +154,7 @@ public class Mgr_UI : MonoBehaviour
     {
         if (InteractionUI_List.Count <= 0) return;
 
-        // »óÈ£ÀÛ¿ë
+        // ìƒí˜¸ì‘ìš©
         InteractionUI_List[ChangeInteractionCount].Interaction();
 
 
@@ -165,18 +162,18 @@ public class Mgr_UI : MonoBehaviour
         {
             case EInteractionType.item:
                 {
-                    // »èÁ¦
+                    // ì‚­ì œ
                     Destroy(InteractionUI_List[ChangeInteractionCount].gameObject);
                     InteractionUI_List.Remove(InteractionUI_List[ChangeInteractionCount]);
 
-                    if (ChangeInteractionCount >= InteractionUI_List.Count)// ¸¶Áö¸· ÀÎµ¦½º¸¦ »óÈ£ÀÛ¿ëÇßÀ»¶§
+                    if (ChangeInteractionCount >= InteractionUI_List.Count)// ë§ˆì§€ë§‰ ì¸ë±ìŠ¤ë¥¼ ìƒí˜¸ì‘ìš©í–ˆì„ë•Œ
                     {
-                        // ¼±ÅÃµÈ »óÈ£ÀÛ¿ë ¼ø¼­ º¯°æ
+                        // ì„ íƒëœ ìƒí˜¸ì‘ìš© ìˆœì„œ ë³€ê²½
                         ChangeInteraction(true);
                     }
                     else
                     {
-                        // UI ¾÷µ¥ÀÌÆ®
+                        // UI ì—…ë°ì´íŠ¸
                         InteractionUI_Update();
                     }
                     break;
@@ -184,7 +181,7 @@ public class Mgr_UI : MonoBehaviour
 
             case EInteractionType.door:
                 {
-                    // UI ¾÷µ¥ÀÌÆ®
+                    // UI ì—…ë°ì´íŠ¸
                     for (int i = 0; i < InteractionUI_List.Count; i++)
                     {
                         if (InteractionUI_List[i].InteractionType == EInteractionType.door)
@@ -199,20 +196,20 @@ public class Mgr_UI : MonoBehaviour
         Mgr_UI.Inst.EquipInfo_Init();
     }
 
-    // ¼±ÅÃ ÁßÀÎ »óÈ£ÀÛ¿ëUI ¼³Á¤
+    // ì„ íƒ ì¤‘ì¸ ìƒí˜¸ì‘ìš©UI ì„¤ì •
     public void ChangeInteraction(bool bUp)
     {
         if (InteractionUI_List.Count == 0) return;
 
 
-        if (bUp) // À§·Î
+        if (bUp) // ìœ„ë¡œ
         {
             ChangeInteractionCount--;
 
             if (ChangeInteractionCount < 0)
                 ChangeInteractionCount = InteractionUI_List.Count - 1;
         }
-        else //¾Æ·¡
+        else //ì•„ë˜
         {
             ChangeInteractionCount++;
 
@@ -220,7 +217,7 @@ public class Mgr_UI : MonoBehaviour
                 ChangeInteractionCount = 0;
         }
 
-        // UI ¾÷µ¥ÀÌÆ®
+        // UI ì—…ë°ì´íŠ¸
         InteractionUI_Update();
 
     }
@@ -228,13 +225,13 @@ public class Mgr_UI : MonoBehaviour
 
     public void AddInteractionUI(Interaction interaction)
     {
-        // Áßº¹ Ã¼Å©
+        // ì¤‘ë³µ ì²´í¬
         bool isDuplicate = false;
 
         switch (interaction.InteractionType)
         {
 
-            // ¾ÆÀÌÅÛ Å¸ÀÔ
+            // ì•„ì´í…œ íƒ€ì…
             case EInteractionType.item:
                 {
                     if (interaction is Interaction_Item item)
@@ -243,7 +240,7 @@ public class Mgr_UI : MonoBehaviour
                         {
                             if (InteractionUI_List[i].Item_Obj_List.Count == 0) continue;
 
-                            // ¾ÆÀÌÅÛ ÄÚµå°¡ °°Àº ¾ÆÀÌÅÛÀÏ °æ¿ì ÇÕÄ¡±â
+                            // ì•„ì´í…œ ì½”ë“œê°€ ê°™ì€ ì•„ì´í…œì¼ ê²½ìš° í•©ì¹˜ê¸°
                             if (InteractionUI_List[i].Item_Obj_List[0].ItemData.Get_Item_Index == item.ItemData.Get_Item_Index)
                             {
                                 InteractionUI_List[i].Item_Obj_List.Add(item);
@@ -282,12 +279,12 @@ public class Mgr_UI : MonoBehaviour
         bool isDestroy = false;
         foreach (Interaction_UI ui in InteractionUI_List)
         {
-            // »óÈ£ÀÛ¿ë ¿ÀºêÁ§Æ®¿Í UI°¡ °°Àº Å¸ÀÔÀÌ ¾Æ´Ï¶ó¸é ³Ñ±â±â
+            // ìƒí˜¸ì‘ìš© ì˜¤ë¸Œì íŠ¸ì™€ UIê°€ ê°™ì€ íƒ€ì…ì´ ì•„ë‹ˆë¼ë©´ ë„˜ê¸°ê¸°
             if (ui.InteractionType != interaction.InteractionType) continue;
 
             switch (ui.InteractionType)
             {
-                // ¾ÆÀÌÅÛ Å¸ÀÔ
+                // ì•„ì´í…œ íƒ€ì…
                 case EInteractionType.item:
                     {
                         Interaction_Item interaction_Item = interaction.GetComponent<Interaction_Item>();
@@ -318,7 +315,7 @@ public class Mgr_UI : MonoBehaviour
                 break;
         }
 
-        // ¸¸¾à »èÁ¦ Çß´Ù¸é
+        // ë§Œì•½ ì‚­ì œ í–ˆë‹¤ë©´
         if (isDestroy && ChangeInteractionCount >= InteractionUI_List.Count)
             ChangeInteraction(true);
 
@@ -326,7 +323,7 @@ public class Mgr_UI : MonoBehaviour
     }
 
 
-    // ¾î¶² »óÈ£ÀÛ¿ëÀ» ¼±ÅÃÁßÀÎÁö ¾÷µ¥ÀÌÆ®
+    // ì–´ë–¤ ìƒí˜¸ì‘ìš©ì„ ì„ íƒì¤‘ì¸ì§€ ì—…ë°ì´íŠ¸
     void InteractionUI_Update()
     {
         for (int i = 0; i < InteractionUI_List.Count; i++)
@@ -342,7 +339,7 @@ public class Mgr_UI : MonoBehaviour
         obj.transform.SetParent(UI_ObjPool.Inst.Get_Interact_UI_Tr, false);
 
 
-        interaction_UI.InteractionType = interaction.InteractionType; // Å¸ÀÔº¹»ç
+        interaction_UI.InteractionType = interaction.InteractionType; // íƒ€ì…ë³µì‚¬
 
         switch (interaction.InteractionType)
         {
@@ -382,7 +379,7 @@ public class Mgr_UI : MonoBehaviour
     #endregion
 
     #region SceneEquipSlot_Init
-    // È­¸é¿¡ º¸ÀÌ´Â ÀåÂø ½½·Ô ÃÊ±âÈ­(¼ö·®, Á¤º¸, ½½·Ô À§Ä¡ ÃÊ±âÈ­)
+    // í™”ë©´ì— ë³´ì´ëŠ” ì¥ì°© ìŠ¬ë¡¯ ì´ˆê¸°í™”(ìˆ˜ëŸ‰, ì •ë³´, ìŠ¬ë¡¯ ìœ„ì¹˜ ì´ˆê¸°í™”)
     public void EquipInfo_Init()
     {
         for (int i = 0; i < EquipSlotInfo_List.Count; i++)
@@ -403,7 +400,7 @@ public class Mgr_UI : MonoBehaviour
     #endregion
 
 
-    // Á¦ÀÛ´ë UI
+    // ì œì‘ëŒ€ UI
     #region CraftingStation
     public void CraftingStation(bool isOn, Interaction_CraftingStation inCraftingStationData = null)
     {
@@ -412,22 +409,22 @@ public class Mgr_UI : MonoBehaviour
 
         if (!isOn || inCraftingStationData == null) return;
 
-        // Á¦ÀÛ´ë ¼ÂÆÃ
+        // ì œì‘ëŒ€ ì…‹íŒ…
         CraftingStation_Obj.SetUICraftingStation(inCraftingStationData);
     }
     #endregion
 
-    // Ã¢°í UI
+    // ì°½ê³  UI
     #region Storage
     public void Storage(bool isOn, int _storageSlotCount, Storage _storage = null)
     {
         Storage_Obj.gameObject.SetActive(isOn);
         Storage_UI = isOn;
 
-        //Ä×À»¶§
+        //ì¼°ì„ë•Œ
         if (isOn)
         {
-            // ¾÷±×·¹ÀÌµå µÇ¼­ ½½·Ô °³¼ö°¡ ´Ş¶óÁö¸é
+            // ì—…ê·¸ë ˆì´ë“œ ë˜ì„œ ìŠ¬ë¡¯ ê°œìˆ˜ê°€ ë‹¬ë¼ì§€ë©´
             if (_storageSlotCount != Storage_Obj.Get_StorageSlotList.Count)
             {
                 int makeCout = _storageSlotCount - Storage_Obj.Get_StorageSlotList.Count;

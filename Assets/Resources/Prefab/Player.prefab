@@ -2153,17 +2153,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b45974089fbb4643b083f6af827263c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ShowTopMostFoldoutHeaderGroup: 1
-  MoveSpeed_Walk: 4
-  MoveSpeed_Run: 7
+  _MoveSpeed_Walk: 4
+  _MoveSpeed_Run: 7
   Max_Hp: 100
   Current_Hp: 100
+  Max_Hunger: 100
+  _Current_Hunger: 100
+  Hunger_DecreasePerSecond: 0.3
+  Max_Thirst: 100
+  _Current_Thirst: 100
+  Thirst_DecreasePerSecond: 0.5
+  Max_Oxygen: 100
+  _Current_Oxygen: 100
+  IsInBaseCamp: 1
+  Oxygen_DecreasePerSecond: 1
   Max_Stamina: 100
   _Current_Stamina: 100
   Craft_Speed: 10
   StaminaRegenDelayTime: 0.5
   StaminaRegenDelayRemainingTime: 0
-  StaminaRegenRate: 5
+  _StaminaRegenRate: 5
   StaminaCost_Attack: 20
   StaminaCost_Jump: 10
   StaminaCost_Run: 3

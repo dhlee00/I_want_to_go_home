@@ -6,8 +6,6 @@ public class Interaction_Door : Interaction
 {
     [SerializeField] float CloseDelay = 3.0f;
     [SerializeField] bool isOpen;
-
-
     [SerializeField] float OpenedY = 0.001948395f; // 닫힐때 높이
     [SerializeField] float ClosedY = -1.3f; // 열릴때 높이
 
@@ -44,12 +42,12 @@ public class Interaction_Door : Interaction
             moveCoroutine = StartCoroutine(OpenDoorDown(true));
         }
     }
+   
 
 
     // 문 여닫기
     IEnumerator OpenDoorDown(bool inisOpen)
     {
-
         float duration = 0.5f;
         Vector3 startPosition = transform.localPosition;
         Vector3 targetPosition = new Vector3(transform.localPosition.x, (inisOpen ? OpenedY : ClosedY), transform.localPosition.z);
