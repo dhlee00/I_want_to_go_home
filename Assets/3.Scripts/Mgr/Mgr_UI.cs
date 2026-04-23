@@ -88,7 +88,7 @@ public class Mgr_UI : MonoBehaviour
             // 스텟
             {
                 // 체력
-                HpBar_Image.fillAmount = Player_Ctrl.LocalPlayer.Current_Hp / Player_Ctrl.LocalPlayer.Max_Hp;
+                HpBar_Image.fillAmount = Player_Ctrl.LocalPlayer.Hp / Player_Ctrl.LocalPlayer.Max_Hp;
                 
                 // 포만감
                 HungerBar_Image.fillAmount = Player_Ctrl.LocalPlayer.Current_Hunger / Player_Ctrl.LocalPlayer.Max_Hunger;

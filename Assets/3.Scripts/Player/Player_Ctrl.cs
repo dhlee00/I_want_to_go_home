@@ -63,7 +63,21 @@ public class Player_Ctrl : MonoBehaviour //NetworkBehaviour
     #region HP
     [Header("HP")]
     public float Max_Hp = 100f;
-    public float Current_Hp = 100f;
+    [SerializeField] float _Hp = 100f;
+
+    public float Hp
+    {
+        get { return _Hp; }
+        set
+        {
+            if (value <= 0)
+            {
+                _Hp = 0;
+                return;
+            }
+            _Hp = (value >= Max_Hp) ? (Max_Hp) : (value);
+        }
+    }
     #endregion
 
     #region 포만감
@@ -122,8 +136,6 @@ public class Player_Ctrl : MonoBehaviour //NetworkBehaviour
     public float Max_Oxygen = 100f;
     [SerializeField] float _Current_Oxygen = 100f;
 
-    public bool IsInBaseCamp = true;
-
     public float Current_Oxygen
     {
         get { return _Current_Oxygen; }
@@ -138,7 +150,9 @@ public class Player_Ctrl : MonoBehaviour //NetworkBehaviour
         }
     }
 
-    [SerializeField] float Oxygen_DecreasePerSecond = 1f; // 초당 산소 소모량
+
+    public bool IsInBaseCamp = true;            // 베이스 캠프에 들어왔는지
+    public float Oxygen_DecreasePerSecond = 1f; // 초당 산소 소모량
 
     [Header("호흡 디버프")]
     float Oxygen_Debuff_MoveSpeedDown = 2f;    // 이동속도 감소
@@ -614,7 +628,7 @@ public class Player_Ctrl : MonoBehaviour //NetworkBehaviour
 
             // 포만감이 0일경우
             if (Current_Hunger <= 0)
-                Current_Hp -= Hunger_Debuff_HPDrain * Time.deltaTime;
+                Hp -= Hunger_Debuff_HPDrain * Time.deltaTime;
         }
 
         // 수분
@@ -624,10 +638,17 @@ public class Player_Ctrl : MonoBehaviour //NetworkBehaviour
 
         // 호흡
         {
-            if (!IsInBaseCamp)
+            if (!IsInBaseCamp || Mgr_BaseCamp.Inst.OxygenAmount <= 0f)
                 Current_Oxygen -= Oxygen_DecreasePerSecond * Time.deltaTime;
             else
+            {
                 Current_Oxygen += (Oxygen_DecreasePerSecond * 2f) * Time.deltaTime;
+
+                if(Current_Oxygen < Max_Oxygen)
+                    Mgr_BaseCamp.Inst.OxygenAmount -= (Oxygen_DecreasePerSecond * 2f) * Time.deltaTime;
+            }
+                
+
         }
     }
 
@@ -705,6 +726,19 @@ public class Player_Ctrl : MonoBehaviour //NetworkBehaviour
         
             EquipWeaponData = we;
         }
+    }
+
+
+    // 데미지 받는 함수
+    public virtual void TakeDamage(float inDamage)
+    {
+        Hp -= inDamage;
+
+        if(Hp <= 0f)// 죽었을때
+        {
+        }
+
+        return;
     }
 
 
