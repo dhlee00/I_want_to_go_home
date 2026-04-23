@@ -10,46 +10,46 @@ using UnityEngine.InputSystem;
 
 public class Player_Ctrl : MonoBehaviour //NetworkBehaviour
 {
-#region µ¿±âÈ­ º¯¼ö
+    #region ë™ê¸°í™” ë³€ìˆ˜
     NetworkVariable<Vector3> serverPos = new NetworkVariable<Vector3>();
     NetworkVariable<Vector3> serverMove = new NetworkVariable<Vector3>();
     NetworkVariable<Quaternion> serverRot = new NetworkVariable<Quaternion>();
     NetworkVariable<float> serverAnimMoveBlend = new NetworkVariable<float>();
-#endregion
+    #endregion
 
-#region ÇÃ·¹ÀÌ¾î ½ºÅİ
-    [Header("ÀÌµ¿¼Óµµ")]
-    #region ÇÃ·¹ÀÌ¾î ÀÌµ¿¼Óµµ
-    [SerializeField] float _MoveSpeed_Walk = 4.0f;       // °È±â ¼Óµµ
+#region í”Œë ˆì´ì–´ ìŠ¤í…Ÿ
+    [Header("ì´ë™ì†ë„")]
+    #region í”Œë ˆì´ì–´ ì´ë™ì†ë„
+    [SerializeField] float _MoveSpeed_Walk = 4.0f;       // ê±·ê¸° ì†ë„
     public float MoveSpeed_Walk
     {
         get
         {
             float value = _MoveSpeed_Walk;
 
-            // Æ÷¸¸°¨ ¿µÇâ
+            // í¬ë§Œê° ì˜í–¥
             if (Current_Hunger <= 0) value /= Hunger_Debuff_MoveSpeedDown;
-            // ¼öºĞ ¿µÇâ
+            // ìˆ˜ë¶„ ì˜í–¥
             if (Current_Thirst <= 0) value /= Thirst_Debuff_MoveSpeedDown;
-            // È£Èí ¿µÇâ
+            // í˜¸í¡ ì˜í–¥
             if (Current_Oxygen <= 0) value /= Oxygen_Debuff_MoveSpeedDown;
 
             return value;
         }
         set { _MoveSpeed_Walk = value; }
     }
-    [SerializeField] float _MoveSpeed_Run = 7.0f;       // ´Ş¸®±â ¼Óµµ
+    [SerializeField] float _MoveSpeed_Run = 7.0f;       // ë‹¬ë¦¬ê¸° ì†ë„
     public float MoveSpeed_Run
     {
         get
         {
             float value = _MoveSpeed_Run;
 
-            // Æ÷¸¸°¨ ¿µÇâ
+            // í¬ë§Œê° ì˜í–¥
             if (Current_Hunger <= 0) value /= Hunger_Debuff_MoveSpeedDown;
-            // ¼öºĞ ¿µÇâ
+            // ìˆ˜ë¶„ ì˜í–¥
             if (Current_Thirst <= 0) value /= Thirst_Debuff_MoveSpeedDown;
-            // È£Èí ¿µÇâ
+            // í˜¸í¡ ì˜í–¥
             if (Current_Thirst <= 0) value /= Oxygen_Debuff_MoveSpeedDown;
 
             return value;
@@ -58,7 +58,7 @@ public class Player_Ctrl : MonoBehaviour //NetworkBehaviour
     }
     #endregion
 
-    #region ÇÃ·¹ÀÌ¾î ½ºÅİ
+    #region í”Œë ˆì´ì–´ ìŠ¤í…Ÿ
 
     #region HP
     [Header("HP")]
@@ -80,8 +80,8 @@ public class Player_Ctrl : MonoBehaviour //NetworkBehaviour
     }
     #endregion
 
-    #region Æ÷¸¸°¨
-    [Header("Æ÷¸¸°¨")]
+    #region í¬ë§Œê°
+    [Header("í¬ë§Œê°")]
     public float Max_Hunger = 100;
     [SerializeField] float _Current_Hunger = 100;
     public float Current_Hunger
@@ -98,41 +98,41 @@ public class Player_Ctrl : MonoBehaviour //NetworkBehaviour
         }
     }
 
-    [SerializeField] float Hunger_DecreasePerSecond = 0.3f; // ÃÊ´ç Æ÷¸¸°¨ ¼Ò¸ğ·®
+    [SerializeField] float Hunger_DecreasePerSecond = 0.3f; // ì´ˆë‹¹ í¬ë§Œê° ì†Œëª¨ëŸ‰
 
-    [Header("Æ÷¸¸°¨ µğ¹öÇÁ")]
-    float Hunger_Debuff_HPDrain = 0.5f;        // HP°¨¼Ò
-    float Hunger_Debuff_MoveSpeedDown = 2f;    // ÀÌµ¿¼Óµµ °¨¼Ò
-    float Hunger_Debuff_StaminaRegenDown = 2f; // ½ºÅÂ¹Ì³ª °¨¼Ò
+    [Header("í¬ë§Œê° ë””ë²„í”„")]
+    float Hunger_Debuff_HPDrain = 0.5f;        // HPê°ì†Œ
+    float Hunger_Debuff_MoveSpeedDown = 2f;    // ì´ë™ì†ë„ ê°ì†Œ
+    float Hunger_Debuff_StaminaRegenDown = 2f; // ìŠ¤íƒœë¯¸ë‚˜ ê°ì†Œ
     #endregion
 
-    #region ¼öºĞ
-    [Header("¼öºĞ")]
+    #region ìˆ˜ë¶„
+    [Header("ìˆ˜ë¶„")]
     public float Max_Thirst = 100;
     [SerializeField] float _Current_Thirst = 100;
     public float Current_Thirst
     {
         get { return _Current_Thirst; }
-        set 
+        set
         {
             if (value <= 0)
             {
                 _Current_Thirst = 0;
                 return;
             }
-            _Current_Thirst = (value >= Max_Thirst) ? (Max_Thirst) : (value); 
+            _Current_Thirst = (value >= Max_Thirst) ? (Max_Thirst) : (value);
         }
     }
 
-    [SerializeField] float Thirst_DecreasePerSecond = 0.5f; // ÃÊ´ç ¼öºĞ ¼Ò¸ğ·®
+    [SerializeField] float Thirst_DecreasePerSecond = 0.5f; // ì´ˆë‹¹ ìˆ˜ë¶„ ì†Œëª¨ëŸ‰
 
-    [Header("¼öºĞ µğ¹öÇÁ")]
-    float Thirst_Debuff_MoveSpeedDown = 2f;    // ÀÌµ¿¼Óµµ °¨¼Ò
-    float Thirst_Debuff_StaminaRegenDown = 2f; // ½ºÅÂ¹Ì³ª °¨¼Ò
+    [Header("ìˆ˜ë¶„ ë””ë²„í”„")]
+    float Thirst_Debuff_MoveSpeedDown = 2f;    // ì´ë™ì†ë„ ê°ì†Œ
+    float Thirst_Debuff_StaminaRegenDown = 2f; // ìŠ¤íƒœë¯¸ë‚˜ ê°ì†Œ
     #endregion
 
-    #region È£Èí
-    [Header("È£Èí")]
+    #region í˜¸í¡
+    [Header("í˜¸í¡")]
     public float Max_Oxygen = 100f;
     [SerializeField] float _Current_Oxygen = 100f;
 
@@ -151,24 +151,23 @@ public class Player_Ctrl : MonoBehaviour //NetworkBehaviour
     }
 
 
-    public bool IsInBaseCamp = true;            // º£ÀÌ½º Ä·ÇÁ¿¡ µé¾î¿Ô´ÂÁö
-    public float Oxygen_DecreasePerSecond = 1f; // ÃÊ´ç »ê¼Ò ¼Ò¸ğ·®
-
-    [Header("È£Èí µğ¹öÇÁ")]
-    float Oxygen_Debuff_MoveSpeedDown = 2f;    // ÀÌµ¿¼Óµµ °¨¼Ò
-    float Oxygen_Debuff_StaminaRegenDown = 2f; // ½ºÅÂ¹Ì³ª °¨¼Ò
+    public bool IsInBaseCamp = true;            // ë² ì´ìŠ¤ ìº í”„ì— ë“¤ì–´ì™”ëŠ”ì§€
+    public float Oxygen_DecreasePerSecond = 1f; // ì´ˆë‹¹ ì‚°ì†Œ ì†Œëª¨ëŸ‰
+    [Header("í˜¸í¡ ë””ë²„í”„")]
+    float Oxygen_Debuff_MoveSpeedDown = 2f;    // ì´ë™ì†ë„ ê°ì†Œ
+    float Oxygen_Debuff_StaminaRegenDown = 2f; // ìŠ¤íƒœë¯¸ë‚˜ ê°ì†Œ
     #endregion
 
 
-    /*(Á¤½Å·Â ¾ÆÁ÷ ±â´É Ãß°¡ ¾ÈÇÔ 26.3.20)
-    // Á¤½Å·Â 
+    /*(ì •ì‹ ë ¥ ì•„ì§ ê¸°ëŠ¥ ì¶”ê°€ ì•ˆí•¨ 26.3.20)
+    // ì •ì‹ ë ¥ 
     //float Max_Sanity = 100; 
     //float Current_Sanity = 100;
     */
 #endregion
 
-    #region ½ºÅÂ¹Ì³ª
-    [Header("½ºÅ×¹Ì³ª")]
+    #region ìŠ¤íƒœë¯¸ë‚˜
+    [Header("ìŠ¤í…Œë¯¸ë‚˜")]
     public float Max_Stamina = 100f;
     [SerializeField] float _Current_Stamina = 100f;
 
@@ -176,7 +175,8 @@ public class Player_Ctrl : MonoBehaviour //NetworkBehaviour
     public float Current_Stamina
     {
         get { return _Current_Stamina; }
-        set {
+        set
+        {
             if (value < _Current_Stamina)
             {
                 StaminaRegenDelayRemainingTime = StaminaRegenDelayTime;
@@ -185,21 +185,21 @@ public class Player_Ctrl : MonoBehaviour //NetworkBehaviour
         }
     }
 
-    public float StaminaRegenDelayTime = 0.5f; // ½ºÅ×¹Ì³Ê È¸º¹±îÁöÀÇ µô·¹ÀÌ ¼³Á¤ ½Ã°£
-    [SerializeField] float StaminaRegenDelayRemainingTime = 0f; // ½ºÅ×¹Ì³Ê È¸º¹±îÁöÀÇ µô·¹ÀÌ
+    public float StaminaRegenDelayTime = 0.5f; // ìŠ¤í…Œë¯¸ë„ˆ íšŒë³µê¹Œì§€ì˜ ë”œë ˆì´ ì„¤ì • ì‹œê°„
+    [SerializeField] float StaminaRegenDelayRemainingTime = 0f; // ìŠ¤í…Œë¯¸ë„ˆ íšŒë³µê¹Œì§€ì˜ ë”œë ˆì´
 
-    [SerializeField] float _StaminaRegenRate = 5f; // ÃÊ´ç È¸º¹·®
+    [SerializeField] float _StaminaRegenRate = 5f; // ì´ˆë‹¹ íšŒë³µëŸ‰
     public float StaminaRegenRate
     {
-        get 
+        get
         {
-            float value = _StaminaRegenRate ;
+            float value = _StaminaRegenRate;
 
-            // Æ÷¸¸°¨ ¿µÇâ
+            // í¬ë§Œê° ì˜í–¥
             if (Current_Hunger <= 0) value /= Hunger_Debuff_StaminaRegenDown;
-            // ¼öºĞ ¿µÇâ
+            // ìˆ˜ë¶„ ì˜í–¥
             if (Current_Thirst <= 0) value /= Thirst_Debuff_StaminaRegenDown;
-            // È£Èí ¿µÇâ
+            // í˜¸í¡ ì˜í–¥
             if (Current_Thirst <= 0) value /= Oxygen_Debuff_StaminaRegenDown;
 
             return value;
@@ -209,74 +209,75 @@ public class Player_Ctrl : MonoBehaviour //NetworkBehaviour
 
     [SerializeField] float StaminaCost_Attack = 20f;
     [SerializeField] float StaminaCost_Jump = 10f;
-    [SerializeField] float StaminaCost_Run = 3f;    // ´Ş¸±¶§ ÃÊ´ç ½ºÅ×¹Ì³Ê ¼Ò¸ğ·®
+    [SerializeField] float StaminaCost_Run = 3f;    // ë‹¬ë¦´ë•Œ ì´ˆë‹¹ ìŠ¤í…Œë¯¸ë„ˆ ì†Œëª¨ëŸ‰
     #endregion
 
-#endregion
+    #endregion
 
-#region ÇÃ·¹ÀÌ¾îÀÇ »óÅÂ
+    #region í”Œë ˆì´ì–´ì˜ ìƒíƒœ
     [Header("Status")]
-    [SerializeField] bool IsZoom = false;   // ¿ìÅ¬¸¯À» ´©¸£¸ç ÁÜÀ» À¯ÁöÇÑ »óÅÂ
+    [SerializeField] bool IsZoom = false;   // ìš°í´ë¦­ì„ ëˆ„ë¥´ë©° ì¤Œì„ ìœ ì§€í•œ ìƒíƒœ
     public bool IsAttacking = false;
 
-    Weapon EquipWeaponData = null; // ÇöÀç ¼Õ¿¡ µé°íÀÖ´Â ¹«±â
+    Weapon EquipWeaponData = null; // í˜„ì¬ ì†ì— ë“¤ê³ ìˆëŠ” ë¬´ê¸°
 
 #endregion
 
-#region InPut
+    #region InPut
     [Header("InPut")]
-    Vector2 InputMove; // ÀÔ·ÂÀ» ¹ŞÀ» º¯¼ö
+    Vector2 InputMove; // ì…ë ¥ì„ ë°›ì„ ë³€ìˆ˜
     #endregion
 
-#region Move
+    #region Move
     [Header("Move")]
     [SerializeField] Vector2 Move = Vector2.zero;
     public bool IsRun;
-    [SerializeField] float Speed;                  // ÀÌµ¿ º¯¼ö
+    [SerializeField] float Speed;                  // ì´ë™ ë³€ìˆ˜
 
-    float TargetRotation = 0.0f;  // È¸Àü Å¸°Ù ¹æÇâ
-    float RotationVelocity;       // È¸Àü ¼Óµµ
+    float TargetRotation = 0.0f;  // íšŒì „ íƒ€ê²Ÿ ë°©í–¥
+    float RotationVelocity;       // íšŒì „ ì†ë„
 
     [Range(0.0f, 0.3f)]
-    float RotationSmoothTime = 0.12f;    // È¸Àü½Ã ÃµÃµÈ÷ µ¹¶§ »ç¿ë
-    float SpeedChangeRate = 10.0f;   // ¼Óµµ º¯È­À²
+    float RotationSmoothTime = 0.12f;    // íšŒì „ì‹œ ì²œì²œíˆ ëŒë•Œ ì‚¬ìš©
+    float SpeedChangeRate = 10.0f;   // ì†ë„ ë³€í™”ìœ¨
 
-    float AnimationMoveBlend;      // ÀÌµ¿½Ã ¾Ö´Ï¸ŞÀÌ¼Ç ºí·£µå
+    float AnimationMoveBlend;      // ì´ë™ì‹œ ì• ë‹ˆë©”ì´ì…˜ ë¸”ëœë“œ
 
     float ZoomMoveX;
     float ZoomMoveY;
     #endregion
 
-#region Áß·Â ¹× Á¡ÇÁ
+    #region ì¤‘ë ¥ ë° ì í”„
     [Header("Grounded and Jump")]
     public bool Grounded = true;
     public LayerMask GroundLayers = 0;
-    public float GroundedOffset = -0.3f;   // ¶¥À» Ã¼Å©ÇÒ ³ôÀÌ °ª
-    float GroundedRadius;  // Ä¸½¶ ¹İÁö¸§(µÎ²²)
+    public float GroundedOffset = -0.3f;   // ë•…ì„ ì²´í¬í•  ë†’ì´ ê°’
+    float GroundedRadius;  // ìº¡ìŠ ë°˜ì§€ë¦„(ë‘ê»˜)
 
-    float CharacterGravity; // Ä³¸¯ÅÍ Àü¿ë Áß·Â
+    float CharacterGravity; // ìºë¦­í„° ì „ìš© ì¤‘ë ¥
 
-    public float VerticalVelocity; // ¼öÁ÷ ¼Óµµ
-    protected float _terminalVelocity = 53.0f; // Á¾Âø ¼Óµµ
+    public float VerticalVelocity; // ìˆ˜ì§ ì†ë„
+    protected float _terminalVelocity = 53.0f; // ì¢…ì°© ì†ë„
 
-    protected float JumpHeight = 2.5f; // Á¡ÇÁ³ôÀÌ
-    protected float _jumpTimeoutDelta; // Á¡ÇÁÅ¸ÀÓ ¾Æ¿ôµ¨Å¸
-    protected float JumpTimeout = 0.50f; // ´ÙÀ½ Á¡ÇÁ±îÁö ÇÊ¿äÇÑ ½Ã°£
+    protected float JumpHeight = 2.5f; // ì í”„ë†’ì´
+    protected float _jumpTimeoutDelta; // ì í”„íƒ€ì„ ì•„ì›ƒë¸íƒ€
+    protected float JumpTimeout = 0.50f; // ë‹¤ìŒ ì í”„ê¹Œì§€ í•„ìš”í•œ ì‹œê°„
 
-    protected float _fallTimeoutDelta; // ³«ÇÏ ½Ã°£
-    protected float FallTimeout = 0.15f; // ³«ÇÏ »óÅÂ¿¡ µé¾î°¡±â Àü¿¡ ¼Ò¿äµÇ´Â ½Ã°£
+    protected float _fallTimeoutDelta; // ë‚™í•˜ ì‹œê°„
+    protected float FallTimeout = 0.15f; // ë‚™í•˜ ìƒíƒœì— ë“¤ì–´ê°€ê¸° ì „ì— ì†Œìš”ë˜ëŠ” ì‹œê°„
     #endregion
 
-#region ¾Ö´Ï¸ŞÀÌ¼Ç
+    #region ì• ë‹ˆë©”ì´ì…˜
     [Header("Animator")]
     Animator m_Animator;
     int m_Animator_UpBody;
-    [SerializeField] Transform SpineBone; // »óÃ¼ º»
+    [SerializeField] Transform SpineBone; // ìƒì²´ ë³¸
 
-    Transform GripPos; // ¹«±â°¡ ¼Õ¿¡ ÀâÈú À§Ä¡
+    Transform GripPos; // ë¬´ê¸°ê°€ ì†ì— ì¡í ìœ„ì¹˜
 #endregion
 
-#region Å×½ºÆ®¿ë
+#region í…ŒìŠ¤íŠ¸ìš©
+
     [Header("Test")]
     public bool TestPlayer = false;
 
@@ -284,16 +285,15 @@ public class Player_Ctrl : MonoBehaviour //NetworkBehaviour
     protected CharacterController Controller;
 
     public static Player_Ctrl LocalPlayer;
-#endregion
 
     void Awake()
     {
-        // ÄÄÆ÷³ÍÆ®
+        // ì»´í¬ë„ŒíŠ¸
         Controller = GetComponent<CharacterController>();
         m_Animator = GetComponent<Animator>();
         m_Animator_UpBody = m_Animator.GetLayerIndex("UpBody");
 
-        // ¼Õ¿¡ ¹«±â¸¦ Áæ Æ÷Áö¼Ç
+        // ì†ì— ë¬´ê¸°ë¥¼ ì¥˜ í¬ì§€ì…˜
         GripPos = transform.Find("metarig.001/pelvis/spine_01/spine_02/spine_03/shoulder.R/upperarm_r/lowerarm_r/hand_r/GripPos");
 
 
@@ -314,7 +314,7 @@ public class Player_Ctrl : MonoBehaviour //NetworkBehaviour
 
     void Update()
     {
-        // ¸¶¿ì½º ÁÂÅ¬¸¯
+        // ë§ˆìš°ìŠ¤ ì¢Œí´ë¦­
         if (Mgr_Game.Inst && Mgr_Game.Inst.bCanMove)
         {
             if (Input.GetMouseButtonDown(0))
@@ -324,41 +324,41 @@ public class Player_Ctrl : MonoBehaviour //NetworkBehaviour
             }
         }
 
-        // ¸¶¿ì½º ÈÙ
+        // ë§ˆìš°ìŠ¤ íœ 
         MouseScroll();
 
-        // Å×½ºÆ®
+        // í…ŒìŠ¤íŠ¸
         {
-            
 
-            // Å×½ºÆ®
+
+            // í…ŒìŠ¤íŠ¸
             if (Input.GetKeyDown(KeyCode.T))
             {
-                
+
             }
         }
-        
 
-        if(!IsAttacking)
+
+        if (!IsAttacking)
             for (KeyCode key = KeyCode.Alpha0; key <= KeyCode.Alpha9; key++)
             {
                 if (Input.GetKeyDown(key))
                 {
                     int num = int.Parse(key.ToString().Replace("Alpha", ""));
 
-                    // 0À» 10À¸·Î º¯È¯
+                    // 0ì„ 10ìœ¼ë¡œ ë³€í™˜
                     if (num == 0)
                         num = 10;
 
                     Mgr_Inventory.Inst.Equip_Slot_Index = num;
                 }
             }
-        
+
     }
 
     void LateUpdate()
     {
-        // ³»°¡ Á¶ÀÛÇÏ´Â ÇÃ·¹ÀÌ¾î ÀÎ °æ¿ì
+        // ë‚´ê°€ ì¡°ì‘í•˜ëŠ” í”Œë ˆì´ì–´ ì¸ ê²½ìš°
         //if (IsLocalPlayer || TestPlayer)
         {
 
@@ -368,7 +368,7 @@ public class Player_Ctrl : MonoBehaviour //NetworkBehaviour
 
                 if (IsZoom)
                 {
-                    // Ä«¸Ş¶óÀÌµ¿¿¡ ´ëÇÑ È¸Àü
+                    // ì¹´ë©”ë¼ì´ë™ì— ëŒ€í•œ íšŒì „
                     Vector3 camForward = Camera.main.transform.forward;
                     camForward.y = 0f;
                     camForward.Normalize();
@@ -376,69 +376,69 @@ public class Player_Ctrl : MonoBehaviour //NetworkBehaviour
                     transform.rotation = Quaternion.LookRotation(camForward);
                 }
 
-                // ¹«ºê ÀÔ·Â
+                // ë¬´ë¸Œ ì…ë ¥
                 InputMove = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
                 IsRun = Input.GetKey(KeyCode.LeftShift) && Current_Stamina > Max_Stamina * 0.1f;
 
-                JumpAndGravity();   // Á¡ÇÁ ¹× Áß·Â
-                GroundedCheck();    // ¶¥¿¡ ´êÀºÁö Ã¼Å©
-                CharMove();         // ÀÌµ¿
+                JumpAndGravity();   // ì í”„ ë° ì¤‘ë ¥
+                GroundedCheck();    // ë•…ì— ë‹¿ì€ì§€ ì²´í¬
+                CharMove();         // ì´ë™
 
-                RegenerateStamina(); // ½ºÅ×¹Ì³Ê °ü¸®
+                RegenerateStamina(); // ìŠ¤í…Œë¯¸ë„ˆ ê´€ë¦¬
 
-                UpdateSurvivalStats(); // »ı¸í½ºÅİ ¾÷µ¥ÀÌÆ®
+                UpdateSurvivalStats(); // ìƒëª…ìŠ¤í…Ÿ ì—…ë°ì´íŠ¸
 
                 if (Input.GetKeyDown(KeyCode.F))
                 {
-                    Mgr_UI.Inst.Interaction();  // »óÈ£ÀÛ¿ë
+                    Mgr_UI.Inst.Interaction();  // ìƒí˜¸ì‘ìš©
                 }
             }
 
         }
         /*
-        // ³»°¡ Á¶ÀÛÇÏ´Â ÇÃ·¹ÀÌ¾î°¡ ¾Æ´Ñ °æ¿ì
+        // ë‚´ê°€ ì¡°ì‘í•˜ëŠ” í”Œë ˆì´ì–´ê°€ ì•„ë‹Œ ê²½ìš°
         //else
         //{
-        //    // À§Ä¡ µ¿±âÈ­
+        //    // ìœ„ì¹˜ ë™ê¸°í™”
         //
-        //    // À§Ä¡ Â÷ÀÌ°¡ Å©¸é º¸Á¤
+        //    // ìœ„ì¹˜ ì°¨ì´ê°€ í¬ë©´ ë³´ì •
         //    float distance = Vector3.Distance(transform.position, serverPos.Value);
         //    if (distance > 0.1f)
         //    {
-        //        // CharacterController ºñÈ°¼ºÈ­
+        //        // CharacterController ë¹„í™œì„±í™”
         //        Controller.enabled = false;
         //
-        //        // À§Ä¡ Á÷Á¢ Àû¿ë
+        //        // ìœ„ì¹˜ ì§ì ‘ ì ìš©
         //        transform.position = Vector3.Lerp(transform.position, serverPos.Value, Time.deltaTime / 0.2f);
         //
-        //        // CharacterController ´Ù½Ã È°¼ºÈ­
+        //        // CharacterController ë‹¤ì‹œ í™œì„±í™”
         //        Controller.enabled = true;
         //    }
         //
         //    else
         //    {
-        //        // ¹°¸® ±â¹İ ÀÌµ¿
+        //        // ë¬¼ë¦¬ ê¸°ë°˜ ì´ë™
         //        Controller.Move(serverMove.Value);
         //    }
         //
-        //    // È¸Àü
+        //    // íšŒì „
         //    transform.rotation = Quaternion.Lerp(transform.rotation, serverRot.Value, Time.deltaTime / 0.2f);
         //
-        //    // ¾Ö´Ï¸ŞÀÌ¼Ç
+        //    // ì• ë‹ˆë©”ì´ì…˜
         //    m_Animator.SetFloat("Move", serverAnimMoveBlend.Value);
         //}
         */
 
-        // ¾Ö´Ï¸ŞÀÌ¼Ç
+        // ì• ë‹ˆë©”ì´ì…˜
         if (m_Animator)
         {
             AnimationMoveBlend = Mathf.Lerp(AnimationMoveBlend, (Move != Vector2.zero) ? (IsRun ? 2 : 1) : 0, Time.deltaTime * SpeedChangeRate);
             if (AnimationMoveBlend < 0.01f) AnimationMoveBlend = 0f;
 
-            ZoomMoveX = Mathf.Lerp(ZoomMoveX, Move.x, Time.deltaTime * SpeedChangeRate); 
+            ZoomMoveX = Mathf.Lerp(ZoomMoveX, Move.x, Time.deltaTime * SpeedChangeRate);
             ZoomMoveY = Mathf.Lerp(ZoomMoveY, Move.y, Time.deltaTime * SpeedChangeRate);
 
-            // ÆÄ¶ó¹ÌÅÍ
+            // íŒŒë¼ë¯¸í„°
             m_Animator.SetBool("Grounded", Grounded);
             m_Animator.SetFloat("Move", AnimationMoveBlend);
             m_Animator.SetBool("IsZoom", IsZoom);
@@ -447,7 +447,7 @@ public class Player_Ctrl : MonoBehaviour //NetworkBehaviour
                 m_Animator.SetFloat("MoveX", ZoomMoveX);
                 m_Animator.SetFloat("MoveY", ZoomMoveY);
 
-                // Çã¸®¸¦ Á¤¸éÀ¸·Î °íÁ¤
+                // í—ˆë¦¬ë¥¼ ì •ë©´ìœ¼ë¡œ ê³ ì •
                 SpineBone.rotation = Quaternion.LookRotation(Camera.main.transform.forward);
             }
         }
@@ -458,23 +458,23 @@ public class Player_Ctrl : MonoBehaviour //NetworkBehaviour
     {
         if (Grounded)
         {
-            // ³«ÇÏ Å¸ÀÓ¾Æ¿ô Å¸ÀÌ¸Ó Àç¼³Á¤
+            // ë‚™í•˜ íƒ€ì„ì•„ì›ƒ íƒ€ì´ë¨¸ ì¬ì„¤ì •
             _fallTimeoutDelta = FallTimeout;
 
-            // Á¡ÇÁ
+            // ì í”„
             if (Input.GetKeyDown(KeyCode.Space) && _jumpTimeoutDelta <= 0.0f && Mgr_Game.Inst.bCanMove)
             {
-                if(Current_Stamina - StaminaCost_Jump >= 0f)
+                if (Current_Stamina - StaminaCost_Jump >= 0f)
                 {
                     Current_Stamina -= StaminaCost_Jump;
 
-                    // H * -2 * GÀÇ Á¦°ö±Ù = ¿øÇÏ´Â ³ôÀÌ¿¡ µµ´ŞÇÏ´Â µ¥ ÇÊ¿äÇÑ ¼Óµµ
+                    // H * -2 * Gì˜ ì œê³±ê·¼ = ì›í•˜ëŠ” ë†’ì´ì— ë„ë‹¬í•˜ëŠ” ë° í•„ìš”í•œ ì†ë„
                     VerticalVelocity = Mathf.Sqrt(JumpHeight * -2f * CharacterGravity);
                 }
             }
             else
             {
-                // ÂøÁö ½Ã ¼Óµµ°¡ °è¼Ó ¶³¾îÁö´Â °ÍÀ» Â÷´Ü
+                // ì°©ì§€ ì‹œ ì†ë„ê°€ ê³„ì† ë–¨ì–´ì§€ëŠ” ê²ƒì„ ì°¨ë‹¨
                 if (VerticalVelocity < 0.0f)
                 {
                     VerticalVelocity = -2f;
@@ -489,10 +489,10 @@ public class Player_Ctrl : MonoBehaviour //NetworkBehaviour
         }
         else
         {
-            // Á¡ÇÁ µô·¹ÀÌ
+            // ì í”„ ë”œë ˆì´
             _jumpTimeoutDelta = JumpTimeout;
 
-            // ³«ÇÏ timeout
+            // ë‚™í•˜ timeout
             if (_fallTimeoutDelta >= 0.0f)
             {
                 _fallTimeoutDelta -= Time.deltaTime;
@@ -505,7 +505,7 @@ public class Player_Ctrl : MonoBehaviour //NetworkBehaviour
         }
     }
 
-    // ¶¥¿¡ ´ê¾ÆÁ®ÀÖ´ÂÁö È®ÀÎ
+    // ë•…ì— ë‹¿ì•„ì ¸ìˆëŠ”ì§€ í™•ì¸
     void GroundedCheck()
     {
         Vector3 spherePosition = this.transform.position;
@@ -525,31 +525,31 @@ public class Player_Ctrl : MonoBehaviour //NetworkBehaviour
         }
     }
 
-    // ¿òÁ÷ÀÓ
+    // ì›€ì§ì„
     void CharMove()
     {
-        // ÀÎÇ²½Ã½ºÅÛ¿¡¼­ Vector2°ª °¡Á®¿À±â
+        // ì¸í’‹ì‹œìŠ¤í…œì—ì„œ Vector2ê°’ ê°€ì ¸ì˜¤ê¸°
         if (Mgr_Game.Inst.bCanMove)
             Move = InputMove;
         else
             Move = Vector2.zero;
 
 
-        // ¼Óµµ ¼³Á¤
+        // ì†ë„ ì„¤ì •
         float targetSpeed = 0.0f;
-        
 
-        // ÀÔ·ÂÀÌ ÀÖÀ»°æ¿ì °æ¿ì ¼Óµµ¸¦ ¼³Á¤
+
+        // ì…ë ¥ì´ ìˆì„ê²½ìš° ê²½ìš° ì†ë„ë¥¼ ì„¤ì •
         if (Move != Vector2.zero)
         {
-            if(IsRun && Current_Stamina - (StaminaCost_Run * Time.deltaTime) > 0f)
+            if (IsRun && Current_Stamina - (StaminaCost_Run * Time.deltaTime) > 0f)
             {
                 Current_Stamina -= (StaminaCost_Run * Time.deltaTime);
                 targetSpeed = MoveSpeed_Run;
             }
             else
                 targetSpeed = MoveSpeed_Walk;
-        } 
+        }
         else
             targetSpeed = 0.0f;
 
@@ -557,20 +557,20 @@ public class Player_Ctrl : MonoBehaviour //NetworkBehaviour
         Speed = Mathf.Round(Speed * 1000f) / 1000f;
 
 
-        // ³ë¸Ö¶óÀÌÁî
+        // ë…¸ë©€ë¼ì´ì¦ˆ
         Vector3 inputDirection = new Vector3(Move.x, 0.0f, Move.y).normalized;
 
 
-        //ÀÌµ¿ ÀÔ·ÂÀÌ ÀÖ´Â °æ¿ì ÇÃ·¹ÀÌ¾î°¡ ÀÌµ¿ÇÒ ¶§ È¸Àü
+        //ì´ë™ ì…ë ¥ì´ ìˆëŠ” ê²½ìš° í”Œë ˆì´ì–´ê°€ ì´ë™í•  ë•Œ íšŒì „
         Vector3 targetDirection = Vector3.zero;
         if (Move != Vector2.zero)
         {
-            if(IsZoom)
+            if (IsZoom)
             {
-                // ¿òÁ÷ÀÓ
+                // ì›€ì§ì„
                 if (Move.x != 0f)
                     targetDirection += (Move.x > 0f) ? Camera.main.transform.right : -Camera.main.transform.right;
-                
+
                 if (Move.y != 0f)
                     targetDirection += (Move.y > 0f) ? Camera.main.transform.forward : -Camera.main.transform.forward;
 
@@ -589,13 +589,13 @@ public class Player_Ctrl : MonoBehaviour //NetworkBehaviour
             }
         }
 
-        
 
-        // ÀÌµ¿
+
+        // ì´ë™
         Controller.Move(targetDirection.normalized * (Speed * Time.deltaTime) +
                              new Vector3(0.0f, VerticalVelocity, 0.0f) * Time.deltaTime);
 
-        // ¼­¹ö·Î »óÅÂ°ª Àü¼Û
+        // ì„œë²„ë¡œ ìƒíƒœê°’ ì „ì†¡
         //SendStateRpc
         //(
         //    transform.position,
@@ -605,12 +605,12 @@ public class Player_Ctrl : MonoBehaviour //NetworkBehaviour
         //);
     }
 
-    // ½ºÅ×¹Ì³Ê ÀÚµ¿È¸º¹
+    // ìŠ¤í…Œë¯¸ë„ˆ ìë™íšŒë³µ
     void RegenerateStamina()
     {
         if (Current_Stamina >= Max_Stamina) return;
 
-        if(StaminaRegenDelayRemainingTime > 0f)
+        if (StaminaRegenDelayRemainingTime > 0f)
         {
             StaminaRegenDelayRemainingTime -= Time.deltaTime;
             if (StaminaRegenDelayRemainingTime > 0f) return;
@@ -619,24 +619,25 @@ public class Player_Ctrl : MonoBehaviour //NetworkBehaviour
         Current_Stamina += StaminaRegenRate * Time.deltaTime;
     }
 
-    // »ı¸í ½ºÅİ ¾÷µ¥ÀÌÆ®
+    // ìƒëª… ìŠ¤í…Ÿ ì—…ë°ì´íŠ¸
     void UpdateSurvivalStats()
     {
-        // Æ÷¸¸°¨
+        // í¬ë§Œê°
         {
             Current_Hunger -= Hunger_DecreasePerSecond * Time.deltaTime;
 
-            // Æ÷¸¸°¨ÀÌ 0ÀÏ°æ¿ì
+            // í¬ë§Œê°ì´ 0ì¼ê²½ìš°
             if (Current_Hunger <= 0)
                 Hp -= Hunger_Debuff_HPDrain * Time.deltaTime;
+
         }
 
-        // ¼öºĞ
+        // ìˆ˜ë¶„
         {
             Current_Thirst -= Thirst_DecreasePerSecond * Time.deltaTime;
         }
 
-        // È£Èí
+        // í˜¸í¡
         {
             if (!IsInBaseCamp || Mgr_BaseCamp.Inst.OxygenAmount <= 0f)
                 Current_Oxygen -= Oxygen_DecreasePerSecond * Time.deltaTime;
@@ -649,17 +650,18 @@ public class Player_Ctrl : MonoBehaviour //NetworkBehaviour
             }
                 
 
+
         }
     }
 
 
-    // ¸¶¿ì½º ÈÙ
+    // ë§ˆìš°ìŠ¤ íœ 
     void MouseScroll()
     {
         float scroll = Input.GetAxis("Mouse ScrollWheel");
 
-        // »óÈ£ÀÛ¿ëÀÌ °¡´ÉÇÑ ¿ÀºêÁ§Æ® ¼±ÅÃ
-        if(scroll == 0.1f)
+        // ìƒí˜¸ì‘ìš©ì´ ê°€ëŠ¥í•œ ì˜¤ë¸Œì íŠ¸ ì„ íƒ
+        if (scroll == 0.1f)
             Mgr_UI.Inst.ChangeInteraction(true);
         else if (scroll == -0.1f)
             Mgr_UI.Inst.ChangeInteraction(false);
@@ -667,12 +669,12 @@ public class Player_Ctrl : MonoBehaviour //NetworkBehaviour
     }
 
 
-    #region ¾Ö´Ï¸ŞÀÌ¼Ç ÇÔ¼ö
+    #region ì• ë‹ˆë©”ì´ì…˜ í•¨ìˆ˜
     public void Anim_Attack()
     {
-        // ÀåÂøÁßÀÎ ¹«±â°¡ ¾ø´Ù¸é || °ø°İÁßÀÌ¶ó¸é || ½ºÅ×¹Ì³Ê°¡ ¾ø´Ù¸é
-        if (EquipWeaponData == null || 
-            EquipWeaponData?.isAttacking == true || 
+        // ì¥ì°©ì¤‘ì¸ ë¬´ê¸°ê°€ ì—†ë‹¤ë©´ || ê³µê²©ì¤‘ì´ë¼ë©´ || ìŠ¤í…Œë¯¸ë„ˆê°€ ì—†ë‹¤ë©´
+        if (EquipWeaponData == null ||
+            EquipWeaponData?.isAttacking == true ||
             IsAttacking == true ||
             Current_Stamina - StaminaCost_Attack < 0f
             ) return;
@@ -686,13 +688,13 @@ public class Player_Ctrl : MonoBehaviour //NetworkBehaviour
     }
 
 
-    // ¾Ö´Ï¸ŞÀÌ¼Ç ÀÌº¥Æ®
+    // ì• ë‹ˆë©”ì´ì…˜ ì´ë²¤íŠ¸
     void AE_StartAttack()
     {
         EquipWeaponData?.Attacking(true);
     }
 
-    // ¾Ö´Ï¸ŞÀÌ¼Ç ÀÌº¥Æ®
+    // ì• ë‹ˆë©”ì´ì…˜ ì´ë²¤íŠ¸
     void AE_EndAttack()
     {
         m_Animator.SetLayerWeight(m_Animator_UpBody, 0f);
@@ -701,7 +703,7 @@ public class Player_Ctrl : MonoBehaviour //NetworkBehaviour
         EquipWeaponData?.Attacking(false);
     }
 
-    // ¾ÆÀÌÅÛ Á¦ÀÛ ¾Ö´Ï¸ŞÀÌ¼Ç
+    // ì•„ì´í…œ ì œì‘ ì• ë‹ˆë©”ì´ì…˜
     public void AE_CraftItem(bool isStart)
     {
         m_Animator.SetLayerWeight(m_Animator_UpBody, (isStart ? 1.0f : 0f));
@@ -718,23 +720,23 @@ public class Player_Ctrl : MonoBehaviour //NetworkBehaviour
             Destroy(EquipWeaponData.gameObject);
             EquipWeaponData = null;
         }
-        
+
         if (Prefab_Str != "")
         {
             Weapon we = Instantiate(Resources.Load<GameObject>(Prefab_Str), GripPos).GetComponent<Weapon>();
             we.SapwnWeapon(this.gameObject);
-        
+
             EquipWeaponData = we;
         }
     }
 
 
-    // µ¥¹ÌÁö ¹Ş´Â ÇÔ¼ö
+    // ë°ë¯¸ì§€ ë°›ëŠ” í•¨ìˆ˜
     public virtual void TakeDamage(float inDamage)
     {
         Hp -= inDamage;
 
-        if(Hp <= 0f)// Á×¾úÀ»¶§
+        if(Hp <= 0f)// ì£½ì—ˆì„ë•Œ
         {
         }
 
@@ -744,13 +746,13 @@ public class Player_Ctrl : MonoBehaviour //NetworkBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        // ³»°¡ Á¶ÀÛÇÏ´Â ÇÃ·¹ÀÌ¾î ÀÎ °æ¿ì
+        // ë‚´ê°€ ì¡°ì‘í•˜ëŠ” í”Œë ˆì´ì–´ ì¸ ê²½ìš°
         //if (IsLocalPlayer || TestPlayer)
         {
             if (other.tag == "BaseCamp")
                 IsInBaseCamp = true;
 
-            // »óÈ£ÀÛ¿ë ¿ÀºêÁ§Æ®°¡ ¾Æ´Ï¶ó¸é ¸®ÅÏ
+            // ìƒí˜¸ì‘ìš© ì˜¤ë¸Œì íŠ¸ê°€ ì•„ë‹ˆë¼ë©´ ë¦¬í„´
             if (other.tag != "Interaction") return;
             Interaction interaction = other.gameObject.GetComponent<Interaction>();
             if (interaction == null) return;
@@ -759,18 +761,18 @@ public class Player_Ctrl : MonoBehaviour //NetworkBehaviour
             Mgr_UI.Inst.AddInteractionUI(interaction);
         }
 
-            
+
     }
 
     private void OnTriggerExit(Collider other)
     {
-        // ³»°¡ Á¶ÀÛÇÏ´Â ÇÃ·¹ÀÌ¾î ÀÎ °æ¿ì
+        // ë‚´ê°€ ì¡°ì‘í•˜ëŠ” í”Œë ˆì´ì–´ ì¸ ê²½ìš°
         //if (IsLocalPlayer || TestPlayer)
         {
             if (other.tag == "BaseCamp")
                 IsInBaseCamp = false;
 
-            // »óÈ£ÀÛ¿ë ¿ÀºêÁ§Æ®°¡ ¾Æ´Ï¶ó¸é ¸®ÅÏ
+            // ìƒí˜¸ì‘ìš© ì˜¤ë¸Œì íŠ¸ê°€ ì•„ë‹ˆë¼ë©´ ë¦¬í„´
             if (other.tag != "Interaction") return;
             Interaction interaction = other.gameObject.GetComponent<Interaction>();
             if (interaction == null) return;
@@ -784,20 +786,20 @@ public class Player_Ctrl : MonoBehaviour //NetworkBehaviour
 
 
 
-    // ¼­¹ö¿¡ °ª Àü¼Û
+    // ì„œë²„ì— ê°’ ì „ì†¡
     //[Rpc(SendTo.Server)]
     //void SendStateRpc(Vector3 pos, Vector3 move, Quaternion rot, float animMoveBlend)
     //{
-    //    // À§Ä¡°ª Àü¼Û
+    //    // ìœ„ì¹˜ê°’ ì „ì†¡
     //    serverPos.Value = pos;
     //
-    //    // ÀÌµ¿°ª Àü¼Û
+    //    // ì´ë™ê°’ ì „ì†¡
     //    serverMove.Value = move;
     //
-    //    // È¸Àü°ª Àü¼Û
+    //    // íšŒì „ê°’ ì „ì†¡
     //    serverRot.Value = rot;
     //
-    //    // ¾Ö´Ï¸ŞÀÌ¼Ç Àü¼Û
+    //    // ì• ë‹ˆë©”ì´ì…˜ ì „ì†¡
     //    serverAnimMoveBlend.Value = animMoveBlend;
     //}
 }
