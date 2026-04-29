@@ -274,17 +274,16 @@ public class Player_Ctrl : MonoBehaviour //NetworkBehaviour
     [SerializeField] Transform SpineBone; // 상체 본
 
     Transform GripPos; // 무기가 손에 잡힐 위치
-#endregion
+    #endregion
 
-#region 테스트용
-
+    #region 테스트용
     [Header("Test")]
     public bool TestPlayer = false;
-
 
     protected CharacterController Controller;
 
     public static Player_Ctrl LocalPlayer;
+    #endregion
 
     void Awake()
     {
