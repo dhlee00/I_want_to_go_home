@@ -16,8 +16,8 @@ public class Player_Ctrl : MonoBehaviour //NetworkBehaviour
     NetworkVariable<Quaternion> serverRot = new NetworkVariable<Quaternion>();
     NetworkVariable<float> serverAnimMoveBlend = new NetworkVariable<float>();
     #endregion
-
-#region 플레이어 스텟
+    
+    #region 플레이어 스텟
     [Header("이동속도")]
     #region 플레이어 이동속도
     [SerializeField] float _MoveSpeed_Walk = 4.0f;       // 걷기 속도
@@ -221,7 +221,8 @@ public class Player_Ctrl : MonoBehaviour //NetworkBehaviour
 
     Weapon EquipWeaponData = null; // 현재 손에 들고있는 무기
 
-#endregion
+    public Vector2Int nowChunk;
+    #endregion
 
     #region InPut
     [Header("InPut")]

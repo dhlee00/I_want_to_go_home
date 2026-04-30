@@ -22,15 +22,24 @@ public class SpawnMonster : MonoBehaviour
 
     void Update()
     {
-        if (spawnedMon.Count < 1)
+        // 기지 안이 아닌 경우
+        if (player.nowChunk != new Vector2Int(0, 0))
         {
-            respawnTimer -= Time.deltaTime;
-
-            if (respawnTimer < 0)
+            if (spawnedMon.Count < 1)
             {
-                Spawn();
-                respawnTimer = respawnTime;
+                respawnTimer -= Time.deltaTime;
+
+                if (respawnTimer < 0)
+                {
+                    Spawn();
+                    respawnTimer = respawnTime;
+                }
             }
+        }
+
+        else
+        {
+            respawnTimer = 0;
         }
     }
 

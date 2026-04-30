@@ -275,12 +275,13 @@ MonoBehaviour:
   disOfTarget: 0
   animEnd: 0
   takeDamage: 0
-  hp: 15
-  attackPower: 5
-  speed: 3
-  Harvest_Item_Index: 1
   rayOrigin: {x: 0, y: 0.3, z: 0}
   rayDis: 1
+  hp: 15
+  attackPower: 5
+  speed: 2
+  Harvest_Item_Index: 1
+  Harvest_Item_Amount: 1
 --- !u!136 &1352864518234326394
 CapsuleCollider:
   m_ObjectHideFlags: 0

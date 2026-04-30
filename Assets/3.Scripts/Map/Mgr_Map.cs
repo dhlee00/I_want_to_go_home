@@ -4,7 +4,7 @@ using UnityEngine;
 public class Mgr_Map : MonoBehaviour
 {
     // 플레이어 트랜스폼
-    [SerializeField] Transform playerT;
+    [SerializeField] Player_Ctrl player;
 
     // 터레인
     [SerializeField] Terrain mapTerrain;
@@ -41,23 +41,24 @@ public class Mgr_Map : MonoBehaviour
 
     void Start()
     {
-        playerT = Player_Ctrl.LocalPlayer.transform;
-        preChunkPos = GridToChunk(WorldToGrid(playerT.position));
+        player = Player_Ctrl.LocalPlayer;
+        preChunkPos = GridToChunk(WorldToGrid(player.transform.position));
         UpdateChunk();
     }
 
     void Update()
     {
         // 터레인이 플레이어를 따라가게 설정
-        mapTerrain.transform.position = new Vector3(playerT.position.x - 50, transform.position.y, playerT.position.z - 50);
+        mapTerrain.transform.position = new Vector3(player.transform.position.x - 50, transform.position.y, player.transform.position.z - 50);
 
         // 현재 플레이어의 청크 좌표 계산
-        Vector2Int newChunkPos = GridToChunk(WorldToGrid(playerT.position));
+        Vector2Int newChunk = GridToChunk(WorldToGrid(player.transform.position));
+        player.nowChunk = newChunk;
 
         // 청크가 바뀌었을 때만 업데이트 실행
-        if (newChunkPos != preChunkPos)
+        if (newChunk != preChunkPos)
         {
-            preChunkPos = newChunkPos;
+            preChunkPos = newChunk;
             UpdateChunk();
         }
     }
@@ -322,8 +323,13 @@ public class Mgr_Map : MonoBehaviour
     // 그리드 좌표를 해당 그리드가 속한 청크 좌표로 변환
     public Vector2Int GridToChunk(Vector2Int gridPos)
     {
-        int x = Mathf.FloorToInt((float)gridPos.x / chunkSize);
-        int y = Mathf.FloorToInt((float)gridPos.y / chunkSize);
+        // 청크 크기의 절반을 오프셋으로 설정
+        float halfChunk = chunkSize / 2f;
+
+        // 그리드 좌표에 절반을 더한 후 청크 크기로 나누고 Floor 처리
+        int x = Mathf.FloorToInt((gridPos.x + halfChunk) / (float)chunkSize);
+        int y = Mathf.FloorToInt((gridPos.y + halfChunk) / (float)chunkSize);
+
         return new Vector2Int(x, y);
     }
 }

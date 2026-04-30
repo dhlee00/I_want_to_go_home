@@ -57,6 +57,9 @@ public class Monster : MonoBehaviour, ITakeDamage
 
     public int Harvest_Item_Index;  // 스폰될 아이템 인덱스
 
+    // 아이템 개수
+    public int Harvest_Item_Amount;
+
     void Start()
     {
         anim = GetComponent<Animation>();
@@ -65,6 +68,8 @@ public class Monster : MonoBehaviour, ITakeDamage
 
     void Update()
     {
+        TestKill();
+
         disOfTarget = Vector3.Distance(target.transformHandle.position, transform.position);
 
         if (!takeDamage)
@@ -90,8 +95,6 @@ public class Monster : MonoBehaviour, ITakeDamage
                 animEnd = false;
             }
         }
-
-        TestKill();
     }
 
     void Idle()
@@ -193,7 +196,6 @@ public class Monster : MonoBehaviour, ITakeDamage
         rig.linearVelocity = Vector3.up * rig.linearVelocity.y;
 
         isAvoiding = false;
-        state = State.Move;
     }
 
     bool IsPlayerFarAngle()
@@ -267,7 +269,7 @@ public class Monster : MonoBehaviour, ITakeDamage
     {
         if (animEnd)
         {
-            DropItems(target.gameObject, 1);
+            DropItems(target.gameObject, Harvest_Item_Amount);
 
             spawnMonster.spawnedMon.Remove(this);
             Destroy(gameObject);
