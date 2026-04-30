@@ -2093,7 +2093,7 @@ GameObject:
   - component: {fileID: 8672731710898708196}
   m_Layer: 3
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2156,7 +2156,7 @@ MonoBehaviour:
   _MoveSpeed_Walk: 4
   _MoveSpeed_Run: 7
   Max_Hp: 100
-  Current_Hp: 100
+  _Hp: 100
   Max_Hunger: 100
   _Current_Hunger: 100
   Hunger_DecreasePerSecond: 0.3
