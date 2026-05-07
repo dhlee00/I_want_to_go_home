@@ -49,6 +49,7 @@ public class Mgr_UI : MonoBehaviour
     #region CraftingStation
     [Header("CraftingStation")]
     [SerializeField] UI_CraftingStation CraftingStation_Obj;
+    [SerializeField] UI_CraftingStation SpaceShipCrafting_Obj;
     bool IsCraftingStation_UI;
     #endregion
 
@@ -411,6 +412,20 @@ public class Mgr_UI : MonoBehaviour
 
         // 제작대 셋팅
         CraftingStation_Obj.SetUICraftingStation(inCraftingStationData);
+    }
+    #endregion
+
+    // 제작대 UI
+    #region CraftingStation
+    public void SpaceShipCraftingStation(bool isOn)
+    {
+        SpaceShipCrafting_Obj.gameObject.SetActive(isOn);
+        IsCraftingStation_UI = isOn;
+
+        if (!isOn) 
+         return;
+
+        // 우주선 셋팅
     }
     #endregion
 
