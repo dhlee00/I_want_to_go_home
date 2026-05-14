@@ -221,7 +221,8 @@ public class Player_Ctrl : MonoBehaviour //NetworkBehaviour
 
     Weapon EquipWeaponData = null; // 현재 손에 들고있는 무기
 
-#endregion
+    public Vector2Int nowChunk;
+    #endregion
 
     #region InPut
     [Header("InPut")]
