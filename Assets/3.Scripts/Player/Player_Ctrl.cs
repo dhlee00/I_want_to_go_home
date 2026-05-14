@@ -280,7 +280,7 @@ public class Player_Ctrl : MonoBehaviour //NetworkBehaviour
 
     [Header("Test")]
     public bool TestPlayer = false;
-
+    #endregion
 
     protected CharacterController Controller;
 

@@ -24,8 +24,6 @@ public class Storage_UI : MonoBehaviour
             slot.GetComponent<Storage_Slot>().Get_SlotNum = i;
             Inven_ItemSlotList.Add(slot.GetComponent<Storage_Slot>());
         }
-
-        this.gameObject.SetActive(false);
     }
 
     public void Close_UI()
