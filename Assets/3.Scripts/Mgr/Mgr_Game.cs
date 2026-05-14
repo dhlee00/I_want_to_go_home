@@ -8,6 +8,7 @@ public class Mgr_Game : MonoBehaviour
 
     public static Mgr_Game Inst;
 
+
     void Awake()
     {
         Inst = this;
@@ -49,7 +50,7 @@ public class Mgr_Game : MonoBehaviour
         }
 
         // 테스트 모든 아이템 획득
-        if (Input.GetKeyDown(KeyCode.P))
+        if (Input.GetKeyDown(KeyCode.O))
         {
             for (int i = 0; i < GoogleSheetManager.SO<GoogleSheetSO>().Item_DataList.Count; i++)
             {
@@ -57,6 +58,12 @@ public class Mgr_Game : MonoBehaviour
                 ItemData.Get_Item_Amount = 2;
                 GlobalValue.AddItme(ItemData);
             }
+        }
+
+        // 테스트
+        if (Input.GetKeyDown(KeyCode.M))
+        {
+            Mgr_Game.Inst.OpenWaterOxidizerUI(true);
         }
 
     }
@@ -109,6 +116,30 @@ public class Mgr_Game : MonoBehaviour
         SetGameplayMode(!isOn);
 
         Mgr_UI.Inst.Storage(isOn, _storageSlotCount, _storage);
+
+        // 연출
+        Mgr_UI.Inst.EquipSlot_On(!isOn);
+    }
+
+    // 가열기
+    public void OpenIceMelterUI(bool isOn)
+    {
+        // 움직임 막음
+        SetGameplayMode(!isOn);
+
+        Mgr_UI.Inst.IceMelterUI(isOn);
+
+        // 연출
+        Mgr_UI.Inst.EquipSlot_On(!isOn);
+    }
+
+    // 수전해 장치
+    public void OpenWaterOxidizerUI(bool isOn)
+    {
+        // 움직임 막음
+        SetGameplayMode(!isOn);
+
+        Mgr_UI.Inst.IceWaterOxidizerUI(isOn);
 
         // 연출
         Mgr_UI.Inst.EquipSlot_On(!isOn);
@@ -176,6 +207,7 @@ public class Mgr_Game : MonoBehaviour
 
         return obj;
     }
-
     #endregion
+
+    
 }

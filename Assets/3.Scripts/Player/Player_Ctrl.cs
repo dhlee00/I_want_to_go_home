@@ -16,8 +16,8 @@ public class Player_Ctrl : MonoBehaviour //NetworkBehaviour
     NetworkVariable<Quaternion> serverRot = new NetworkVariable<Quaternion>();
     NetworkVariable<float> serverAnimMoveBlend = new NetworkVariable<float>();
     #endregion
-    
-    #region 플레이어 스텟
+
+#region 플레이어 스텟
     [Header("이동속도")]
     #region 플레이어 이동속도
     [SerializeField] float _MoveSpeed_Walk = 4.0f;       // 걷기 속도
@@ -275,16 +275,17 @@ public class Player_Ctrl : MonoBehaviour //NetworkBehaviour
     [SerializeField] Transform SpineBone; // 상체 본
 
     Transform GripPos; // 무기가 손에 잡힐 위치
-    #endregion
+#endregion
 
-    #region 테스트용
+#region 테스트용
+
     [Header("Test")]
     public bool TestPlayer = false;
+    #endregion
 
     protected CharacterController Controller;
 
     public static Player_Ctrl LocalPlayer;
-    #endregion
 
     void Awake()
     {

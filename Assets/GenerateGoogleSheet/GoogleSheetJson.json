@@ -87,7 +87,7 @@
       "ITEM_TYPE": "INGREDIENT",
       "ITEM_AMOUNT": 1,
       "ITEM_DESC": "담을 수 있는 양동이다 (물, 석유 원료)",
-      "ITEM_ICON_PATH": "Image/Item/Icon/Tool/Pail",
+      "ITEM_ICON_PATH": "Image/Item/Icon/Ingredient/Pail",
       "ITEM_PREFAB": ""
     },
     {
@@ -116,8 +116,18 @@
       "ITEM_DESC": "물이든 양동이",
       "ITEM_ICON_PATH": "Image/Item/Icon/Ingredient/WaterPail",
       "ITEM_PREFAB": ""
+    },
+    {
+      "ITEM_INDEX": 13,
+      "ITEM_NAME": "특제 푸딩",
+      "ITEM_TYPE": "FOOD",
+      "ITEM_AMOUNT": 1,
+      "ITEM_DESC": "슬라임에게서 얻은 특제 푸딩이다",
+      "ITEM_ICON_PATH": "Image/Item/Icon/nian",
+      "ITEM_PREFAB": ""
     }
   ],
+  "Interact_Obj": [],
   "Craft_Data": [
     {
       "CRAFT_NUM": 0,
@@ -140,6 +150,5 @@
       "CRAFT_AMOUNT": 1,
       "CRAFT_INGREDIENT": "1,5"
     }
-  ],
-  "Interact_Obj": []
+  ]
 }

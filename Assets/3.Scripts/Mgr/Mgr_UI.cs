@@ -59,6 +59,18 @@ public class Mgr_UI : MonoBehaviour
     bool Storage_UI;
     #endregion
 
+    #region IceMelter_UI
+    [Header("IceMelter_UI")]
+    [SerializeField] UI_IceMelter IceMelter_Obj;
+    bool bIceMelter_UI;
+    #endregion
+
+    #region WaterOxidizer_UI
+    [Header("WaterOxidizer_UI")]
+    [SerializeField] UI_WaterOxidizer WaterOxidizer_Obj;
+    bool bIceWaterOxidizer_UI;
+    #endregion
+
 
     void Start()
     {
@@ -456,4 +468,23 @@ public class Mgr_UI : MonoBehaviour
     }
     #endregion
 
+    #region 가열기
+    public void IceMelterUI(bool isOn)
+    {
+        IceMelter_Obj.gameObject.SetActive(isOn);
+        bIceMelter_UI = isOn;
+
+        IceMelter_Obj.UIUpdate();
+    }
+    #endregion
+
+    #region 수전해 장치
+    public void IceWaterOxidizerUI(bool isOn)
+    {
+        WaterOxidizer_Obj.gameObject.SetActive(isOn);
+        bIceWaterOxidizer_UI = isOn;
+
+        WaterOxidizer_Obj.UIUpdate();
+    }
+    #endregion
 }

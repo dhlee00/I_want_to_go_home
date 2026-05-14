@@ -89,7 +89,7 @@ MonoBehaviour:
     ITEM_AMOUNT: 1
     ITEM_DESC: "\uB2F4\uC744 \uC218 \uC788\uB294 \uC591\uB3D9\uC774\uB2E4 (\uBB3C,
       \uC11D\uC720 \uC6D0\uB8CC)"
-    ITEM_ICON_PATH: Image/Item/Icon/Tool/Pail
+    ITEM_ICON_PATH: Image/Item/Icon/Ingredient/Pail
     ITEM_PREFAB: 
   - ITEM_INDEX: 10
     ITEM_NAME: "\uACE1\uAD2D\uC774"
@@ -112,6 +112,13 @@ MonoBehaviour:
     ITEM_AMOUNT: 1
     ITEM_DESC: "\uBB3C\uC774\uB4E0 \uC591\uB3D9\uC774"
     ITEM_ICON_PATH: Image/Item/Icon/Ingredient/WaterPail
+    ITEM_PREFAB: 
+  - ITEM_INDEX: 13
+    ITEM_NAME: "\uD2B9\uC81C \uD478\uB529"
+    ITEM_TYPE: FOOD
+    ITEM_AMOUNT: 1
+    ITEM_DESC: "\uC2AC\uB77C\uC784\uC5D0\uAC8C\uC11C \uC5BB\uC740 \uD2B9\uC81C \uD478\uB529\uC774\uB2E4"
+    ITEM_ICON_PATH: Image/Item/Icon/nian
     ITEM_PREFAB: 
   Craft_DataList:
   - CRAFT_NUM: 0
