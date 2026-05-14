@@ -81,6 +81,17 @@ public class Mgr_Game : MonoBehaviour
         Mgr_UI.Inst.EquipSlot_On(!isOn);
     }
 
+    // 우주선 수리 UI
+    public void OpenCraftingSpaceUI(bool isOn, Interaction_CraftingStation inCraftingStationData = null)
+    {
+        SetGameplayMode(!isOn);
+
+        Mgr_UI.Inst.SpaceShipCraftingStation(isOn);
+
+        // 연출
+        Mgr_UI.Inst.EquipSlot_On(!isOn);
+    }
+
     void SetGameplayMode(bool isPlay)
     {
         if (isPlay)

@@ -1,5 +1,15 @@
 using UnityEngine;
 
+// 오브젝트 종류
+public enum EHarvestObjectType
+{
+    Plant,     // 풀
+    Tree,      // 나무
+    Rock,      // 돌
+    Mountain,  // 산
+    Monster    // 몬스터
+}
+
 public class HarvestObject : MonoBehaviour, ITakeDamage
 {
     public EHarvestObjectType HarvestObjectType;
@@ -20,7 +30,7 @@ public class HarvestObject : MonoBehaviour, ITakeDamage
     public float ReSpawnTime = 5.0f;
     public float ReSpawn = 0;
 
-    [HideInInspector] public MeshRenderer m_MeshRenderer;
+    [HideInInspector] public Renderer m_MeshRenderer;
     [HideInInspector] public MeshCollider m_Collider;
     [HideInInspector] public Mgr_Map mgr_Map;
 

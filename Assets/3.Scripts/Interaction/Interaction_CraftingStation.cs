@@ -43,7 +43,7 @@ public class Interaction_CraftingStation : Interaction
         }
     }
 
-    public void StartCraftItem(Item inMakeItem)
+    public virtual void StartCraftItem(Item inMakeItem)
     {
         Debug.Log("제작 시작");
         Mgr_Game.Inst.OpenCraftingStationUI(false, this); // UI닫기

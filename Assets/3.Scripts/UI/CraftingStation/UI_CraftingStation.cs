@@ -34,7 +34,7 @@ public class UI_CraftingStation : MonoBehaviour
     {
         // 닫기 버튼
         if (CraftingStationClose_Button)
-            CraftingStationClose_Button.onClick.AddListener(() => { Mgr_Game.Inst.OpenCraftingStationUI(false); });
+            CraftingStationClose_Button.onClick.AddListener(() => { Mgr_Game.Inst.OpenCraftingSpaceUI(false); });
 
         // Make_Button 버튼 활성화
         if (Make_Button)
